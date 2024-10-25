@@ -1,12 +1,11 @@
-import { User } from '../server/db/index';  // might be wrong to do this?
-const express = require('express');         // import Express with Node.js 'require' method
-const db = require('../server/db/index')
+import express from 'express';            // Importing Express to use for our server
+import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
 
-/////////////////////////////////////////////////////////////////////////////////////
-/*                                 MIDDLEWARE                                      */
+//////////////////////////////////////////////////////////////////////////////////////
+/*                                 MIDDLEWARE                                       */
 
 //app.use(...)                      // create router middlewares
 //app.use(...)
@@ -15,9 +14,13 @@ const port = 8080;                  // random port, can change as necessary
 
 //app.use(...)                      // apply google passport as auth middleware
 app.use(express.json())             // use express.json() as middleware
-/////////////////////////////////////////////////////////////////////////////////////
-
 app.use('/', express.static('client/dist'));  // on startup, serve files from webpack
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+/*                                  REQUEST HANDLERS                                */
 
 /* 
   Undeveloped, but this will be for a more sensitive request (login) that is necessary
@@ -82,11 +85,33 @@ app.put('user/info/:id', (req, res) => {
       res.sendStatus(500);
     })
 })
+//////////////////////////////////////////////////////////////////////////////////////
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+/*                  DATABASE CONNECTION & SERVER LISTENER                           */
 // On successful connection to database, have our server begin listening for requests...
 db.on('open', () => {
   app.listen( port, () => {
-    console.log(`Connection to database fitness-tracker established...`)
+    console.log(`>> Connection to database fitness-tracker established <<`)
     console.log(`Express is listening on port ${port}...`)
   })
 })
+
+db.on('disconnected', () => {
+  console.log('>> Disconnected from database fitness-tracker <<')
+})
+
+db.on('disconnecting', () => {
+  console.log('>> Disconnecting to database fitness-tracker <<')
+})
+
+db.on('reconnected', () => {
+  console.log('>> Attempting reconnect to database fitness-tracker <<')
+})
+
+db.on('close', () => {
+  console.log('>> Connection to database fitness-tracker has been closed <<')
+})
+/////////////////////////////////////////////////////////////////////////////////////
