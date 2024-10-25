@@ -1,11 +1,11 @@
+import React from 'react'
 export default function App(){
 
   return (
-    <div id="root-app">hello</div>
+    <div id="root-app">hello there world</div>
   )
 }
-  
-  
+
   //importing everything into the App component
 
 
