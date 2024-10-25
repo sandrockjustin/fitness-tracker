@@ -4,9 +4,10 @@
   "description": "workouts and calories tracked",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "seed": "node mock-data/seedDatabase.js",
+    "build": "webpack",
   },
   "keywords": [],
   "author": "",
