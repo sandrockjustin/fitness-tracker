@@ -5,10 +5,15 @@ import WorkoutList from './WorkoutList.jsx';
 //receives workouts as a prop from WorkoutList.jsx
 
 const Workout = ({workout, onClick}) => {
-
-  return (
-    <div onClick={onClick}>{workout ? (workout.name) : ''}</div>
-  )
+  if(onClick) {
+    return (
+      <div onClick={onClick}>{workout ? (workout.name) : ''}</div>
+    )
+  } else {
+    return (
+      <div>{workout ? (workout.name) : ''}</div>
+    )
+  }
 }
 
 export default Workout;
