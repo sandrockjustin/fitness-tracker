@@ -1,4 +1,14 @@
-//render individual workout routine (collection of exercises)
+import React from 'react';
+import WorkoutList from './WorkoutList.jsx';
+//render individual workout routine
 
-//receives routine as a prop from WorkoutList.jsx
+//receives workouts as a prop from WorkoutList.jsx
 
+const Workout = ({workout, onClick}) => {
+
+  return (
+    <div onClick={onClick}>{workout ? (workout.name) : ''}</div>
+  )
+}
+
+export default Workout;
