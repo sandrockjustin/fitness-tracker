@@ -29,10 +29,10 @@ app.get('/user', (req, res) => {
 })
 
 // Responsible for answering basic get request, return the current User's information from database
-app.get('/user/info', (req, res) => {
+app.get('/user/info/:id', (req, res) => {
 
   // Try to find a user matching the current user's ID
-  User.find({_id: req.body.id})
+  User.find({_id: req.params.id})
     .then((foundUser) => {
 
       // if no user with that ID is found
@@ -40,7 +40,7 @@ app.get('/user/info', (req, res) => {
         res.sendStatus(404)
       }
 
-      // Why scrub user? Ensures sensitive information (password, salt) are not leaked
+      // Why scrub user? Ensures sensitive information (password, salt, secret) are not leaked
       const scrubUser = {
         _id: foundUser._id,
         username: foundUser.username,
