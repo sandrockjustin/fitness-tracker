@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import {User, db} from '../server/db/index.js'
 import exampleWorkouts from './exampleWorkouts.js'
+import exampleNutrition from './exampleNutrition.js';
 
 db.on('open', () => {
 
@@ -11,34 +12,67 @@ db.on('open', () => {
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   /*                                 INITIALIZING USERS FOR SEED                              */
+
+  function randomWorkouts(){
+    if (
+      exampleWorkouts === undefined ||
+      exampleWorkouts.length === undefined || 
+      exampleWorkouts.length === 0
+    ) {
+      return console.error('Error during database seed; exampleWorkouts undefined.')
+    }
+
+    let max = exampleWorkouts.length;
+    let rand = Math.floor(Math.random() * max);
+
+    return exampleWorkouts.slice(0, rand);
+  }
+
+  function randomNutrition(){
+    
+    if (
+      exampleNutrition === undefined ||
+      exampleNutrition.length === undefined || 
+      exampleNutrition.length === 0
+    ) {
+      return console.error('Error during database seed; exampleNutrition undefined.')
+    }
+    
+    let max = exampleNutrition.length;
+    
+    let rand = Math.floor(Math.random() * max);
+
+    return exampleNutrition.slice(0, rand);
+  }
+
   const userOne = {
-    username: 'Fiddlesticks',
-    workouts: exampleWorkouts,
-    nutrition: ['Banana', 'Ham Sandwich', 'Chicken', 'Peach', 'Mango']
+    username: 'Jeremy Hernandez',
+    workouts: randomWorkouts(),
+    nutrition: randomNutrition()
   }
 
   const userTwo = {
-    username: 'Evelynn',
-    workouts: exampleWorkouts,
-    nutrition: ['Banana', 'Peach', 'Mango']
+    username: 'Benjamin Long',
+    workouts: randomWorkouts(),
+    nutrition: randomNutrition()
   }
 
   const userThree = {
-    username: 'MooMoo Mittens',
-    workouts: exampleWorkouts,
-    nutrition: ['Chicken', 'Peach', 'Mango']
+    username: 'Justin Sandrock',
+    workouts: randomWorkouts(),
+    nutrition: randomNutrition()
   }
 
   const userFour = {
-    username: 'Louisa',
-    workouts: exampleWorkouts,
-    nutrition: ['Banana', 'Ham Sandwich', 'Mango']
+    username: 'Olivia Baylor',
+    workouts: randomWorkouts(),
+    nutrition: randomNutrition()
   }
 
   const userFive = {
-    username: 'Alphonso',
-    workouts: exampleWorkouts,
-    nutrition: ['Chicken', 'Peach']
+    username: 'Ethan Little',
+    workouts: randomWorkouts(),
+    nutrition: randomNutrition()
   }
   //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -116,13 +150,14 @@ db.on('open', () => {
   //////////////////////////////////////////////////////////////////////////////////////////////
 
 
-  
+
   //////////////////////////////////////////////////////////////////////////////////////////////
   /*               WAITS FOR ALL OPERATIONS TO CONCLUDE, THEN LOGS MESSAGE                    */
   Promise.all([createUserOne, createUserTwo, createUserThree, createUserFour, createUserFive])
     .then(() => {
-      console.log(`There were ${deletedCount} successful deletions and ${successCount} insertions.`)
-      console.log(`There were ${failureCount} failures to during this process.`)
+      console.log(
+        `${deletedCount} successful deletions.\n${successCount} insertions.\n${failureCount} failures.`
+      )
     })
   //////////////////////////////////////////////////////////////////////////////////////////////
 
