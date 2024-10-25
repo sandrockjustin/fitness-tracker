@@ -1,4 +1,6 @@
 import express from 'express';            // Importing Express to use for our server
+import session from 'express-session';
+import Passport from 'passport-google-oauth20';
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 
 const app = express();              // create Express instance named 'app'
@@ -23,10 +25,10 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 /*                                  REQUEST HANDLERS                                */
 
 // Responsible for answering basic get request, return the current User's information from database
-app.get('/user/info/:id', (req, res) => {
+app.get('/user/info/:username', (req, res) => {
 
   // Try to find a user matching the current user's ID
-  User.find({_id: req.params.id})
+  User.find({username: req.params.username})
     .then((foundUser) => {
 
       // if no user with that ID is found

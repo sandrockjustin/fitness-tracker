@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
-const findOrCreate = require('mongoose-findorcreate'); // importing this to register it to our schema
+import findOrCreate from 'mongoose-findorcreate' // importing this to register it to our schema
 
 // establish connection to mongoose
 // before we can do this, we need to declare a database name and a path
