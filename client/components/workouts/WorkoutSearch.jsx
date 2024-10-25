@@ -30,6 +30,7 @@ const WorkoutSearch = () => {
     .then((result) => {
       console.log('result returned', result);
       setFilteredResults(result.data);
+      setSearchQuery('');
     })
     .catch((error) => {
       console.error(`There was an error.`);
@@ -44,7 +45,7 @@ const WorkoutSearch = () => {
           handleClickEvent();
         }}
       >
-        <label htmlFor="query">Search Workouts:</label>
+        <label htmlFor="query">Search Workouts for Muscle Group:</label>
         <input
           type="search"
           id="query"
@@ -58,7 +59,7 @@ const WorkoutSearch = () => {
       </form>
       {filteredResults.map((workout, index) => {
         return (
-         <Workout workout={workout} key={index}/>
+         <Workout workout={workout} key={index} onClick={() => console.log('Workout added to users workoutList')}/>
         )
       })}
     </div>
