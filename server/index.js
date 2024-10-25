@@ -28,7 +28,32 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
   exposing a user's password or, even worse, somehow exposing the secret given to use by
   Google Passport.
 */
-app.get('/user', (req, res) => {
+app.get('/login', (req, res) => {
+  res.render('login');
+})
+
+app.post('/login', (req, res) => {
+  console.log(req.data); // should contain username and password properties
+  const { username, password } = req.data;
+
+  // find the user with this username
+  User.find({username: username})
+    .then((foundUser) => {
+      if (!foundUser) {
+        res.status(404).redirect('/login')
+      }
+
+      if (founderUser.password = password){
+        res.status(200).redirect('index')
+      } else {
+        res.status(403).redirect('/login')
+      }
+    })
+    .catch((error) => {
+      console.error('Error during login request.')
+      res.sendStatus(404);
+    })
+
 })
 
 // Responsible for answering basic get request, return the current User's information from database
