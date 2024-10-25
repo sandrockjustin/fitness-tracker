@@ -1,4 +1,12 @@
-//importing everything into the App component
+export default function App(){
+
+  return (
+    <div id="root-app">hello</div>
+  )
+}
+  
+  
+  //importing everything into the App component
 
 
 //render login page view

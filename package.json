@@ -4,8 +4,9 @@
   "description": "workouts and calories tracked",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/index.js"
+    "build": "webpack",
+    "start": "nodemon server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +15,7 @@
     "@mui/material": "^6.1.5",
     "axios": "^1.7.7",
     "babel": "^5.8.38",
+    "babel-loader": "^9.2.1",
     "eslint": "^9.13.0",
     "express": "^4.21.1",
     "mongodb": "^6.10.0",
@@ -27,6 +29,8 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.25.9",
     "html-webpack-plugin": "^5.6.3"
   }
 }
