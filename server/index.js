@@ -1,6 +1,5 @@
-import mongoose from 'mongoose';
-import express from 'express';
-import { User, db } from './db/index.js'
+import express from 'express';            // Importing Express to use for our server
+import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
@@ -18,10 +17,7 @@ app.use(express.json())             // use express.json() as middleware
 app.use('/', express.static('client/dist'));  // on startup, serve files from webpack
 //////////////////////////////////////////////////////////////////////////////////////
 
-app.listen( port, () => {
-  console.log(`>> Connection to database fitness-tracker established <<`)
-  console.log(`Express is listening on port ${port}...`)
-})
+
 
 //////////////////////////////////////////////////////////////////////////////////////
 /*                                  REQUEST HANDLERS                                */
