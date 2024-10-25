@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import exampleWorkoutData from '../../../mock-data/exampleWorkouts';
+import Workout from './Workout.jsx';
 //should have search bar
 
 //populates result window with results
@@ -11,7 +12,7 @@ const WorkoutSearch = () => {
   //useStates
   const [searchQuery, setSearchQuery] = useState('');
   //state for mock data
-  const [workouts, setWorkouts] = useState(exampleWorkoutData);
+  const [workout, setWorkout] = useState([]);
   //state for filtered mock data
   const [filteredResults, setFilteredResults] = useState([]);
 
@@ -22,10 +23,17 @@ const WorkoutSearch = () => {
 
   const handleClickEvent = () => {
     // filter exampleWorkoutData by search query
-    const results = workouts.filter(workout =>
-      workout.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredResults(results);
+    // const results = workouts.filter(workout =>
+    //   workout.name.toLowerCase().includes(searchQuery.toLowerCase())
+    // );
+    axios.get(`/WorkoutSearch/workouts/${searchQuery}`)
+    .then((result) => {
+      console.log('result returned', result);
+      setFilteredResults(result.data);
+    })
+    .catch((error) => {
+      console.error(`There was an error.`);
+    })
   };
 
   return (
@@ -46,16 +54,13 @@ const WorkoutSearch = () => {
           onChange={handleInputChange}
           value={searchQuery}
         />
-        <button type="submit">Search</button>
+        <button type="submit" onClick={handleClickEvent}>Search</button>
       </form>
-
-      <div>
-        {filteredResults.map((workout) => (
-          <div key={workout.id}>
-            {workout.name}
-          </div>
-        ))}
-      </div>
+      {filteredResults.map((workout, index) => {
+        return (
+         <Workout workout={workout} key={index}/>
+        )
+      })}
     </div>
   );
 };

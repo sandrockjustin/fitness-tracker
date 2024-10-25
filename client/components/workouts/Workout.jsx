@@ -4,10 +4,10 @@ import WorkoutList from './WorkoutList.jsx';
 
 //receives workouts as a prop from WorkoutList.jsx
 
-const Workout = ({workouts}) => {
+const Workout = ({workout}) => {
 
   return (
-    <div>{workouts}</div>
+    <div>{workout ? (workout.name) : ''}</div>
   )
 }
 

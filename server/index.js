@@ -1,6 +1,7 @@
 import express from 'express';            // Importing Express to use for our server
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
-
+import axios from 'axios';
+import {API_NINJA_KEY} from '../config.js';
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
 
@@ -84,6 +85,27 @@ app.put('user/info/:id', (req, res) => {
       console.error(`Error on post request to ${req.params.id}...`);
       res.sendStatus(500);
     })
+})
+
+/* 
+  This is used to send a search request to API Ninjas
+  endpoint '/WorkoutSearch/workouts
+*/
+app.get('/WorkoutSearch/workouts/:query', (req, res) => {
+  const {query} = req.params;
+  let data;
+  // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
+  axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
+    .then((response) => {
+      data = JSON.stringify(response.data);
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error('Error during API fetch for workouts', err);
+
+      res.sendStatus(500);
+    })
+
 })
 //////////////////////////////////////////////////////////////////////////////////////
 
