@@ -4,7 +4,7 @@ import WorkoutList from './workouts/WorkoutList.jsx';
 //importing everything into the App component
 export default function App(){
   const [user, setUser] = useState(null);
-  
+  const [usersWorkoutList, setWorkoutList] = useState(['curls', 'squats', 'lunges']);
 
   //useEffect to fetch user info on start up
   // useEffect(() => {
@@ -15,7 +15,7 @@ export default function App(){
     {!user ? (
       <div>
       <WorkoutSearch />
-      <WorkoutList />
+      <WorkoutList usersWorkoutList={usersWorkoutList}/>
       </div>
     ) : (
       <div>
