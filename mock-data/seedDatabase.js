@@ -47,30 +47,35 @@ db.on('open', () => {
 
   const userOne = {
     username: 'Jeremy Hernandez',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userTwo = {
     username: 'Benjamin Long',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userThree = {
     username: 'Justin Sandrock',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userFour = {
     username: 'Olivia Baylor',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userFive = {
     username: 'Ethan Little',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
