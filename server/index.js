@@ -1,11 +1,21 @@
-//create express instance
+const express = require('express'); // import Express with Node.js 'require' method
+const app = express();              // create Express instance named 'app'
+const port = 8080;                  // random port, can change as necessary
 
-//create router
+/////////////////////////////////////////////////////////////////////////////////////
+/*                                 MIDDLEWARE                                      */
 
-//apply google passport as middleware
+//app.use(...)                      // create router middlewares
+//app.use(...)
+//app.use(...)
+//app.use(...)
 
-//apply express json parsing middleware
+//app.use(...)                      // apply google passport as authentication middleware
+app.use(express.json())             // use express.json() as middleware
+/////////////////////////////////////////////////////////////////////////////////////
 
-//express instance listens on a port
+app.use('/', express.static('client/dist'));  // on startup, serve files from webpack
 
-//on startup express serves client/dist (static assets)
+app.listen( port, () => {
+  console.log(`Express is listening on port ${port}...`)
+})
