@@ -47,30 +47,35 @@ db.on('open', () => {
 
   const userOne = {
     username: 'Jeremy Hernandez',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userTwo = {
     username: 'Benjamin Long',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userThree = {
     username: 'Justin Sandrock',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userFour = {
     username: 'Olivia Baylor',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
 
   const userFive = {
     username: 'Ethan Little',
+    password: 'password',
     workouts: randomWorkouts(),
     nutrition: randomNutrition()
   }
@@ -81,7 +86,7 @@ db.on('open', () => {
   //////////////////////////////////////////////////////////////////////////////////////////////
   /*                    PURGE DATABASE AND REPOPULATE WITH EXAMPLE USERS                      */
   /*  !!WARNING!!: Running npm seed command WILL delete users with matching usernames in db   */
-  const createUserOne = User.findOneAndDelete({username: userOne.username})
+  const createUserOne = User.deleteMany({username: userOne.username})
     .then( () => {
       deletedCount += 1
 
@@ -94,11 +99,11 @@ db.on('open', () => {
       failureCount += 1
     })
 
-  const createUserTwo = User.findOneAndDelete({username: userTwo.username})
+  const createUserTwo = User.deleteMany({username: userTwo.username})
     .then( () => {
       deletedCount += 1
 
-      return User.create(userOne)
+      return User.create(userTwo)
     })
     .then( () => {
       successCount += 1
@@ -108,11 +113,11 @@ db.on('open', () => {
     })
 
 
-  const createUserThree = User.findOneAndDelete({username: userThree.username})
+  const createUserThree = User.deleteMany({username: userThree.username})
     .then( () => {
       deletedCount += 1
 
-      return User.create(userOne)
+      return User.create(userThree)
     })
     .then( () => {
       successCount += 1
@@ -121,11 +126,11 @@ db.on('open', () => {
       failureCount += 1
     })
 
-  const createUserFour = User.findOneAndDelete({username: userFour.username})
+  const createUserFour = User.deleteMany({username: userFour.username})
     .then( () => {
       deletedCount += 1
 
-      return User.create(userOne)
+      return User.create(userFour)
     })
     .then( () => {
       successCount += 1
@@ -134,11 +139,11 @@ db.on('open', () => {
       failureCount += 1
     })
     
-  const createUserFive = User.findOneAndDelete({username: userFive.username})
+  const createUserFive = User.deleteMany({username: userFive.username})
     .then( () => {
       deletedCount += 1
 
-      return User.create(userOne)
+      return User.create(userFive)
     })
     .then( () => {
       successCount += 1
