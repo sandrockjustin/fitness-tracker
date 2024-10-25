@@ -23,15 +23,6 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 //////////////////////////////////////////////////////////////////////////////////////
 /*                                  REQUEST HANDLERS                                */
 
-/* 
-  Undeveloped, but this will be for a more sensitive request (login) that is necessary
-  for authentication. I want to try to keep these separate so that we aren't unnecessarily
-  exposing a user's password or, even worse, somehow exposing the secret given to use by
-  Google Passport.
-*/
-app.get('/user', (req, res) => {
-})
-
 // Responsible for answering basic get request, return the current User's information from database
 app.get('/user/info/:username', (req, res) => {
   console.log('req.params', req.params);
