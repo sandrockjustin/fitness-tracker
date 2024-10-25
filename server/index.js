@@ -1,4 +1,6 @@
 import express from 'express';            // Importing Express to use for our server
+import session from 'express-session';
+import Passport from 'passport-google-oauth20';
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 import axios from 'axios';
 import {API_NINJA_KEY} from '../config.js';
@@ -25,6 +27,7 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 
 // Responsible for answering basic get request, return the current User's information from database
 app.get('/user/info/:username', (req, res) => {
+
   console.log('req.params', req.params);
   // Try to find a user matching the current user's ID
   User.findOne({username: req.params.username})
