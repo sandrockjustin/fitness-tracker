@@ -24,12 +24,12 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 /*                                  REQUEST HANDLERS                                */
 
 // Responsible for answering basic get request, return the current User's information from database
-app.get('/user/info/:id', (req, res) => {
-
+app.get('/user/info/:username', (req, res) => {
+  console.log('req.params', req.params);
   // Try to find a user matching the current user's ID
-  User.find({_id: req.params.id})
+  User.findOne({username: req.params.username})
     .then((foundUser) => {
-
+      console.log('foundUser', foundUser);
       // if no user with that ID is found
       if (foundUser === null){
         res.sendStatus(404)

@@ -1,27 +1,41 @@
 import React, {useState, useEffect} from 'react'
 import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
+import axios from 'axios';
 //importing everything into the App component
 export default function App(){
   const [user, setUser] = useState(null);
-  const [usersWorkoutList, setWorkoutList] = useState([]);
+  const [workouts, setWorkouts] = useState([]);
 
+  //fetch user info
+  const fetchUser = () => {
+    axios.get(`/user/info/${'Jeremy Hernandez'}`)
+      .then((userData) => {
+        setUser(userData.data);
+        
+        // console.log('userData', userData);
+      })
+      .catch((err) => {
+        console.err('Failed to get userData');
+      })
+  }
   //useEffect to fetch user info on start up
-  // useEffect(() => {
-  //   const fetchedUser = axios.get()
-  // })
+  useEffect(() => {
+   fetchUser();
+    
+  }, []);
+  setTimeout(console.log, 5000, user);
   return (
     <div id="root-app">hello there world
-    {!user ? (
+    {user ?
       <div>
       <WorkoutSearch />
-      <WorkoutList usersWorkoutList={usersWorkoutList}/>
+      <WorkoutList workouts={workouts}/>
       </div>
-    ) : (
+     :
       <div>
         <h1>Please Login</h1>
       </div>
-    )
       }
     </div>
   )

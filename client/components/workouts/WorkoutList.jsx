@@ -4,14 +4,14 @@ import Workout from './Workout.jsx';
 
 //populate each workout list tied to the user's saved lists
 
-const WorkoutList = ({usersWorkoutList}) => {
-  console.log('usersworkoutlist', usersWorkoutList);
+const WorkoutList = ({workouts}) => {
+  // console.log('usersworkoutlist', usersWorkoutList);
   return (
     <div>
-      {usersWorkoutList.map((workouts, index) => {
-        console.log('workouts', workouts);
+      {workouts.map((workout, index) => {
+        console.log('workout', workout);
         return (
-          <Workout workouts={workouts} key={index} />
+          <Workout workout={workout} key={index} />
         )
       })}
     </div>
