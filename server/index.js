@@ -17,7 +17,13 @@ const port = 8080;                  // random port, can change as necessary
 //   req.user ? next() : res.sendStatus(401);
 // }
 
-app.use(session({ secret: 'kdjJHS98DY0812SsadKangar00'})) // this should eventually be stored in an .env
+app.use(session(
+  { 
+    secret: 'kdjJHS98DY0812SsadKangar00',
+    resave: false,
+    saveUninitialized: false
+  }
+)) // this should eventually be stored in an .env
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -30,21 +36,22 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 //////////////////////////////////////////////////////////////////////////////////////
 /*                                  REQUEST HANDLERS                                */
 
-app.get('/auth/google', (req, res) => {
-  passport.authenticate('google', { scope: ['email', 'openid'] });
-})
+// previous issue resolved; issue was how we were using passport.authenticate in route
+app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'openid'] }));
 
-app.get('/google/callback', (req, res) => {
+app.get('/google/callback', 
   passport.authenticate('google', {
     successRedirect: '/currentWorkouts',
     failureRedirect: '/auth/google'
   })
-})
+);
+
 
 // when user clicks nav button to change view, is GET request that can be protected
 app.get('/currentWorkouts', (req, res) => {
-  
-  res.status(200).send({view: 'WorkoutList'})
+
+  res.status(200).redirect('/');
+
 })
 
 app.get('/searchWorkouts', (req, res) => {
@@ -55,8 +62,20 @@ app.get('/nutrition', (req, res) => {
   
 })
 
-app.get('/logout', (req, res) => {
-  req.logout();
+// On request to logout, attempt to delete session and user data
+app.post('/logout', (req, res, next) => {
+
+  // handles deletion of req.user
+  req.logout( (err) => {
+    if (err) { return next(err)}
+
+    // this is deleting session but a new one is being created by middleware
+    // either way, this isn't fixing the issue of being able to login AGAIN after logout
+    req.session.destroy( (err) => {
+      if (err) { return next(err)}
+      res.status(200).redirect('/auth/google');
+    })
+  });
 })
 
 // Responsible for answering basic get request, return the current User's information from database
