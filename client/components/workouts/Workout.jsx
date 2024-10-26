@@ -7,7 +7,12 @@ import WorkoutList from './WorkoutList.jsx';
 const Workout = ({workout, onClick}) => {
   if(onClick) {
     return (
-      <div onClick={onClick}>{workout ? (workout.name) : ''}</div>
+      <div onClick={onClick}>{workout ? (
+        <div className='workout-name'>
+          {workout.name}
+        </div>
+      ) : ''}
+      </div>
     )
   } else {
     return (

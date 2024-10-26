@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
 import axios from 'axios';
+
 //importing everything into the App component
 export default function App(){
   const [user, setUser] = useState(null);
@@ -12,7 +13,7 @@ export default function App(){
     axios.get(`/user/info/${'Jeremy Hernandez'}`)
       .then((userData) => {
         setUser(userData.data);
-        
+        setWorkouts(userData.data.workouts)
         // console.log('userData', userData);
       })
       .catch((err) => {
@@ -26,10 +27,11 @@ export default function App(){
   }, []);
   setTimeout(console.log, 5000, user);
   return (
-    <div id="root-app">hello there world
+    <div id="root-app">CALORIE CONVEYOR BELT
     {user ?
       <div>
       <WorkoutSearch />
+      <h3>User's Workout List</h3>
       <WorkoutList workouts={workouts}/>
       </div>
      :

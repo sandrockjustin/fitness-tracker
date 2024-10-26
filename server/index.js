@@ -1,7 +1,7 @@
 import express from 'express';            // Importing Express to use for our server
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 import axios from 'axios';
-import {API_NINJA_KEY} from '../config.js';
+import {API_NINJA_KEY, FOOD_API_KEY} from '../config.js';
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
 
