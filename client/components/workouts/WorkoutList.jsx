@@ -1,6 +1,7 @@
 import React from 'react';
 import Workout from './Workout.jsx';
-import { Container } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 //import workouts from App.jsx
 
@@ -9,24 +10,39 @@ import { Container } from '@mui/material';
 const WorkoutList = ({workouts}) => {
   // console.log('usersworkoutlist', usersWorkoutList);
   return (
-    <Container sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 2,
-      padding: 3,
-      background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-      alignContent: "flex-start",
-      margin: '0 auto',
-      marginLeft: 0
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        overflowX: 'auto',
+        flexDirection: 'row',
+        gap: 2,
+        padding: '10px',
+      }}
+    >
       {workouts.map((workout, index) => {
-        console.log('workout', workout);
         return (
-          <Workout workout={workout} key={index} />
-        )
+          <div
+            key={index}
+            style={{flex: '1 1 30%', maxHeight: '500px', overflowY: 'auto', minWidth: '500px', padding: '10px', background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', boxSizing: 'border-box', position: 'relative'}}>
+            <IconButton
+              sx={{ 
+                position: 'absolute', 
+                top: 8, 
+                right: 8, 
+                color: 'white',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
+              }}
+              onClick={() => console.log('Deleted item')}
+            >
+              <DeleteIcon />
+            </IconButton>
+            <Workout workout={workout} key={index} />
+          </div>
+        );
       })}
-    </Container>
-  )
-}
+    </Box>
+  );
+};
 
 export default WorkoutList;

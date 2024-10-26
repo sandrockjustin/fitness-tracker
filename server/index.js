@@ -80,7 +80,8 @@ app.put('user/info/:id', (req, res) => {
       res.sendStatus(500);
     })
 })
-
+////////////////////////////////////////////////////////////
+//Workout request handlers
 /* 
   This is used to send a search request to API Ninjas
   endpoint '/WorkoutSearch/workouts
@@ -101,6 +102,29 @@ app.get('/WorkoutSearch/workouts/:query', (req, res) => {
     })
 
 })
+
+//handle requests to add workout to users saved workout list
+app.patch('/WorkoutSearch/addWorkout', (req, res) => {
+  const {workout, user} = req.body;
+  console.log('user', user);
+  console.log('workout to be added', workout);
+  User.findOneAndUpdate(
+    {_id: user._id},
+    {$push: {workouts: workout}},
+    { new: true, upsert: true }
+  )
+  .then((updatedUser) => {
+    if (updatedUser) {
+      res.status(200).send(updatedUser);
+    } else {
+      res.sendStatus(404);
+    }
+  })
+  .catch((err) => {
+    console.error('Failed to find user and add workout')
+    res.sendStatus(500);
+  })
+});
 //////////////////////////////////////////////////////////////////////////////////////
 
 

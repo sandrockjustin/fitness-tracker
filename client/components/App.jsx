@@ -52,7 +52,7 @@ export default function App() {
 				<Navigation updateView={updateView}/>	
 				{user ?
 					<div>
-					<WorkoutSearch/>
+					<WorkoutSearch user={user} fetchUser={fetchUser}/>
 					</div>
 					:
 					<div>

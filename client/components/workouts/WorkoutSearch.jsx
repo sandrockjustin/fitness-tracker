@@ -4,7 +4,7 @@ import exampleWorkoutData from '../../../mock-data/exampleWorkouts';
 import Workout from './Workout.jsx';
 import {Button, FormControl} from '@mui/material';
 
-const WorkoutSearch = () => {
+const WorkoutSearch = ({user, fetchUser}) => {
   //useStates
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -30,6 +30,22 @@ const WorkoutSearch = () => {
     .catch((error) => {
       console.error(`There was an error.`);
     })
+  };
+
+  //handle user clicks on result workout objects to add to user's saved workout list
+  const handleSelectedWorkout = (workout, index) => {
+    axios.patch(`/WorkoutSearch/addWorkout`, {workout, user})
+      .then(() => {
+
+        setFilteredResults((prevResults) =>
+          prevResults.filter((_, i) => i !== index)
+      );
+      fetchUser();
+      alert('Workout has been added to your saved workout list!')
+      })
+      .catch((err) => {
+        console.error('Failed to save workout');
+      })
   };
 
   return (
@@ -67,13 +83,15 @@ const WorkoutSearch = () => {
          onClick={handleClickEvent}>Search
          </Button>
       </FormControl>
-      <div name='results'>
-        <h3>Workout results</h3>
+      <h3 style={{ marginTop: '20px' }}>Workout results</h3>
+      <div name='results' style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: '5px', justifyContent: 'center', marginTop: '20px' }}>
         {filteredResults.map((workout, index) => {
           return (
-          <Workout workout={workout}
-            key={index}
-            onClick={() => console.log('Workout added to users workoutList')}/>
+            <div key={index} style={{ flex: '0 1 200px', minWidth: '200px' }}>
+              <Workout workout={workout}
+                key={index}
+                onClick={() => handleSelectedWorkout(workout, index)}/>
+            </div>
           )
         })}
       </div>
