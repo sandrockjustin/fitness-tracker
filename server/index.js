@@ -107,7 +107,7 @@ app.put('user/info/:id', (req, res) => {
 
 /* 
   This is used to send a search request to Spoonacular
-  endpoint '/WorkoutSearch/workouts
+  endpoint '/FoodSearch
 */
 app.get('/FoodSearch/:query', (req, res) => {
   const {query} = req.params;
@@ -137,7 +137,6 @@ app.get('/FoodSearch/:query', (req, res) => {
         nutDensity
       }
 
-
       res.status(200).send(nutrientsInfo);
 
     })
@@ -146,6 +145,29 @@ app.get('/FoodSearch/:query', (req, res) => {
     console.error("didn't get food", err)
     res.sendStatus(500)
   })
+
+})
+/* 
+  This is used to save a search result from 
+  endpoint '/pantry
+*/
+app.put('/pantry/:id', (req, res)=>{
+
+	const id = req.params.id;
+	const update = req.body.nutrition; // not sure if req.data or req.body
+	
+	/////////////////////////////////////////////////
+	console.log(`User ID is: ${id}.`)
+	console.log(`Request body is: `, update)
+	/////////////////////////////////////////////////
+
+	User.findByIdAndUpdate({_id: id}, {$push: {nutrition: update}})
+		.then((updateComplete) => {
+			res.sendStatus(201);
+		})
+		.catch((error) => {
+			console.error(`Error on PUT request to pantry for User ${id}.`)
+		})
 
 })
 

@@ -4,12 +4,15 @@ import FoodSearch from './FoodSearch.jsx'
 import Meals from './Meals.jsx'
 
 
-export default function Nutrition(){
+export default function Nutrition(props){
 
   return(
 <>
+  <br></br>
+    <FoodSearch user={props.user}/>
+  <br></br>
     <PantryList/>
-    <FoodSearch/>
+  <br></br>  
     <Meals/>
 </>
   )
