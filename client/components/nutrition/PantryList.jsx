@@ -7,13 +7,21 @@
 import React from 'react'
 import PantryListItem from './PantryListItem.jsx'
 
-export default function PantryList(){
+export default function PantryList(props){
+  console.log("PANTRY LIST NUTRITION", props.nutrition)
+
+
+
   return(
     <div>pantry list component
-      <PantryListItem/>
-      <PantryListItem/>
-      <PantryListItem/>
-      <PantryListItem/>
+     {props.nutrition.map((food)=>{
+
+      // console.log("FOOD", food)
+
+      return(
+        <PantryListItem fetchUser={props.fetchUser} user={props.user} food={food} key={food.foodId}/>
+      )
+     })}
 
 
     </div>

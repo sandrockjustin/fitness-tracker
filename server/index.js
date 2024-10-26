@@ -111,6 +111,7 @@ app.put('user/info/:id', (req, res) => {
 */
 app.get('/FoodSearch/:query', (req, res) => {
   const {query} = req.params;
+  console.log("SERVER REQ PARAMS", req.params)
   
   axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
   .then(results=>{
@@ -120,7 +121,7 @@ app.get('/FoodSearch/:query', (req, res) => {
     console.log("FOODID", id, results.data.results[0])
 
     axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
-    .then(data=>{
+    .then((data)=>{
 
       //calculates caloric density of the searched food
       let calories = data.data.nutrition.nutrients[2].amount
@@ -147,6 +148,7 @@ app.get('/FoodSearch/:query', (req, res) => {
   })
 
 })
+//////////////////////////////////////////////////////////////////////
 /* 
   This is used to save a search result from 
   endpoint '/pantry
@@ -168,6 +170,26 @@ app.put('/pantry/:id', (req, res)=>{
 		.catch((error) => {
 			console.error(`Error on PUT request to pantry for User ${id}.`)
 		})
+
+})
+//////////////////////////////////////////////////////////////////
+/* 
+  This is used to delete an entry result from
+  endpoint '/pantry
+*/
+
+app.put('/pantry/food/:id', (req, res)=>{
+  console.log("DELETE REQ PARAMS", req.body)
+  console.log('user request:', req.params.id)
+
+  User.findByIdAndUpdate({_id: req.params.id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
+  .then((data)=>{
+    console.log("THEN BLOCK DATA", data)
+  })
+  .catch((err)=>{
+    console.error(err)
+  })
+
 
 })
 

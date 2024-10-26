@@ -65,7 +65,7 @@ export default function App() {
 			return (
 				<div id="root-app">Fitness Tracker
 					<Navigation updateView={updateView}/>
-					<div><Nutrition user={user}/></div>
+					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
 				</div>
 			)
 		default:

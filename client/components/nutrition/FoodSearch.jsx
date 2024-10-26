@@ -2,8 +2,6 @@ import React from 'react';
 import {useState} from 'react';
 import axios from 'axios';
 
-const pantry = [];
-
 //search bar input
 
 //add food object to pantry button
@@ -21,11 +19,9 @@ export default function FoodSearch(props){
     //and the search to the /FoodSearch endpoint
     axios.get(`/FoodSearch/${searchField}`)
     .then((foodInfo)=>{
-      console.log("FOODINFO", foodInfo.data)
-      // pantry.push(foodInfo.data)
+      // console.log("FOODINFO", foodInfo.data)
       setResults(foodInfo.data)
       handleAdd(foodInfo.data)
-      
     })
     .catch((err)=>{
       console.error(err);
@@ -33,17 +29,16 @@ export default function FoodSearch(props){
 
 
   }
-  
+
   const handleAdd = (foodInfo)=>{
 
-    axios.put(`/pantry/${props.user._id}`, { nutrition: foodInfo})
+    axios.put(`/pantry/${props.user._id}`, { nutrition: foodInfo })
       .then((data) => {
-        console.log("HANDLE ADD DATA", data)
+        // console.log("HANDLE ADD DATA", data)
       })
       .catch((err)=>{
         console.error(`Error during PUT request to database.`)
       })
-  
   }
 
 ///////////////////////////////////////////////////////
@@ -51,7 +46,7 @@ export default function FoodSearch(props){
     <div>food search component
 
       <input type="text" id='food-search' onChange={handleChange}/>
-      {console.log(searchField)}
+      {/* {console.log(searchField)} */}
       <button type="submit" onClick={handleClick}>search</button>
 
     </div>

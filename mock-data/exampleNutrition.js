@@ -1,7 +1,7 @@
 const exampleNutrition = [
     {
         foodName: 'bananas',
-        foodId: 9003,
+        foodId: 9040,
         calories: 105.02,
         grams: 118,
         nutDensity: 0.89
