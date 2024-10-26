@@ -1,6 +1,7 @@
 import React from 'react';
 import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
+import Navigation from './Navigation.jsx'
 import axios from 'axios';
 
 class App extends React.Component {
@@ -42,11 +43,7 @@ class App extends React.Component {
 			case 'WorkoutList':
 				return (
 					<div id="root-app">Fitness Tracker
-					<nav>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutList">Current Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutSearch">Search Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="Nutrition">Nutrition Helper</button>						
-					</nav>
+					<Navigation updateView={this.updateView}/>	
 					{this.state.user ?
 					  <div>
 					  <WorkoutList workouts={this.state.workouts}/>
@@ -61,11 +58,7 @@ class App extends React.Component {
 			case 'WorkoutSearch':
 				return (
 					<div id="root-app">Fitness Tracker
-					<nav>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutList">Current Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutSearch">Search Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="Nutrition">Nutrition Helper</button>						
-					</nav>
+					<Navigation updateView={this.updateView}/>	
 					{this.state.user ?
 					  <div>
 					  <WorkoutSearch/>
@@ -80,22 +73,14 @@ class App extends React.Component {
 			case 'Nutrition':
 				return (
 					<div id="root-app">Fitness Tracker
-					<nav>
-						<button type="button" onClick={(e) => this.updateView(e)} name="WorkoutList">Current Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutSearch">Search Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="Nutrition">Nutrition Helper</button>						
-					</nav>
+						<Navigation updateView={this.updateView}/>					
 						<div>NUTRITION component has not been implemented</div>
 					</div>
 				)
 			default:
 				return (
 					<div id="root-app">Fitness Tracker
-					<nav>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutList">Current Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="WorkoutSearch">Search Workouts</button>
-						<button type="button" onClick={(e) => this.updateView(e)}  name="Nutrition">Nutrition Helper</button>						
-					</nav>
+						<Navigation updateView={this.updateView}/>
 						<div>LOGIN component has not been implemented.</div>
 					</div>
 				)
