@@ -10,22 +10,35 @@ export default function App() {
 	const [view, setView] = useState('WorkoutList');
 	const [user, setUser] = useState(null);
 
-	function fetchUser() {
-		axios.get(`/user/info/${'Jeremy Hernandez'}`)
-		  .then((userData) => {
-				setUser(userData.data)
-		  })
-		  .catch((err) => {
-			console.error('Failed to get userData');
-		  })
-	}
+	// function fetchUser() {
+	// 	axios.get(`/user/info/`)
+	// 	  .then((userData) => {
+	// 			setUser(userData.data)
+	// 	  })
+	// 	  .catch((err) => {
+	// 		console.error('Failed to get userData');
+	// 	  })
+	// }
+
+	/*
+		What are the req.session and req.cookies?
+		This would reflect the current user or userID
+		We can use that to search in the database
+	*/
 	
 	function updateView(e) {
+		if (e.target.name === 'Logout'){
+			axios.post('/logout')
+				.catch((error) => {
+					console.error('Error during logout.')
+				})
+		}
+
 		setView(e.target.name)
 	}
 
 	useEffect(() => {
-		fetchUser();
+		// fetchUser();
 	}, [])
 	
 
