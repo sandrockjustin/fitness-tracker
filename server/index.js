@@ -3,7 +3,9 @@ import session from 'express-session';
 import Passport from 'passport-google-oauth20';
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 import axios from 'axios';
-import {API_NINJA_KEY} from '../config.js';
+// import {API_NINJA_KEY} from '../config.js';
+import FOOD_API_KEY from '../config.js';
+
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
 
@@ -85,25 +87,67 @@ app.put('user/info/:id', (req, res) => {
   This is used to send a search request to API Ninjas
   endpoint '/WorkoutSearch/workouts
 */
-app.get('/WorkoutSearch/workouts/:query', (req, res) => {
-  const {query} = req.params;
-  let data;
-  // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
-  axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
-    .then((response) => {
-      data = JSON.stringify(response.data);
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      console.error('Error during API fetch for workouts', err);
+// app.get('/WorkoutSearch/workouts/:query', (req, res) => {
+//   const {query} = req.params;
+//   let data;
+//   // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
+//   axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
+//     .then((response) => {
+//       data = JSON.stringify(response.data);
+//       res.status(200).send(data);
+//     })
+//     .catch((err) => {
+//       console.error('Error during API fetch for workouts', err);
 
-      res.sendStatus(500);
-    })
+//       res.sendStatus(500);
+//     })
 
-})
+// })
 //////////////////////////////////////////////////////////////////////////////////////
 
+/* 
+  This is used to send a search request to Spoonacular
+  endpoint '/WorkoutSearch/workouts
+*/
+app.get('/FoodSearch/:query', (req, res) => {
+  const {query} = req.params;
+  
+  axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
+  .then(results=>{
 
+    let id = results.data.results[0].id
+
+    console.log("FOODID", id, results.data.results[0])
+
+    axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
+    .then(data=>{
+
+      //calculates caloric density of the searched food
+      let calories = data.data.nutrition.nutrients[2].amount
+      let grams = data.data.nutrition.weightPerServing.amount
+      let nutDensity = calories/grams
+
+      console.log("caloric density", nutDensity)
+
+      const nutrientsInfo = {
+        foodName: results.data.results[0].name,
+        foodId:  results.data.results[0].id,
+        calories,
+        grams,
+        nutDensity
+      }
+
+
+      res.status(200).send(nutrientsInfo);
+
+    })
+  })
+  .catch(err=>{
+    console.error("didn't get food", err)
+    res.sendStatus(500)
+  })
+
+})
 
 //////////////////////////////////////////////////////////////////////////////////////
 /*                  DATABASE CONNECTION & SERVER LISTENER                           */
