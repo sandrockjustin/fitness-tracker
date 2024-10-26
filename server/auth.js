@@ -6,16 +6,14 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// we need to import GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET from .env file
-// we do this because we don't want this information leaked, which would compromise security
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8080/google/callback", // will likely change for us
+    callbackURL: "http://localhost:8080/google/callback",
     passReqToCallback: true
   },
   function(request, accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    User.findOrCreate({ _id: profile.id }, function (err, user) {
       return cb(err, user);
     });
   }
