@@ -21,40 +21,27 @@ export default function FoodSearch(props){
   
   
   const [searchField, setSearch] = useState('')
+  const [searchResults, setResults] = useState({})
 
   const handleChange = (e)=> {
     setSearch(e.target.value)
   }
+////////////////////////////////////////////////////
   const handleClick = ()=>{
+    // console.log(searchField)
+    axios.get(`/FoodSearch/${searchField}`)
+    .then((foodInfo)=>{
+      
+      setResults(foodInfo.data)
 
-    console.log(searchField)
-
-    //
-    
-
-    axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${searchField}&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
-    .then(results=>{
-
-      let id = results.data.results[0].id
-      console.log("FOODID", id, results.data.results[0])
-      axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
-      .then(data=>{
-
-        console.log("calories", data.data.nutrition.nutrients[2].amount)
-
-        let calories = data.data.nutrition.nutrients[2].amount
-        console.log("grams per serving", data.data.nutrition.weightPerServing.amount)
-
-        let grams = data.data.nutrition.weightPerServing.amount
-        console.log("calories/gram", calories/grams)
-
-      })
     })
-    .catch(err=>{
-      console.error("didnt get food", err)
+    .catch((err)=>{
+      console.error(err);
     })
+
   }
 
+///////////////////////////////////////////////////////
   return(
     <div>food search component
 
