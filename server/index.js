@@ -22,10 +22,10 @@ app.use(session(
     resave: false,
     saveUninitialized: false
   }
-)) // this should eventually be stored in an .env
+))
+
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use(express.json())                       // use express.json() as middleware
 app.use('/', express.static('client/dist'));  // on startup, serve files from webpack
 //////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,10 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 /*                                  REQUEST HANDLERS                                */
 
 // previous issue resolved; issue was how we were using passport.authenticate in route
-app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'openid'] }));
+app.get('/auth/google', passport.authenticate('google', { 
+  scope: ['email', 'openid'], 
+  prompt: 'select_account' // Forces the user to select an account
+}));
 
 app.get('/google/callback', 
   passport.authenticate('google', {
@@ -68,12 +71,14 @@ app.post('/logout', (req, res, next) => {
   req.logout( (err) => {
     if (err) { return next(err)}
 
-    // this is deleting session but a new one is being created by middleware
-    // either way, this isn't fixing the issue of being able to login AGAIN after logout
-    req.session.destroy( (err) => {
+    req.session.destroy((err) => {
+
       if (err) { return next(err)}
+
+      res.clearCookie('connect.sid')
       res.status(200).redirect('/auth/google');
     })
+
   });
 })
 

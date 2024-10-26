@@ -26,6 +26,9 @@ export default function App() {
 				.catch((error) => {
 					console.error('Error during logout.')
 				})
+			
+			setView('');
+			return;
 		}
 
 		setView(e.target.name)
@@ -79,7 +82,7 @@ export default function App() {
 			return (
 				<div id="root-app">Fitness Tracker
 					<Navigation updateView={updateView}/>
-					<div>LOGIN component has not been implemented.</div>
+					<button type="button">Log in with Google</button>
 				</div>
 			)
 	}

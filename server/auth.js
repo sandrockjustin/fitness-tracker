@@ -3,7 +3,6 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import passport from 'passport';
 import { User } from './db/index.js'; // importing model for interactions
 import dotenv from 'dotenv';
-
 dotenv.config();
 
 passport.use(new GoogleStrategy({
@@ -14,17 +13,25 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ _id: profile.id }, function (err, user) {
-      return cb(err, user);
+      return cb(err, user._id); // reworked, now should only store the user's ID, which we can use in requests
     });
   }
 ));
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-})
+passport.serializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, {
+      id: user.id,
+      username: user.username,
+      picture: user.picture
+    });
+  });
+});
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-})
+passport.deserializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
 
 export default passport;
