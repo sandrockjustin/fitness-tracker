@@ -32,7 +32,7 @@ app.get('/auth/google', (req, res) => {
   passport.authenticate('google', { scope: ['email', 'openid'] });
 })
 
-app.get('/auth/google/callback', (req, res) => {
+app.get('/google/callback', (req, res) => {
   passport.authenticate('google', {
     successRedirect: '/currentWorkouts',
     failureRedirect: '/auth/google'
@@ -41,7 +41,7 @@ app.get('/auth/google/callback', (req, res) => {
 
 // when user clicks nav button to change view, is GET request that can be protected
 app.get('/currentWorkouts', isLoggedIn, (req, res) => {
-  
+  res.send('/currentWorkouts')
 })
 
 app.get('/searchWorkouts', isLoggedIn, (req, res) => {
