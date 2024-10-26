@@ -8,10 +8,10 @@ import { User } from './db/index.js'; // importing model for interactions
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/auth/google/callback", // will likely change for us
+    callbackURL: "http://localhost:8080/google/callback", // will likely change for us
     passReqToCallback: true
   },
-  function(accessToken, refreshToken, profile, cb) {
+  function(request, accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
     });
