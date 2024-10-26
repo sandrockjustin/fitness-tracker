@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema } = mongoose;
+import findOrCreate from 'mongoose-findorcreate' // importing this to register it to our schema
 
 // establish connection to mongoose
 // before we can do this, we need to declare a database name and a path
@@ -18,6 +19,8 @@ const UserSchema = new Schema({
   workouts: Array,
   nutrition: Array
 })
+
+UserSchema.plugin(findOrCreate);  // adding the findOrCreate plugin to our schema here
 
 // make model from Schema
 const User = mongoose.model('User', UserSchema);
