@@ -2,6 +2,7 @@ import express from 'express';            // Importing Express to use for our se
 import session from 'express-session';
 import passport from 'passport';
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
+import auth from './auth.js';
 import axios from 'axios';
 import {API_NINJA_KEY, FOOD_API_KEY} from '../config.js';
 
@@ -11,9 +12,9 @@ const port = 8080;                  // random port, can change as necessary
 //////////////////////////////////////////////////////////////////////////////////////
 /*                                 MIDDLEWARE                                       */
 
-function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
-}
+// function isLoggedIn(req, res, next) {
+//   req.user ? next() : res.sendStatus(401);
+// }
 
 app.use(session({ secret: 'kdjJHS98DY0812SsadKangar00'})) // this should eventually be stored in an .env
 app.use(passport.initialize());
@@ -40,19 +41,20 @@ app.get('/google/callback', (req, res) => {
 })
 
 // when user clicks nav button to change view, is GET request that can be protected
-app.get('/currentWorkouts', isLoggedIn, (req, res) => {
-  res.send('/currentWorkouts')
+app.get('/currentWorkouts', (req, res) => {
+  
+  res.status(200).send({view: 'WorkoutList'})
 })
 
-app.get('/searchWorkouts', isLoggedIn, (req, res) => {
+app.get('/searchWorkouts', (req, res) => {
   
 })
 
-app.get('/nutrition', isLoggedIn, (req, res) => {
+app.get('/nutrition', (req, res) => {
   
 })
 
-app.get('/logout', isLoggedIn, (req, res) => {
+app.get('/logout', (req, res) => {
   req.logout();
 })
 
