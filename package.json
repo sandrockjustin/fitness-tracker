@@ -10,6 +10,8 @@
     "seed": "node mock-data/seedDatabase.js",
     "build": "webpack",
     "reap": "node mock-data/reapDatabase.js"
+    "build": "webpack",
+    "reap": "node mock-data/reapDatabase.js"
   },
   "keywords": [],
   "author": "",
