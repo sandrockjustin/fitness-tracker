@@ -14,8 +14,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/fitness-tracker')
 
 //define schema
 const UserSchema = new Schema({
-  username: String,
-  password: String,
+  _id: String,
   workouts: Array,
   nutrition: Array
 })
