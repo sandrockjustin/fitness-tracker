@@ -1,6 +1,6 @@
 import express from 'express';            // Importing Express to use for our server
 import session from 'express-session';
-import Passport from 'passport-google-oauth20';
+import passport from 'passport';
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 import axios from 'axios';
 import {API_NINJA_KEY, FOOD_API_KEY} from '../config.js';
@@ -12,13 +12,15 @@ const port = 8080;                  // random port, can change as necessary
 //////////////////////////////////////////////////////////////////////////////////////
 /*                                 MIDDLEWARE                                       */
 
-//app.use(...)                      // create router middlewares
-//app.use(...)
-//app.use(...)
-//app.use(...)
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.sendStatus(401);
+}
 
-//app.use(...)                      // apply google passport as auth middleware
-app.use(express.json())             // use express.json() as middleware
+app.use(session({ secret: 'kdjJHS98DY0812SsadKangar00'})) // this should eventually be stored in an .env
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(express.json())                       // use express.json() as middleware
 app.use('/', express.static('client/dist'));  // on startup, serve files from webpack
 //////////////////////////////////////////////////////////////////////////////////////
 
@@ -26,6 +28,34 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 
 //////////////////////////////////////////////////////////////////////////////////////
 /*                                  REQUEST HANDLERS                                */
+
+app.get('/auth/google', (req, res) => {
+  passport.authenticate('google', { scope: ['email', 'openid'] });
+})
+
+app.get('/auth/google/callback', (req, res) => {
+  passport.authenticate('google', {
+    successRedirect: '/currentWorkouts',
+    failureRedirect: '/auth/google'
+  })
+})
+
+// when user clicks nav button to change view, is GET request that can be protected
+app.get('/currentWorkouts', isLoggedIn, (req, res) => {
+  
+})
+
+app.get('/searchWorkouts', isLoggedIn, (req, res) => {
+  
+})
+
+app.get('/nutrition', isLoggedIn, (req, res) => {
+  
+})
+
+app.get('/logout', isLoggedIn, (req, res) => {
+  req.logout();
+})
 
 // Responsible for answering basic get request, return the current User's information from database
 app.get('/user/info/:username', (req, res) => {
