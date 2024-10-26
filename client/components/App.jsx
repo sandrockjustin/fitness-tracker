@@ -21,11 +21,18 @@ export default function App() {
 	}
 
 	function updateView(e) {
+		if (e.target.name === 'Logout'){
+			axios.post('/logout')
+				.catch((error) => {
+					console.error('Error during logout.')
+				})
+		}
+
 		setView(e.target.name)
 	}
 
 	useEffect(() => {
-		fetchUser();
+		// fetchUser();
 	}, [])
 
 
