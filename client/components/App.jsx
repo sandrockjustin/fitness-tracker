@@ -1,92 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
+import Nutrition from './nutrition/Nutrition.jsx';
 import Navigation from './Navigation.jsx'
 import axios from 'axios';
 
-class App extends React.Component {
-	constructor(props){
-		super(props);
-		
-		this.state = {
-			view: 'WorkoutList',
-			user: null, 
-			workouts: [],
-			nutrition: []
-		}
+export default function App() {
 
-		this.fetchUser = this.fetchUser.bind(this);
-		this.updateView = this.updateView.bind(this);
-	}
+	const [view, setView] = useState('WorkoutList');
+	const [user, setUser] = useState(null);
 
-	fetchUser() {
+	function fetchUser() {
 		axios.get(`/user/info/${'Jeremy Hernandez'}`)
 		  .then((userData) => {
-			this.setState({user: userData.data});
+				setUser(userData.data)
 		  })
 		  .catch((err) => {
-			console.err('Failed to get userData');
+			console.error('Failed to get userData');
 		  })
 	}
 	
-	updateView(e) {
-		this.setState({view: e.target.name})
+	function updateView(e) {
+		setView(e.target.name)
 	}
 
-	componentDidMount(){
-		this.fetchUser();
-	}
+	useEffect(() => {
+		fetchUser();
+	}, [])
 	
-	render(){
+
 		
-		switch(this.state.view){
-			case 'WorkoutList':
-				return (
-					<div id="root-app">Fitness Tracker
-					<Navigation updateView={this.updateView}/>	
-					{this.state.user ?
-					  <div>
-					  <WorkoutList workouts={this.state.workouts}/>
-					  </div>
-					 :
-					  <div>
-						<h1>Please Login</h1>
-					  </div>
-					  }
-					</div>				
-				)
-			case 'WorkoutSearch':
-				return (
-					<div id="root-app">Fitness Tracker
-					<Navigation updateView={this.updateView}/>	
-					{this.state.user ?
-					  <div>
-					  <WorkoutSearch/>
-					  </div>
-					 :
-					  <div>
-						<h1>Please Login</h1>
-					  </div>
-					  }
+	switch(view){
+		case 'WorkoutList':
+			return (
+				<div id="root-app">Fitness Tracker
+				<Navigation updateView={updateView}/>	
+				{user ?
+					<div>
+					<WorkoutList workouts={user.workouts}/>
 					</div>
-				)
-			case 'Nutrition':
-				return (
-					<div id="root-app">Fitness Tracker
-						<Navigation updateView={this.updateView}/>					
-						<div>NUTRITION component has not been implemented</div>
+					:
+					<div>
+					<h1>Please Login</h1>
 					</div>
-				)
-			default:
-				return (
-					<div id="root-app">Fitness Tracker
-						<Navigation updateView={this.updateView}/>
-						<div>LOGIN component has not been implemented.</div>
+					}
+				</div>				
+			)
+		case 'WorkoutSearch':
+			return (
+				<div id="root-app">Fitness Tracker
+				<Navigation updateView={updateView}/>	
+				{user ?
+					<div>
+					<WorkoutSearch/>
 					</div>
-				)
-		}
+					:
+					<div>
+					<h1>Please Login</h1>
+					</div>
+					}
+				</div>
+			)
+		case 'Nutrition':
+			return (
+				<div id="root-app">Fitness Tracker
+					<Navigation updateView={updateView}/>					
+					<div><Nutrition/></div>
+				</div>
+			)
+		default:
+			return (
+				<div id="root-app">Fitness Tracker
+					<Navigation updateView={updateView}/>
+					<div>LOGIN component has not been implemented.</div>
+				</div>
+			)
 	}
 	
 }
-
-export default App;
