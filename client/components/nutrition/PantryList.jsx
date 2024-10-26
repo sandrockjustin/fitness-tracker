@@ -5,7 +5,18 @@
 //add or delete items in the pantry list
 
 import React from 'react'
+import List from '@mui/material/List';
+import Box from '@mui/material/Box';
 import PantryListItem from './PantryListItem.jsx'
+import { styled } from '@mui/material/styles';
+
+
+const PantryBox = styled(Box)`
+background: #f0f0f0;
+height: 200px;
+overflow-y:auto;
+
+`
 
 export default function PantryList(props){
   console.log("PANTRY LIST NUTRITION", props.nutrition)
@@ -13,15 +24,26 @@ export default function PantryList(props){
 
 
   return(
-    <div>pantry list component
+    <div style={{fontFamily: "Arial, sans-serif"}}>
+      <h1>Pantry</h1>
+
+
+      <PantryBox>
      {props.nutrition.map((food)=>{
 
-      // console.log("FOOD", food)
+       // console.log("FOOD", food)
 
       return(
-        <PantryListItem fetchUser={props.fetchUser} user={props.user} food={food} key={food.foodId}/>
-      )
-     })}
+
+        <List key={food.foodId} sx={{maxHeight:'10px'}}>
+
+      <PantryListItem fetchUser={props.fetchUser} user={props.user} food={food} />
+
+      </List>
+    )
+  })}
+  
+      </PantryBox>
 
 
     </div>
