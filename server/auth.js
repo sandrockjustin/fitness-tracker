@@ -1,5 +1,6 @@
 /* Following Passport instructions provided here: https://www.passportjs.org/packages/passport-google-oauth20/ */
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const passport = require('passport');
 import { User } from './db/index.js'; // importing model for interactions
 
 // we need to import GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET from .env file
@@ -16,3 +17,11 @@ passport.use(new GoogleStrategy({
     });
   }
 ));
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+})
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+})
