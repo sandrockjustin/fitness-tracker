@@ -5,9 +5,9 @@
 //add or delete items in the pantry list
 
 import React from 'react'
+import PantryListItem from './PantryListItem.jsx'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
-import PantryListItem from './PantryListItem.jsx'
 import { styled } from '@mui/material/styles';
 
 
@@ -25,7 +25,7 @@ export default function PantryList(props){
 
   return(
     <div style={{fontFamily: "Arial, sans-serif"}}>
-      <h1>Pantry</h1>
+      <h1>PANTRY</h1>
 
 
       <PantryBox>

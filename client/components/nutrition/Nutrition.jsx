@@ -16,7 +16,7 @@ export default function Nutrition(props){
   <br></br>
     <PantryList fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
   <br></br> 
-    <Meals/>
+    <Meals fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
 </>
   )
 }
