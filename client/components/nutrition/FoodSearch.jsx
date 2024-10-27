@@ -27,7 +27,7 @@ export default function FoodSearch(props){
   }
   const handleClick = ()=>{
 
-    console.log(searchField)
+    // console.log(searchField)
 
     //
     
@@ -36,17 +36,17 @@ export default function FoodSearch(props){
     .then(results=>{
 
       let id = results.data.results[0].id
-      console.log("FOODID", id, results.data.results[0])
+      // console.log("FOODID", id, results.data.results[0])
       axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
       .then(data=>{
 
-        console.log("calories", data.data.nutrition.nutrients[2].amount)
+        // console.log("calories", data.data.nutrition.nutrients[2].amount)
 
         let calories = data.data.nutrition.nutrients[2].amount
-        console.log("grams per serving", data.data.nutrition.weightPerServing.amount)
+        // console.log("grams per serving", data.data.nutrition.weightPerServing.amount)
 
         let grams = data.data.nutrition.weightPerServing.amount
-        console.log("calories/gram", calories/grams)
+        // console.log("calories/gram", calories/grams)
 
       })
     })

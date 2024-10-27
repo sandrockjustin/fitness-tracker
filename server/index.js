@@ -125,6 +125,28 @@ app.patch('/WorkoutSearch/addWorkout', (req, res) => {
     res.sendStatus(500);
   })
 });
+
+//////////////////////////////////////////////////////////////////////////////////////
+//REQUEST HANDLER FOR DELETION OF A WORKOUT FROM USERS SAVED WORKOUT LIST
+app.patch('/WorkoutList/deleteWorkout/:id', (req, res) => {
+  const {workout} = req.body;
+  const id = req.params.id;
+  // console.log('id/workout', workout, id);
+  User.findOneAndUpdate(
+    {_id: id},
+    {$pull: {workouts: workout}}
+  )
+  .then((user) => {
+    if(!user) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(201);
+    }
+  })
+  .catch((err) => {
+    res.sendStatus(500);
+  })
+});
 //////////////////////////////////////////////////////////////////////////////////////
 
 
