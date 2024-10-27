@@ -37,7 +37,7 @@ export default function App() {
 				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
-					<WorkoutList workouts={user.workouts}/>
+					<WorkoutList user={user} fetchUser={fetchUser} workouts={user.workouts}/>
 					</div>
 					:
 					<div>
@@ -52,7 +52,7 @@ export default function App() {
 				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
-					<WorkoutSearch/>
+					<WorkoutSearch user={user} fetchUser={fetchUser}/>
 					</div>
 					:
 					<div>
