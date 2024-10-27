@@ -107,10 +107,11 @@ app.put('user/info/:id', (req, res) => {
 
 /* 
   This is used to send a search request to Spoonacular
-  endpoint '/WorkoutSearch/workouts
+  endpoint '/FoodSearch
 */
 app.get('/FoodSearch/:query', (req, res) => {
   const {query} = req.params;
+  console.log("SERVER REQ PARAMS", req.params)
   
   axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
   .then(results=>{
@@ -120,7 +121,7 @@ app.get('/FoodSearch/:query', (req, res) => {
     console.log("FOODID", id, results.data.results[0])
 
     axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
-    .then(data=>{
+    .then((data)=>{
 
       //calculates caloric density of the searched food
       let calories = data.data.nutrition.nutrients[2].amount
@@ -137,7 +138,6 @@ app.get('/FoodSearch/:query', (req, res) => {
         nutDensity
       }
 
-
       res.status(200).send(nutrientsInfo);
 
     })
@@ -146,6 +146,50 @@ app.get('/FoodSearch/:query', (req, res) => {
     console.error("didn't get food", err)
     res.sendStatus(500)
   })
+
+})
+//////////////////////////////////////////////////////////////////////
+/* 
+  This is used to save a search result from 
+  endpoint '/pantry
+*/
+app.put('/pantry/:id', (req, res)=>{
+
+	const id = req.params.id;
+	const update = req.body.nutrition; // not sure if req.data or req.body
+	
+	/////////////////////////////////////////////////
+	console.log(`User ID is: ${id}.`)
+	console.log(`Request body is: `, update)
+	/////////////////////////////////////////////////
+
+	User.findByIdAndUpdate({_id: id}, {$push: {nutrition: update}})
+		.then((updateComplete) => {
+			res.sendStatus(201);
+		})
+		.catch((error) => {
+			console.error(`Error on PUT request to pantry for User ${id}.`)
+		})
+
+})
+//////////////////////////////////////////////////////////////////
+/* 
+  This is used to delete an entry result from
+  endpoint '/pantry
+*/
+
+app.put('/pantry/food/:id', (req, res)=>{
+  console.log("DELETE REQ PARAMS", req.body)
+  console.log('user request:', req.params.id)
+
+  User.findByIdAndUpdate({_id: req.params.id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
+  .then((data)=>{
+    console.log("THEN BLOCK DATA", data)
+  })
+  .catch((err)=>{
+    console.error(err)
+  })
+
 
 })
 

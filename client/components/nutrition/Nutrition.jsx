@@ -2,15 +2,21 @@ import React from 'react'
 import PantryList from './PantryList.jsx'
 import FoodSearch from './FoodSearch.jsx'
 import Meals from './Meals.jsx'
+// import './Style.css'
+import { styled } from '@mui/material/styles';
 
+export default function Nutrition(props){
 
-export default function Nutrition(){
-
+  
+  // console.log("NUTRITION USER", props.user.nutrition)
   return(
 <>
-    <PantryList/>
-    <FoodSearch/>
-    <Meals/>
+  <br></br>
+    <FoodSearch user={props.user}/>
+  <br></br>
+    <PantryList fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
+  <br></br> 
+    <Meals fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
 </>
   )
 }

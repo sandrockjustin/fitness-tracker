@@ -19,7 +19,7 @@ export default function App() {
 			console.error('Failed to get userData');
 		  })
 	}
-	
+
 	function updateView(e) {
 		setView(e.target.name)
 	}
@@ -27,14 +27,14 @@ export default function App() {
 	useEffect(() => {
 		fetchUser();
 	}, [])
-	
 
-		
+
+
 	switch(view){
 		case 'WorkoutList':
 			return (
 				<div id="root-app">Fitness Tracker
-				<Navigation updateView={updateView}/>	
+				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
 					<WorkoutList workouts={user.workouts}/>
@@ -44,12 +44,12 @@ export default function App() {
 					<h1>Please Login</h1>
 					</div>
 					}
-				</div>				
+				</div>
 			)
 		case 'WorkoutSearch':
 			return (
 				<div id="root-app">Fitness Tracker
-				<Navigation updateView={updateView}/>	
+				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
 					<WorkoutSearch/>
@@ -64,8 +64,8 @@ export default function App() {
 		case 'Nutrition':
 			return (
 				<div id="root-app">Fitness Tracker
-					<Navigation updateView={updateView}/>					
-					<div><Nutrition/></div>
+					<Navigation updateView={updateView}/>
+					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
 				</div>
 			)
 		default:
@@ -76,5 +76,4 @@ export default function App() {
 				</div>
 			)
 	}
-	
 }
