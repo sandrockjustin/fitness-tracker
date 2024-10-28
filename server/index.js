@@ -30,10 +30,10 @@ const port = 8080;                  // random port, can change as necessary
  * app.use(..., express.static())     => serves client/dist on server startup
  * ----------------------------------------------------------------------------------- */
 
-function isLoggedIn(req, res, next) {
-  // req.user ? next() : res.sendStatus(401);
-  
-}
+// function isLoggedIn(req, res, next) {
+//   // req.user ? next() : res.sendStatus(401);
+
+// }
 
 app.use(session(
   { 
@@ -74,7 +74,7 @@ app.get('/auth/google', passport.authenticate('google', {
 
 app.get('/google/callback', 
   passport.authenticate('google', {
-    successRedirect: '/currentWorkouts',
+    successRedirect: '/user/homepage',
     failureRedirect: '/auth/google'
   })
 );
@@ -91,8 +91,12 @@ app.post('/user/logout', (req, res, next) => {
   });
 })
 
+app.get('/user/homepage', (req, res) => {
+  res.status(200).redirect('/');
+})
+
 app.get('/user/workouts', (req, res) => {
-  res.status(200).send({view: 'Workouts'})
+  res.status(200).send({view: 'Workouts'});
 })
 
 app.get('/user/workouts/search', (req, res) => {
