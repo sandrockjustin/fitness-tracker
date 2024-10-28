@@ -31,7 +31,8 @@ const port = 8080;                  // random port, can change as necessary
  * ----------------------------------------------------------------------------------- */
 
 function isLoggedIn(req, res, next) {
-  req.user ? next() : res.sendStatus(401);
+  // req.user ? next() : res.sendStatus(401);
+  
 }
 
 app.use(session(
@@ -79,7 +80,7 @@ app.get('/google/callback',
 );
 
 // On request to logout, attempt to delete session and user data
-app.post('/logout', (req, res, next) => {
+app.post('/user/logout', (req, res, next) => {
   req.logout( (err) => {
     if (err) { return next(err)}
     req.session.destroy((err) => {
@@ -90,15 +91,15 @@ app.post('/logout', (req, res, next) => {
   });
 })
 
-app.get('/currentWorkouts', (req, res) => {
-  res.status(200).send({view: 'WorkoutsList'})
+app.get('/user/workouts', (req, res) => {
+  res.status(200).send({view: 'Workouts'})
 })
 
-app.get('/searchWorkouts', (req, res) => {
-  res.status(200).send({view: 'WorkoutSearch'})
+app.get('/user/workouts/search', (req, res) => {
+  res.status(200).send({view: 'Workouts-Search'})
 })
 
-app.get('/nutrition', (req, res) => {
+app.get('/user/nutrition', (req, res) => {
   res.status(200).send({view: 'Nutrition'})
 })
 // ----------------------------------------------------------------------------------- //
