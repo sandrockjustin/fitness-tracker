@@ -30,10 +30,9 @@ const port = 8080;                  // random port, can change as necessary
  * app.use(..., express.static())     => serves client/dist on server startup
  * ----------------------------------------------------------------------------------- */
 
-// function isLoggedIn(req, res, next) {
-//   // req.user ? next() : res.sendStatus(401);
-
-// }
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.status(401).redirect('/');
+}
 
 app.use(session(
   { 
@@ -46,7 +45,7 @@ app.use(session(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json())                       
-app.use('/', express.static('client/dist'));
+app.use('/user/homepage', isLoggedIn, express.static('client/dist'));
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
@@ -67,43 +66,37 @@ app.use('/', express.static('client/dist'));
  * /nutrition                 => used to change view to 'Nutrition' component
  * ----------------------------------------------------------------------------------- */
 
-app.get('/auth/google', passport.authenticate('google', { 
+app.get('/', passport.authenticate('google', { 
   scope: ['email', 'openid'], 
   prompt: 'select_account' 
 }));
 
-app.get('/google/callback', 
+app.get('/login-success', 
   passport.authenticate('google', {
     successRedirect: '/user/homepage',
-    failureRedirect: '/auth/google'
+    failureRedirect: '/'
   })
 );
 
 // On request to logout, attempt to delete session and user data
-app.post('/user/logout', (req, res, next) => {
-  req.logout( (err) => {
-    if (err) { return next(err)}
-    req.session.destroy((err) => {
-      if (err) { return next(err)}
-      res.clearCookie('connect.sid')
-      res.status(200).redirect('/auth/google');
-    })
-  });
-})
-
-app.get('/user/homepage', (req, res) => {
+app.post('/user/logout', isLoggedIn, (req, res, next) => {
+  req.logout( (err) => {console.error('POST :: INTERNAL :: Error on logout.')});
   res.status(200).redirect('/');
 })
 
-app.get('/user/workouts', (req, res) => {
+app.get('/user/homepage', isLoggedIn, (req, res) => {
+  res.status(200).redirect('/user/homepage');
+})
+
+app.get('/user/workouts', isLoggedIn, (req, res) => {
   res.status(200).send({view: 'Workouts'});
 })
 
-app.get('/user/workouts/search', (req, res) => {
+app.get('/user/workouts/search', isLoggedIn, (req, res) => {
   res.status(200).send({view: 'Workouts-Search'})
 })
 
-app.get('/user/nutrition', (req, res) => {
+app.get('/user/nutrition', isLoggedIn, (req, res) => {
   res.status(200).send({view: 'Nutrition'})
 })
 // ----------------------------------------------------------------------------------- //
