@@ -17,7 +17,7 @@ export default function App() {
 	const [user, setUser] = useState(null);
 
 	function fetchUser() {
-		axios.get(`/user/info/${'Jeremy Hernandez'}`)
+		axios.get(`/user/info/`)
 		  .then((userData) => {
 				setUser(userData.data)
 		  })
@@ -26,18 +26,50 @@ export default function App() {
 		  })
 	}
 
+	/*
+		What are the req.session and req.cookies?
+		This would reflect the current user or userID
+		We can use that to search in the database
+	*/
+	
 	function updateView(e) {
-		if (e.target.name === 'Logout'){
-			axios.post('/logout')
-				.catch((error) => {
-					console.error('Error during logout.')
-				})
-			
-			setView('');
-			return;
-		}
 
-		setView(e.target.name)
+		switch (e.target.name){
+			case 'Logout':
+				axios.post('/user/logout')
+					.catch((error) => {
+						console.error('Error on POST logout.')
+					})
+				break;
+			case 'Workouts':
+				axios.get('/user/workouts')
+					.then((data) => {
+						setView(data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET workouts view in main.')
+					})
+				break;
+			case 'Workouts-Search':
+				axios.get('/user/workouts/search')
+					.then((data) => {
+						setView(data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET workouts search view in main.')
+					})
+			case 'Nutrition':
+				axios.get('/user/nutrition')
+					.then((data) => {
+						setView(data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET nutrition view in main.')
+					})
+					break;
+			default:
+				console.error('Client error for update view in main.')
+		}
 	}
 
   const handleThemeChange = () => {
@@ -45,13 +77,13 @@ export default function App() {
   };
 
 	useEffect(() => {
-		// fetchUser();
+		fetchUser();
 	}, [])
 
 
 
 	switch(view){
-		case 'WorkoutList':
+		case 'Workouts':
 			return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
           <CssBaseline />
@@ -72,7 +104,7 @@ export default function App() {
 				</div>
         </ThemeProvider>
 			)
-		case 'WorkoutSearch':
+		case 'Workouts-Search':
 			return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <CssBaseline />
