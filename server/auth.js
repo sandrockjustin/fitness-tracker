@@ -13,18 +13,14 @@ passport.use(new GoogleStrategy({
   },
   function(request, accessToken, refreshToken, profile, cb) {
     User.findOrCreate({ _id: profile.id }, function (err, user) {
-      return cb(err, user._id); // reworked, now should only store the user's ID, which we can use in requests
+      return cb(err, { _id: user._id }); // reworked, now should only store the user's ID, which we can use in requests
     });
   }
 ));
 
 passport.serializeUser(function(user, cb) {
   process.nextTick(function() {
-    return cb(null, {
-      id: user.id,
-      username: user.username,
-      picture: user.picture
-    });
+    return cb(null, user);
   });
 });
 
