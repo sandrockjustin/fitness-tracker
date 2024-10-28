@@ -34,12 +34,12 @@ const  dummyExercises = [
 
 //counts calories burned in an workout routine
 let calorieCount = dummyExercises.reduce((acc, curr)=>{
-  console.log("ACC", acc, "CURR", curr.caloriesBurned)
+  // console.log("ACC", acc, "CURR", curr.caloriesBurned)
   acc+=curr.caloriesBurned
   return acc
 }, 0)
 
-console.log("TOTAL CALORIES BURNED:", calorieCount)
+// console.log("TOTAL CALORIES BURNED:", calorieCount)
 
 
 //////////////////////////////////////////////////

@@ -16,9 +16,9 @@
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-
     "@mui/icons-material": "^6.1.5",
     "@mui/material": "^6.1.5",
+    "@mui/styles": "^6.1.5",
     "axios": "^1.7.7",
     "babel": "^5.8.38",
     "babel-loader": "^9.2.1",
@@ -46,4 +46,5 @@
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "style-loader": "^4.0.0"
+  }
 }

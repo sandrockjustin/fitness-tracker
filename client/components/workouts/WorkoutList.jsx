@@ -1,14 +1,14 @@
 import React from 'react';
 import Workout from './Workout.jsx';
-import { Box, IconButton } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box, IconButton, Typography, Container} from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import axios from 'axios';
-//import workouts from App.jsx
+import useStyles from '../styles'
 
 //populate each workout list tied to the user's saved lists
 
 const WorkoutList = ({workouts, fetchUser, user}) => {
-  // console.log('usersworkoutlist', usersWorkoutList);
+  const classes = useStyles();
 
   // function to handle delete requests in user's workout list
   const deleteWorkout = (workout) => {
@@ -23,47 +23,30 @@ const WorkoutList = ({workouts, fetchUser, user}) => {
   };
 
   return (
+    <div>
+    <Typography variant='h3' fontWeight='bold' fontFamily='Roboto' align='center' display='flex' justifyContent='center' >Saved Workout List</Typography>
     <Box
-      sx={{
-        display: 'flex',
-        overflowX: 'auto',
-        flexDirection: 'row',
-        gap: 2,
-        padding: '10px',
-        
-      }}
+      className={classes.box}
+      display="flex" flexDirection="row" alignItems="center"
     >
       {workouts.map((workout, index) => {
         return (
           <div
+            className={classes.workouts}
             key={index}
-            style={{
-              flex: '1 1 30%',
-              maxHeight: '500px',
-              overflowY: 'auto',
-              minWidth: '300px',
-              padding: '10px',
-              background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', 
-              boxSizing: 'border-box',
-              position: 'relative'}}>
+          >
             <IconButton
-              sx={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                color: 'white',
-                backgroundColor: 'rgba(0, 0, 0, 0.5)',
-                '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.7)' },
-              }}
+              className={classes.iconButton}
               onClick={() => deleteWorkout(workout)}
             >
-              <DeleteIcon />
+            <DeleteForeverIcon fontSize='medium'/>
             </IconButton>
-            <Workout workout={workout} key={index} />
+            <Workout className={classes.workouts} workout={workout} key={index} />
           </div>
         );
       })}
     </Box>
+    </div>
   );
 };
 

@@ -4,9 +4,15 @@ import WorkoutList from './workouts/WorkoutList.jsx';
 import Nutrition from './nutrition/Nutrition.jsx';
 import Navigation from './Navigation.jsx'
 import axios from 'axios';
+import { ThemeProvider, CssBaseline, Switch, IconButton } from '@mui/material';
+import { lightTheme, darkTheme } from './styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+
+
 
 export default function App() {
-
+  //theme toggle light/dark
+  const [darkMode, setDarkMode] = useState(false);
 	const [view, setView] = useState('WorkoutList');
 	const [user, setUser] = useState(null);
 
@@ -24,6 +30,10 @@ export default function App() {
 		setView(e.target.name)
 	}
 
+  const handleThemeChange = () => {
+    setDarkMode((prevMode) => !prevMode);
+  };
+
 	useEffect(() => {
 		fetchUser();
 	}, [])
@@ -33,6 +43,11 @@ export default function App() {
 	switch(view){
 		case 'WorkoutList':
 			return (
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+          <CssBaseline />
+          <IconButton onClick={handleThemeChange} color="inherit">
+          <Brightness4Icon />
+        </IconButton>
 				<div id="root-app">Fitness Tracker
 				<Navigation updateView={updateView}/>
 				{user ?
@@ -45,9 +60,15 @@ export default function App() {
 					</div>
 					}
 				</div>
+        </ThemeProvider>
 			)
 		case 'WorkoutSearch':
 			return (
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <IconButton onClick={handleThemeChange} color="inherit">
+          <Brightness4Icon />
+        </IconButton>
 				<div id="root-app">Fitness Tracker
 				<Navigation updateView={updateView}/>
 				{user ?
@@ -60,20 +81,33 @@ export default function App() {
 					</div>
 					}
 				</div>
+        </ThemeProvider>
 			)
 		case 'Nutrition':
 			return (
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <IconButton onClick={handleThemeChange} color="inherit">
+          <Brightness4Icon />
+        </IconButton>
 				<div id="root-app">Fitness Tracker
 					<Navigation updateView={updateView}/>
 					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
 				</div>
+        </ThemeProvider>
 			)
 		default:
 			return (
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <IconButton onClick={handleThemeChange} color="inherit">
+          <Brightness4Icon />
+        </IconButton>
 				<div id="root-app">Fitness Tracker
 					<Navigation updateView={updateView}/>
 					<div>LOGIN component has not been implemented.</div>
 				</div>
+        </ThemeProvider>
 			)
 	}
 }
