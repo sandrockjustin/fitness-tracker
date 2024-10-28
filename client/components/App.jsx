@@ -27,7 +27,6 @@ export default function App() {
 	}
 
 	function updateView(e) {
-		console.log("View before click: ", e.target.name)
 
 		switch (e.target.name){
 			case 'Logout':
@@ -38,8 +37,8 @@ export default function App() {
 				break;
 			case 'Workouts':
 				axios.get('/user/workouts')
-					.then((data) => {
-						setView(data.view);
+					.then((response) => {
+						setView(response.data.view);
 					})
 					.catch((error) => {
 						console.error('Error on GET workouts view in main.')
@@ -47,16 +46,17 @@ export default function App() {
 				break;
 			case 'Workouts-Search':
 				axios.get('/user/workouts/search')
-					.then((data) => {
-						setView(data.view);
+					.then((response) => {
+						setView(response.data.view);
 					})
 					.catch((error) => {
 						console.error('Error on GET workouts search view in main.')
 					})
+					break;
 			case 'Nutrition':
 				axios.get('/user/nutrition')
-					.then((data) => {
-						setView(data.view);
+					.then((response) => {
+						setView(response.data.view);
 					})
 					.catch((error) => {
 						console.error('Error on GET nutrition view in main.')
@@ -108,15 +108,9 @@ export default function App() {
         </IconButton>
 				<div id="root-app">Fitness Tracker
 				<Navigation updateView={updateView}/>
-				{user ?
 					<div>
 					<WorkoutSearch user={user} fetchUser={fetchUser}/>
 					</div>
-					:
-					<div>
-					<h1>Please Login</h1>
-					</div>
-					}
 				</div>
         </ThemeProvider>
 			)
