@@ -115,11 +115,13 @@ app.get('/nutrition', (req, res) => {
  *  GET    /user/info               => CRITICAL :: supplies data to top-level component
  *                                   > other components cannot render if unsuccessful
  *                                   > additionally enables all 'read' functionality
+ *  GET    /user/workouts/search     => external request to API to retrieve workouts
+ *  GET    /user/nutrition/search   => external request to API to retrieve food items
  * 
  *  PATCH  /user/workouts/create    => allows for user to save a workout to account
  *  PATCH  /user/workouts/delete    => allows for user to delete a workout from account
- *  PATCH  /user/nutrition/create   => allows for user to add items to pantry
- *  PATCH  /user/nutrition/delete   => allows for user to delete items from pantry
+ *  PUT    /user/nutrition/create   => allows for user to add items to pantry
+ *  PUT    /user/nutrition/delete   => allows for user to delete items from pantry
  * ----------------------------------------------------------------------------------- */
 
 app.get('/user/info/', (req, res) => {
@@ -130,10 +132,68 @@ app.get('/user/info/', (req, res) => {
       res.status(200).send(user);           
     })
     .catch((error) => {
-      console.error(`Error on request for user #${req.user._id}.`);
+      console.error(`GET :: INTERNAL :: Retrieve user #${req.user._id}.`);
       res.sendStatus(500);
     })
 })
+
+app.get('/user/workouts/search/:query', (req, res) => {
+  const { query } = req.params;
+  let data;
+
+  const primaryExternalRequest = `https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`;
+
+  axios.get(primaryExternalRequest)
+    .then((workouts) => {
+      data = JSON.stringify(workouts.data);
+      res.status(200).send(data);
+    })
+    .catch((err) => {
+      console.error('GET :: EXTERNAL :: Searching workouts');
+      res.sendStatus(500);
+    })
+})
+
+app.patch('/user/workouts/create', (req, res) => {
+  const { workout } = req.body;
+
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {$push: {workouts: workout}},
+    { new: true, upsert: true }
+  )
+  .then((updatedUser) => {
+    if (updatedUser) {
+      res.status(201).send(updatedUser);  // review main; do we even need to send these?
+    } else {
+      res.sendStatus(404);
+    }
+  })
+  .catch((err) => {
+    console.error(`PATCH :: INTERNAL :: New workout for #${req.user._id}.`)
+    res.sendStatus(500);
+  })
+})
+
+app.patch('/user/workouts/delete', (req, res) => {
+  const { workout } = req.body;
+
+  // console.log('id/workout', workout, id);
+  User.findOneAndUpdate(
+    {_id: req.user._id},
+    {$pull: {workouts: workout}}
+  )
+  .then((updateComplete) => {
+    if(!updateComplete) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(201);
+    }
+  })
+  .catch((err) => {
+    res.sendStatus(500);
+  })
+});
 
 app.get('/user/nutrition/search/:query', (req, res) => {
 
@@ -163,17 +223,41 @@ app.get('/user/nutrition/search/:query', (req, res) => {
           res.status(200).send(nutrientsInfo)
         })
         .catch((error) => {
-          console.error(`Error on GET nutrition search, secondary external request.`)
+          console.error(`GET :: EXTERNAL :: Searching nutrition :: Secondary external request.`)
           res.sendStatus(500);
         })
     })
     .catch((error) => {
-      console.error(`Error on GET nutrition search, primary external request.`)
+      console.error(`GET :: EXTERNAL :: Searching nutrition :: Primary external request.`)
       res.sendStatus(500);
     })
 })
 
+app.put('/user/nutrition/create', (req, res)=>{
 
+	const update = req.body.nutrition; 
+
+	User.findByIdAndUpdate({_id: req.user._id}, {$push: {nutrition: update}})
+		.then((updateComplete) => {
+			res.sendStatus(201);
+		})
+		.catch((error) => {
+			console.error(`PUT :: INTERNAL :: New food item for #${req.user._id}.`)
+		})
+
+})
+
+app.put('/user/nutrition/delete', (req, res)=>{
+
+  User.findByIdAndUpdate({_id: req.user._id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
+  .then((data)=>{
+    // INCOMPLETE
+    console.log("THEN BLOCK DATA", data)
+  })
+  .catch((err)=>{
+    console.error(`PUT :: INTERNAL :: On delete food #${req.body.foodData} for user #${req.user._id}.`)
+  })
+})
 
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
