@@ -26,13 +26,8 @@ export default function App() {
 		  })
 	}
 
-	/*
-		What are the req.session and req.cookies?
-		This would reflect the current user or userID
-		We can use that to search in the database
-	*/
-	
 	function updateView(e) {
+		console.log("View before click: ", e.target.name)
 
 		switch (e.target.name){
 			case 'Logout':
@@ -77,7 +72,7 @@ export default function App() {
   };
 
 	useEffect(() => {
-		fetchUser();
+		setTimeout( () => {fetchUser()}, 0)
 	}, [])
 
 
