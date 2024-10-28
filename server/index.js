@@ -135,6 +135,46 @@ app.get('/user/info/', (req, res) => {
     })
 })
 
+app.get('/user/nutrition/search/:query', (req, res) => {
+
+  const { query } = req.params;
+  const primaryExternalRequest = `https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`;
+
+  axios.get(primaryExternalRequest)
+    .then((foodItem) => {
+      let id = foodItem.data.results[0].id
+      const secondaryExternalRequest = `https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`
+
+      axios.get((secondaryExternalRequest))
+        .then((caloricInfo) => {
+          //calculates caloric density of the searched food
+          let calories = caloricInfo.data.nutrition.nutrients[2].amount
+          let grams = caloricInfo.data.nutrition.weightPerServing.amount
+          let nutDensity = calories/grams
+
+          const nutrientsInfo = {
+            'foodName': foodItem.data.results[0].name,
+            'foodId':  foodItem.data.results[0].id,
+            'calories': calories,
+            'grams': grams,
+            'nutDensity': nutDensity
+          }
+
+          res.status(200).send(nutrientsInfo)
+        })
+        .catch((error) => {
+          console.error(`Error on GET nutrition search, secondary external request.`)
+          res.sendStatus(500);
+        })
+    })
+    .catch((error) => {
+      console.error(`Error on GET nutrition search, primary external request.`)
+      res.sendStatus(500);
+    })
+})
+
+
+
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
