@@ -17,7 +17,7 @@ export default function App() {
 	const [user, setUser] = useState(null);
 
 	function fetchUser() {
-		axios.get(`/user/info/${'Jeremy Hernandez'}`)
+		axios.get(`/user/info/`)
 		  .then((userData) => {
 				setUser(userData.data)
 		  })
@@ -27,7 +27,49 @@ export default function App() {
 	}
 
 	function updateView(e) {
-		setView(e.target.name)
+
+		switch (e.target.name){
+			case 'Logout':
+				axios.post('/user/logout')
+					.then((response) => {
+						if (response.status === 200){
+							window.location.href = "http://localhost:8080/";
+						}
+					})
+					.catch((error) => {
+						console.error('Error on POST logout.')
+					})
+				break;
+			case 'Workouts':
+				axios.get('/user/workouts')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET workouts view in main.')
+					})
+				break;
+			case 'Workouts-Search':
+				axios.get('/user/workouts/search')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET workouts search view in main.')
+					})
+					break;
+			case 'Nutrition':
+				axios.get('/user/nutrition')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET nutrition view in main.')
+					})
+					break;
+			default:
+				console.error('Client error for update view in main.')
+		}
 	}
 
   const handleThemeChange = () => {
@@ -35,13 +77,13 @@ export default function App() {
   };
 
 	useEffect(() => {
-		fetchUser();
+		setTimeout( () => {fetchUser()}, 0)
 	}, [])
 
 
 
 	switch(view){
-		case 'WorkoutList':
+		case 'Workouts':
 			return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
           <CssBaseline />
@@ -63,7 +105,7 @@ export default function App() {
 				</div>
         </ThemeProvider>
 			)
-		case 'WorkoutSearch':
+		case 'Workouts-Search':
 			return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
         <CssBaseline />
@@ -73,15 +115,9 @@ export default function App() {
 				<div id="root-app">
 				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
-				{user ?
 					<div>
 					<WorkoutSearch user={user} fetchUser={fetchUser}/>
 					</div>
-					:
-					<div>
-					<h1>Please Login</h1>
-					</div>
-					}
 				</div>
         </ThemeProvider>
 			)
@@ -109,7 +145,7 @@ export default function App() {
 				<div id="root-app">
 					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
-					<div>LOGIN component has not been implemented.</div>
+					<button type="button">Log in with Google</button>
 				</div>
         </ThemeProvider>
 			)

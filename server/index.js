@@ -1,146 +1,239 @@
-import express from 'express';            // Importing Express to use for our server
-import session from 'express-session';
-import Passport from 'passport-google-oauth20';
-import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
-import axios from 'axios';
-import {API_NINJA_KEY, FOOD_API_KEY} from '../config.js';
+/* ===================================================================================
+ *                                    DOCUMENTATION
+ * ----------------------------------------------------------------------------------
+ * https://developer.mozilla.org/en-US/docs/Web/API/Location                  REVIEW
+ * https://developer.mozilla.org/en-US/docs/Web/API/History/pushState         REVIEW
+ * https://reactrouter.com/en/main                                            REVIEW
+ * https://mongoosejs.com/docs/connections.html#connection-events
+ * https://expressjs.com/
+ * https://www.passportjs.org/packages/passport-google-oauth20/
+ * ----------------------------------------------------------------------------------- */
+// =================================================================================== //
 
+
+/* ===================================================================================
+ *                              IMPORTS & INITIALIZATION
+ * ----------------------------------------------------------------------------------*/
+import express from 'express';            
+import session from 'express-session';
+import passport from 'passport';
+import { User, db } from './db/index.js'  // must be imported for database connection  
+import auth from './auth.js';             // must be imported for Passport to function
+import axios from 'axios';                // must be imported for external requests
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
-
-//////////////////////////////////////////////////////////////////////////////////////
-/*                                 MIDDLEWARE                                       */
-
-//app.use(...)                      // create router middlewares
-//app.use(...)
-//app.use(...)
-//app.use(...)
-
-//app.use(...)                      // apply google passport as auth middleware
-app.use(express.json())             // use express.json() as middleware
-app.use('/', express.static('client/dist'));  // on startup, serve files from webpack
-//////////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------------- //
+// =================================================================================== //
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-/*                                  REQUEST HANDLERS                                */
 
-// Responsible for answering basic get request, return the current User's information from database
-app.get('/user/info/:username', (req, res) => {
 
-  // console.log('req.params', req.params);
-  // Try to find a user matching the current user's ID
-  User.findOne({username: req.params.username})
-    .then((foundUser) => {
-      // console.log('foundUser', foundUser);
-      // if no user with that ID is found
-      if (foundUser === null){
-        res.sendStatus(404)
-      }
+/* ===================================================================================
+ *                                    MIDDLEWARE
+ * -----------------------------------------------------------------------------------
+ * 
+ * app.use(session())                 => Express is used for creating sessions
+ * app.use(passport.initialize())     => initializes Passport for incoming requests
+ * app.use(passport.session())        => works on top of Express session middleware
+ * app.use(express.json())            => helps with parsing requests
+ * app.use(..., express.static())     => serves client/dist on server startup
+ * ----------------------------------------------------------------------------------- */
 
-      // Why scrub user? Ensures sensitive information (password, salt, secret) are not leaked
-      const scrubUser = {
-        _id: foundUser._id,
-        username: foundUser.username,
-        workouts: foundUser.workouts,
-        nutrition: foundUser.nutrition
-      }
+function isLoggedIn(req, res, next) {
+  req.user ? next() : res.redirect('/');
+}
 
-      // After user is scrubbed of sensitive info, deliver to client
-      res.status(200).send(scrubUser)
+app.use(session(
+  { 
+    secret: process.env.SERVER_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+  }
+))
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.json())                       
+app.use('/user/homepage', isLoggedIn, express.static('client/dist'));
+// ----------------------------------------------------------------------------------- //
+// =================================================================================== //
+
+
+
+
+
+/* ===================================================================================
+ *                          AUTHENTICATION & PROTECTED ROUTES
+ * -----------------------------------------------------------------------------------
+ *
+ * /auth/google               => used for login and authentication
+ * /google/callback           => used after authentication to determine where to go next
+ * /logout                    => deletes session, cookies and changes view to login
+ * 
+ * /currentWorkouts           => used to change view to 'WorkoutList' component
+ * /searchWorkouts            => used to change view to 'WorkoutSearch' component
+ * /nutrition                 => used to change view to 'Nutrition' component
+ * ----------------------------------------------------------------------------------- */
+
+app.get('/', passport.authenticate('google', { 
+  scope: ['email', 'openid'], 
+  prompt: 'select_account' 
+}));
+
+app.get('/login-success', 
+  passport.authenticate('google', {
+    successRedirect: '/user/homepage',
+    failureRedirect: '/'
+  })
+);
+
+app.post('/user/logout', (req, res, next) => {
+  req.logout( (err) => {
+    if (err){
+      console.error('POST :: INTERNAL :: Error on logout.')
+      return next(err);
+    }
+    res.sendStatus(200);  // indicate success in logout
+  });
+})
+
+app.get('/user/homepage', isLoggedIn, (req, res) => {
+  res.status(200).redirect('/user/homepage');
+})
+
+app.get('/user/workouts', isLoggedIn, (req, res) => {
+  res.status(200).send({view: 'Workouts'});
+})
+
+app.get('/user/workouts/search', isLoggedIn, (req, res) => {
+  res.status(200).send({view: 'Workouts-Search'})
+})
+
+app.get('/user/nutrition', isLoggedIn, (req, res) => {
+  res.status(200).send({view: 'Nutrition'})
+})
+
+
+// IN RESERVE // 
+// app.post('/user/logout', (req, res, next) => {
+//   passport.authenticate('google', (err, user, info, status) => {
+//     if (err) { return next(err) }
+//     if (!user) { return res.redirect('/') }
+//     res.redirect('/user/homepage');
+//   })(req, res, next);
+// });
+
+// app.get('/user/homepage', passport.authenticate('google', {
+//   successRedirect: '/user/homepage',
+//   failureRedirect: '/'
+// }))
+
+// app.get('/user/workouts', passport.authenticate('google', {
+//   successRedirect: '/user/workouts',
+//   failureRedirect: '/'
+// }))
+
+// app.get('/user/workouts/search', passport.authenticate('google', {
+//   successRedirect: '/user/workouts/search',
+//   failureRedirect: '/'
+// }))
+
+// app.get('/user/nutrition', passport.authenticate('google', {
+//   successRedirect: '/user/nutrition',
+//   failureRedirect: '/'
+// }))
+// ----------------------------------------------------------------------------------- //
+// =================================================================================== //
+
+
+
+
+
+/* ===================================================================================
+ *                                  REQUEST HANDLERS
+ * -----------------------------------------------------------------------------------
+ * 
+ *  GET    /user/info               => CRITICAL :: supplies data to top-level component
+ *                                   > other components cannot render if unsuccessful
+ *                                   > additionally enables all 'read' functionality
+ *  GET    /user/workouts/search     => external request to API to retrieve workouts
+ *  GET    /user/nutrition/search   => external request to API to retrieve food items
+ * 
+ *  PATCH  /user/workouts/create    => allows for user to save a workout to account
+ *  PATCH  /user/workouts/delete    => allows for user to delete a workout from account
+ *  PUT    /user/nutrition/create   => allows for user to add items to pantry
+ *  PUT    /user/nutrition/delete   => allows for user to delete items from pantry
+ * ----------------------------------------------------------------------------------- */
+
+app.get('/user/info/', (req, res) => {
+  const filter = {_id: req.user._id};       
+  User.findById(filter)  
+    .then((user) => {
+      if (!user){ res.sendStatus(404)};     
+      res.status(200).send(user);           
     })
     .catch((error) => {
-      console.error(`Error on GET request for /workouts.`)
+      console.error(`GET :: INTERNAL :: Retrieve user #${req.user._id}.`);
       res.sendStatus(500);
     })
 })
 
-/* 
-  This is used to update ANY property for a user, this includes updates to workouts and nutrition...
-  
-  Patch request MUST include current client-side property that we are changing, this ensures that we
-  are adding to that array instead of totally replacing it.
 
-  Ex. req.data = {'workouts': [...this.state.user.workouts, newWorkout]}
-
-  If we don't do this, then the 'workouts' property will be completely overwritten by a workout
-*/
-app.put('user/info/:id', (req, res) => {
-
-  const filter = {_id: req.params.id};  // filter will be applied to the wildcard :id specified by Axios
-
-  const update = req.data;              // might be body rather than data, must double-check
-
-  User.findByIdAndUpdate(filter, update)  // attempt to find a user and update
-    .then((complete) => {
-      res.sendStatus(201);                // when completed, a 201 is sent
-    })
-    .catch((error) => {
-      console.error(`Error on post request to ${req.params.id}...`);
-      res.sendStatus(500);
-    })
-})
-////////////////////////////////////////////////////////////
-//Workout request handlers
-/* 
-  This is used to send a search request to API Ninjas
-  endpoint '/WorkoutSearch/workouts
-*/
-app.get('/WorkoutSearch/workouts/:query', (req, res) => {
-
-  const {query} = req.params;
+app.get('/user/workouts/search/:query', (req, res) => {
+  const { query } = req.params;
   let data;
-  // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
-  axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
-    .then((response) => {
-      data = JSON.stringify(response.data);
+
+  const primaryExternalRequest = `https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${process.env.API_NINJA_KEY}`;
+
+  axios.get(primaryExternalRequest)
+    .then((workouts) => {
+      data = JSON.stringify(workouts.data);
       res.status(200).send(data);
     })
     .catch((err) => {
-      console.error('Error during API fetch for workouts', err);
-
+      console.error('GET :: EXTERNAL :: Searching workouts');
       res.sendStatus(500);
     })
-
 })
 
-//handle requests to add workout to users saved workout list
-app.patch('/WorkoutSearch/addWorkout', (req, res) => {
-  const {workout, user} = req.body;
-  // console.log('user', user);
-  // console.log('workout to be added', workout);
-  User.findOneAndUpdate(
-    {_id: user._id},
+app.patch('/user/workouts/create', (req, res) => {
+  const { workout } = req.body;
+        User.findOneAndUpdate(
+    {_id: req.user._id},
     {$push: {workouts: workout}},
     { new: true, upsert: true }
   )
   .then((updatedUser) => {
     if (updatedUser) {
-      res.status(200).send(updatedUser);
+      res.status(201).send(updatedUser);  // review main; do we even need to send these?
     } else {
       res.sendStatus(404);
     }
   })
   .catch((err) => {
-    console.error('Failed to find user and add workout')
+    console.error(`PATCH :: INTERNAL :: New workout for #${req.user._id}.`)
     res.sendStatus(500);
   })
-});
+})
+})
 
-//////////////////////////////////////////////////////////////////////////////////////
-//REQUEST HANDLER FOR DELETION OF A WORKOUT FROM USERS SAVED WORKOUT LIST
-app.patch('/WorkoutList/deleteWorkout/:id', (req, res) => {
-  const {workout} = req.body;
-  const id = req.params.id;
+
+
+
+app.patch('/user/workouts/delete', (req, res) => {
+  const { workout } = req.body;
+
   // console.log('id/workout', workout, id);
   User.findOneAndUpdate(
-    {_id: id},
+    {_id: req.user._id},
     {$pull: {workouts: workout}}
   )
-  .then((user) => {
-    if(!user) {
+  .then((updateComplete) => {
+    if(!updateComplete) {
       res.sendStatus(404);
     } else {
       res.sendStatus(201);
@@ -150,112 +243,93 @@ app.patch('/WorkoutList/deleteWorkout/:id', (req, res) => {
     res.sendStatus(500);
   })
 });
-//////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////
+app.get('/user/nutrition/search/:query', (req, res) => {
 
-/* 
-  This is used to send a search request to Spoonacular
-  endpoint '/FoodSearch
-*/
-app.get('/FoodSearch/:query', (req, res) => {
-  const {query} = req.params;
-  // console.log("SERVER REQ PARAMS", req.params)
-  
-  axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
-  .then(results=>{
+  const { query } = req.params;
+  const primaryExternalRequest = `https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${process.env.FOOD_API_KEY}`;
 
-    let id = results.data.results[0].id
+  axios.get(primaryExternalRequest)
+    .then((foodItem) => {
+      let id = foodItem.data.results[0].id
+      const secondaryExternalRequest = `https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${process.env.FOOD_API_KEY}&amount=1`
 
-    console.log("FOODID", id, results.data.results[0])
+      axios.get((secondaryExternalRequest))
+        .then((caloricInfo) => {
+          //calculates caloric density of the searched food
+          let calories = data.data.nutrition.nutrients
+            .filter(nutrient=>nutrient.name === "Calories")
+            .map(key=>key.amount);
+            
+          let grams = caloricInfo.data.nutrition.weightPerServing.amount
+          let nutDensity = calories/grams
 
-    
+          const nutrientsInfo = {
+            'foodName': foodItem.data.results[0].name,
+            'foodId':  foodItem.data.results[0].id,
+            'calories': calories,
+            'grams': grams,
+            'nutDensity': nutDensity
+          }
 
-    axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
-    .then((data)=>{
-
-      //calculates caloric density of the searched food
-      let calories = data.data.nutrition.nutrients
-      .filter(nutrient=>nutrient.name === "Calories")
-      .map(key=>key.amount);
-
-
-      let grams = data.data.nutrition.weightPerServing.amount
-      console.log("###### GRAMS:", grams)
-      let nutDensity = calories/grams
-
-      console.log("|calories", calories, "|grams", grams, "|caloric density", nutDensity)
-
-      const nutrientsInfo = {
-        foodName: results.data.results[0].name,
-        foodId:  results.data.results[0].id,
-        calories,
-        grams,
-        nutDensity
-      }
-
-      res.status(200).send(nutrientsInfo);
-
+          res.status(200).send(nutrientsInfo)
+        })
+        .catch((error) => {
+          console.error(`GET :: EXTERNAL :: Searching nutrition :: Secondary external request.`)
+          res.sendStatus(500);
+        })
     })
-  })
-  .catch(err=>{
-    console.error("didn't get food", err)
-    res.sendStatus(500)
-  })
-
+    .catch((error) => {
+      console.error(`GET :: EXTERNAL :: Searching nutrition :: Primary external request.`)
+      res.sendStatus(500);
+    })
 })
 
+app.put('/user/nutrition/create', (req, res)=>{
 
-/* 
-  This is used to save a search result from 
-  endpoint '/pantry
-*/
-app.put('/pantry/:id', (req, res)=>{
+	const update = req.body.nutrition; 
 
-	const id = req.params.id;
-	const update = req.body.nutrition; // not sure if req.data or req.body
-	
-
-  console.log("!!! !!! !!! USER DATA NUTRITION???:", User.findById(id).then(data=>console.log(data)))
-	///////////////////////////////////////////////
-	console.log(`User ID is: ${id}.`)
-	console.log(`Request body is: `, req.body)
-	///////////////////////////////////////////////
-
-
-	User.findByIdAndUpdate({_id: id}, {$push: {nutrition: update}})
+	User.findByIdAndUpdate({_id: req.user._id}, {$push: {nutrition: update}})
 		.then((updateComplete) => {
 			res.sendStatus(201);
 		})
 		.catch((error) => {
-			console.error(`Error on PUT request to pantry for User ${id}.`)
+			console.error(`PUT :: INTERNAL :: New food item for #${req.user._id}.`)
 		})
 
 })
-//////////////////////////////////////////////////////////////////
-/* 
-  This is used to delete an entry result from
-  endpoint '/pantry
-*/
 
-app.put('/pantry/food/:id', (req, res)=>{
-  // console.log("DELETE REQ PARAMS", req.body)
-  // console.log('user request:', req.params.id)
+app.put('/user/nutrition/delete', (req, res)=>{
 
-  User.findByIdAndUpdate({_id: req.params.id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
+  User.findByIdAndUpdate({_id: req.user._id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
   .then((data)=>{
-    // console.log("THEN BLOCK DATA", data)
+    // INCOMPLETE
+    console.log("THEN BLOCK DATA", data)
   })
   .catch((err)=>{
-    console.error(err)
+    console.error(`PUT :: INTERNAL :: On delete food #${req.body.foodData} for user #${req.user._id}.`)
   })
-
-
 })
 
-//////////////////////////////////////////////////////////////////////////////////////
-/*                  DATABASE CONNECTION & SERVER LISTENER                           */
-// On successful connection to database, have our server begin listening for requests...
+// ----------------------------------------------------------------------------------- //
+// =================================================================================== //
+
+
+
+
+
+/* ===================================================================================
+ *                                DATABASE LISTENERS
+ * -----------------------------------------------------------------------------------
+ *  
+ *  'open'          =>  CRITICAL :: when database opens, listen for requests from server
+ *  'disconnected'  =>  if database cannot be reached or you are disconnected
+ *  'disconnecting' =>  if an error emerges and database closes
+ *  'reconnected'   =>  if we are able to reconnect to database
+ *  'close'         =>  if connection is completely closed
+ * ----------------------------------------------------------------------------------- */
+
+
 db.on('open', () => {
   app.listen( port, () => {
     console.log(`>> Connection to database fitness-tracker established <<`)
@@ -278,4 +352,5 @@ db.on('reconnected', () => {
 db.on('close', () => {
   console.log('>> Connection to database fitness-tracker has been closed <<')
 })
-/////////////////////////////////////////////////////////////////////////////////////
+// ----------------------------------------------------------------------------------- //
+// =================================================================================== //

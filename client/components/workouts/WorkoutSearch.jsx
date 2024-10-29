@@ -27,8 +27,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
   const handleSearch = () => {
     if (!selectedKeyword) return;
 
-    axios
-      .get(`/WorkoutSearch/workouts/${selectedKeyword}`)
+         axios.get(`/user/workouts/search/${selectedKeyword}`)
       .then((result) => {
         setFilteredResults(result.data);
       })
@@ -39,8 +38,8 @@ const WorkoutSearch = ({ user, fetchUser }) => {
 
   // handle user clicks to add workout to saved list
   const handleSelectedWorkout = (workout, index) => {
-    axios
-      .patch(`/WorkoutSearch/addWorkout`, { workout, user })
+    axios.patch(`/user/workouts/create`, { workout })
+
       .then(() => {
         setFilteredResults((prevResults) =>
           prevResults.filter((_, i) => i !== index)

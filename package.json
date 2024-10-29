@@ -8,6 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
     "seed": "node mock-data/seedDatabase.js",
+    "reap": "node mock-data/reapDatabase.js",
     "build": "webpack"
   },
   "keywords": [],
@@ -32,6 +33,7 @@
     "mongoose-findorcreate": "^4.0.0",
     "node": "^22.10.0",
     "nodemon": "^3.1.7",
+    "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "peers": "^0.1.0",
     "react": "^18.3.1",

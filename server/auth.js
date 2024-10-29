@@ -1,18 +1,33 @@
 /* Following Passport instructions provided here: https://www.passportjs.org/packages/passport-google-oauth20/ */
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import passport from 'passport';
 import { User } from './db/index.js'; // importing model for interactions
+import dotenv from 'dotenv';
+dotenv.config();
 
-// we need to import GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET from .env file
-// we do this because we don't want this information leaked, which would compromise security
 passport.use(new GoogleStrategy({
-    clientID: GOOGLE_CLIENT_ID,
-    clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/auth/google/callback", // will likely change for us
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:8080/login-success",
     passReqToCallback: true
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return cb(err, user);
+  function(request, accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ _id: profile.id }, function (err, user) {
+      return cb(err, { _id: user._id }); // reworked, now should only store the user's ID, which we can use in requests
     });
   }
 ));
+
+passport.serializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
+passport.deserializeUser(function(user, cb) {
+  process.nextTick(function() {
+    return cb(null, user);
+  });
+});
+
+export default passport;
