@@ -27,22 +27,20 @@ export default function FoodSearch(props){
 //on click, we search for the food item
   const handleClick = ()=>{
     //and the search to the /FoodSearch endpoint
-    axios.get(`/FoodSearch/${searchField}`)
-    .then((foodInfo)=>{
-      // console.log("FOODINFO", foodInfo.data)
-      setResults(foodInfo.data)
-      handleAdd(foodInfo.data)
-    })
-    .catch((err)=>{
-      console.error(err);
-    })
-
-
+    axios.get(`/user/nutrition/search/${searchField}`)
+      .then((foodInfo)=>{
+        // console.log("FOODINFO", foodInfo.data)
+        setResults(foodInfo.data)
+        handleAdd(foodInfo.data)
+      })
+      .catch((err)=>{
+        console.error(err);
+      })
   }
 
   const handleAdd = (foodInfo)=>{
 
-    axios.put(`/pantry/${props.user._id}`, { nutrition: foodInfo })
+    axios.put(`/user/nutrition/create`, { nutrition: foodInfo })
       .then((data) => {
         // console.log("HANDLE ADD DATA", data)
       })

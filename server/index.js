@@ -91,8 +91,6 @@ app.get('/login-success',
   })
 );
 
-
-// On request to logout, attempt to delete session and user data
 app.post('/user/logout', (req, res, next) => {
   req.logout( (err) => {
     if (err){
@@ -188,7 +186,7 @@ app.get('/user/workouts/search/:query', (req, res) => {
   const { query } = req.params;
   let data;
 
-  const primaryExternalRequest = `https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`;
+  const primaryExternalRequest = `https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${process.env.API_NINJA_KEY}`;
 
   axios.get(primaryExternalRequest)
     .then((workouts) => {
@@ -245,17 +243,20 @@ app.patch('/user/workouts/delete', (req, res) => {
 app.get('/user/nutrition/search/:query', (req, res) => {
 
   const { query } = req.params;
-  const primaryExternalRequest = `https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`;
+  const primaryExternalRequest = `https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${process.env.FOOD_API_KEY}`;
 
   axios.get(primaryExternalRequest)
     .then((foodItem) => {
       let id = foodItem.data.results[0].id
-      const secondaryExternalRequest = `https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`
+      const secondaryExternalRequest = `https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${process.env.FOOD_API_KEY}&amount=1`
 
       axios.get((secondaryExternalRequest))
         .then((caloricInfo) => {
           //calculates caloric density of the searched food
-          let calories = caloricInfo.data.nutrition.nutrients[2].amount
+          let calories = data.data.nutrition.nutrients
+            .filter(nutrient=>nutrient.name === "Calories")
+            .map(key=>key.amount);
+            
           let grams = caloricInfo.data.nutrition.weightPerServing.amount
           let nutDensity = calories/grams
 

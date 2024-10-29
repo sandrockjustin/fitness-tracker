@@ -19,7 +19,7 @@ const WorkoutSearch = ({user, fetchUser}) => {
 
   const handleClickEvent = () => {
     //on click event, send get request for workouts to server
-    axios.get(`/WorkoutSearch/workouts/${searchQuery}`)
+    axios.get(`/user/workouts/search/${searchQuery}`)
     .then((result) => {
       // console.log('result returned', result);
       //setState for results from API
@@ -34,7 +34,7 @@ const WorkoutSearch = ({user, fetchUser}) => {
 
   //handle user clicks on result workout objects to add to user's saved workout list
   const handleSelectedWorkout = (workout, index) => {
-    axios.patch(`/WorkoutSearch/addWorkout`, {workout, user})
+    axios.patch(`/user/workouts/create`, { workout })
       .then(() => {
 
         setFilteredResults((prevResults) =>

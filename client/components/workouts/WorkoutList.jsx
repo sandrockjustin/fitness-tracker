@@ -13,7 +13,7 @@ const WorkoutList = ({workouts, fetchUser, user}) => {
   // function to handle delete requests in user's workout list
   const deleteWorkout = (workout) => {
     console.log('workout to be deleted', workout);
-    axios.patch(`/WorkoutList/deleteWorkout/${user._id}`, {workout})
+    axios.patch(`/user/workouts/delete`, {workout})
       .then(() => {
         fetchUser();
       })
