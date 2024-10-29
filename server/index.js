@@ -219,7 +219,7 @@ app.patch('/user/workouts/create', (req, res) => {
     res.sendStatus(500);
   })
 })
-})
+
 
 
 
@@ -257,19 +257,21 @@ app.get('/user/nutrition/search/:query', (req, res) => {
       axios.get((secondaryExternalRequest))
         .then((caloricInfo) => {
           //calculates caloric density of the searched food
-          let calories = data.data.nutrition.nutrients
+          let calories = caloricInfo.data.nutrition.nutrients
             .filter(nutrient=>nutrient.name === "Calories")
             .map(key=>key.amount);
             
           let grams = caloricInfo.data.nutrition.weightPerServing.amount
           let nutDensity = calories/grams
+          console.log("CATEGORY???", caloricInfo.data.categoryPath)
 
           const nutrientsInfo = {
             'foodName': foodItem.data.results[0].name,
             'foodId':  foodItem.data.results[0].id,
             'calories': calories,
             'grams': grams,
-            'nutDensity': nutDensity
+            'nutDensity': nutDensity,
+            'category': caloricInfo.data.categoryPath[0]
           }
 
           res.status(200).send(nutrientsInfo)
@@ -300,8 +302,10 @@ app.put('/user/nutrition/create', (req, res)=>{
 })
 
 app.put('/user/nutrition/delete', (req, res)=>{
+  console.log("DELETE REQ USER ID", req.user._id, "REQ BODY", req.body)
 
   User.findByIdAndUpdate({_id: req.user._id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
+
   .then((data)=>{
     // INCOMPLETE
     console.log("THEN BLOCK DATA", data)
