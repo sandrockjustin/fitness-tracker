@@ -77,6 +77,9 @@ export default function Meals(props){
   let foods = props.user.nutrition
   let foodNum = props.user.nutrition.length;
   let mealSize = 3;
+  let mealReplaceAmts = []
+  
+if(foods.length > 2){
 
   //makes a random meal
   for (let i = 0; i < mealSize; i++){
@@ -87,12 +90,12 @@ export default function Meals(props){
 
   let mealReplenish = calsBurned / mealSize
 
-  let mealReplaceAmts = []
   for (let i = 0; i < meal.length; i++){
     mealReplaceAmts.push(Math.round((mealReplenish / meal[i].nutDensity)*100)/100)
   }
 
   console.log("MEAL", meal, mealReplaceAmts)
+}
 /////////////////////////////////////////////////////////////////////
   return(
     <div style={{fontFamily: "Arial, sans-serif"}}>
