@@ -14,10 +14,10 @@
 /* ===================================================================================
  *                              IMPORTS & INITIALIZATION
  * ----------------------------------------------------------------------------------*/
-import express from 'express';            
+import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-import { User, db } from './db/index.js'  // must be imported for database connection  
+import { User, db } from './db/index.js'  // must be imported for database connection
 import auth from './auth.js';             // must be imported for Passport to function
 import axios from 'axios';                // must be imported for external requests
 import dotenv from 'dotenv';
@@ -57,7 +57,7 @@ app.use(session(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.json())                       
+app.use(express.json());
 app.use('/user/homepage', isLoggedIn, express.static('client/dist'));
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
@@ -219,9 +219,6 @@ app.patch('/user/workouts/create', (req, res) => {
     res.sendStatus(500);
   })
 })
-})
-
-
 
 
 app.patch('/user/workouts/delete', (req, res) => {
