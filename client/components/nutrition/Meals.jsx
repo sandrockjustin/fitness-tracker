@@ -89,9 +89,9 @@ export default function Meals(props){
                 <div>
                   <strong>PANTRY ITEM:</strong> {food.foodName}
                   <br></br>
-                  <strong>CALORIC DENSITY/G:</strong> {Math.round(food.nutDensity)/100}
+                  <strong>CALORIC DENSITY/G:</strong> {food.nutDensity}
                   <br></br>
-                  <strong>GRAMS TO REFUEL:</strong>{Math.round((calorieCount / food.nutDensity) * 100)/100}
+                  <strong>GRAMS TO REFUEL:</strong>{Math.round((calorieCount / food.nutDensity)*100)/100}
                   <br></br>
                   <br></br>
                 </div>
