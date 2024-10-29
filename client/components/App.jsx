@@ -28,6 +28,7 @@ export default function App() {
 
 	function updateView(e) {
 
+		console.log(e.target.name);
 		switch (e.target.name){
 			case 'Logout':
 				axios.post('/user/logout')
@@ -91,7 +92,6 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
@@ -113,7 +113,6 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
 					<div>
 					<WorkoutSearch user={user} fetchUser={fetchUser}/>
@@ -129,7 +128,6 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
 					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
 				</div>
@@ -143,9 +141,7 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
-					<button type="button">Log in with Google</button>
 				</div>
         </ThemeProvider>
 			)
