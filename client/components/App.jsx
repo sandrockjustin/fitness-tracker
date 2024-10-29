@@ -28,6 +28,7 @@ export default function App() {
 
 	function updateView(e) {
 
+		console.log(e.target.name);
 		switch (e.target.name){
 			case 'Logout':
 				axios.post('/user/logout')
@@ -37,7 +38,7 @@ export default function App() {
 						}
 					})
 					.catch((error) => {
-						console.error('Error on POST logout.')
+						console.error('Error on POST logout in main.', error)
 					})
 				break;
 			case 'Workouts':
@@ -46,7 +47,7 @@ export default function App() {
 						setView(response.data.view);
 					})
 					.catch((error) => {
-						console.error('Error on GET workouts view in main.')
+						console.error('Error on GET workouts view in main.', error)
 					})
 				break;
 			case 'Workouts-Search':
@@ -55,7 +56,7 @@ export default function App() {
 						setView(response.data.view);
 					})
 					.catch((error) => {
-						console.error('Error on GET workouts search view in main.')
+						console.error('Error on GET workouts search view in main.', error)
 					})
 					break;
 			case 'Nutrition':
@@ -64,9 +65,19 @@ export default function App() {
 						setView(response.data.view);
 					})
 					.catch((error) => {
-						console.error('Error on GET nutrition view in main.')
+						console.error('Error on GET nutrition view in main.', error)
 					})
 					break;
+			case 'Delete Account':
+				axios.delete('/user/delete')
+					.then((response) => {
+						if (response.status === 200){
+							window.location.href = "http://localhost:8080/";
+						}
+					})
+					.catch((error) => {
+						console.error('Error on DELETE user in main.', error)
+					})
 			default:
 				console.error('Client error for update view in main.')
 		}
@@ -91,7 +102,6 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
@@ -113,7 +123,6 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
 					<div>
 					<WorkoutSearch user={user} fetchUser={fetchUser}/>
@@ -129,7 +138,6 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
 					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
 				</div>
@@ -143,9 +151,7 @@ export default function App() {
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
-					<button type="button">Log in with Google</button>
 				</div>
         </ThemeProvider>
 			)

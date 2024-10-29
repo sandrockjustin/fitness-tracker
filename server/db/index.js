@@ -24,6 +24,7 @@ UserSchema.plugin(findOrCreate);  // adding the findOrCreate plugin to our schem
 // make model from Schema
 const User = mongoose.model('User', UserSchema);
 
+
 const db = mongoose.connection;
 
 // we still need to export this and the connection to mongoose

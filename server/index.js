@@ -36,6 +36,11 @@ const port = 8080;                  // random port, can change as necessary
  *                                    MIDDLEWARE
  * -----------------------------------------------------------------------------------
  * 
+ * isLoggedIn                         => CRITICAL :: used as middleware to secure 
+ *                                     > routes checks to see if provided user is
+ *                                     > valid does not check whether session is valid
+ *                                     > as this is handled by other middleware
+ * 
  * app.use(session())                 => Express is used for creating sessions
  * app.use(passport.initialize())     => initializes Passport for incoming requests
  * app.use(passport.session())        => works on top of Express session middleware
@@ -44,7 +49,21 @@ const port = 8080;                  // random port, can change as necessary
  * ----------------------------------------------------------------------------------- */
 
 function isLoggedIn(req, res, next) {
-  req.user ? next() : res.redirect('/');
+  if (!req.user) {
+    res.redirect('/');
+  } else {
+    User.findById({_id: req.user._id})
+      .then((isFound) => {
+        if (!isFound) { 
+          console.error(`SERVER :: INTERNAL :: User #${req.user._id} does not exist.`);
+          res.redirect('/')
+        }
+        next();
+      })
+      .catch((error) => {
+        console.error('SERVER :: INTERNAL :: Failure to authenticate.');
+      })
+  }
 }
 
 app.use(session(
@@ -180,6 +199,21 @@ app.get('/user/info/', (req, res) => {
       console.error(`GET :: INTERNAL :: Retrieve user #${req.user._id}.`);
       res.sendStatus(500);
     })
+})
+
+app.delete('/user/delete', (req, res) => {
+
+  const filter = {_id: req.user._id};   
+
+  User.findByIdAndDelete(filter)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.error(`DELETE :: INTERNAL :: Delete user #${req.user._id}.`)
+      res.sendStatus(500);
+    })
+
 })
 
 

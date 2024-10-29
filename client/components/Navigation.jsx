@@ -1,14 +1,39 @@
-import React from 'react';
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import useStyles from './styles';
 
-export default function Navigation(props) {
+function Navigation(props) {
+
+  const nav_classes = useStyles();
 
   return (
-    <nav>
-      <button type="button" onClick={(e) => props.updateView(e)}  name="Workouts">Current Workouts</button>
-      <button type="button" onClick={(e) => props.updateView(e)}  name="Workouts-Search">Search Workouts</button>
-      <button type="button" onClick={(e) => props.updateView(e)}  name="Nutrition">Nutrition Helper</button>
-      <button type="button" onClick={(e) => props.updateView(e)}  name="Logout">Logout</button>									
-    </nav>
-  )
-
+    <AppBar position="static">
+      <Container maxWidth="100%" className={nav_classes.navBar}>
+        <Toolbar sx={{justifyContent: "space-between"}}>
+          <Container>
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts" sx={{color: 'white'}}>Workouts</Button>
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts-Search" sx={{color: 'white'}}>Search Workouts</Button>
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Nutrition" sx={{color: 'white'}}>Nutrition</Button>	
+          </Container>
+          <Container>
+            <MenuList className={nav_classes.navAccountOptions}>
+              <MenuItem>
+                <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navDeleteAccButton} name="Delete Account" sx={{color: 'white'}}>Delete Account</Button>
+              </MenuItem>
+              <MenuItem>
+                <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Logout" sx={{color: 'white'}}>Logout</Button>
+              </MenuItem>
+            </MenuList>				
+          </Container>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
 }
+
+export default Navigation;
