@@ -238,10 +238,6 @@ app.patch('/user/workouts/create', (req, res) => {
     res.sendStatus(500);
   })
 })
-})
-
-
-
 
 app.patch('/user/workouts/delete', (req, res) => {
   const { workout } = req.body;
