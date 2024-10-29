@@ -201,6 +201,21 @@ app.get('/user/info/', (req, res) => {
     })
 })
 
+app.delete('/user/delete', (req, res) => {
+
+  const filter = {_id: req.user._id};   
+
+  User.findByIdAndDelete(filter)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.error(`DELETE :: INTERNAL :: Delete user #${req.user._id}.`)
+      res.sendStatus(500);
+    })
+
+})
+
 
 app.get('/user/workouts/search/:query', (req, res) => {
   const { query } = req.params;

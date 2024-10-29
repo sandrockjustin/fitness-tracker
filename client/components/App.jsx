@@ -38,7 +38,7 @@ export default function App() {
 						}
 					})
 					.catch((error) => {
-						console.error('Error on POST logout.')
+						console.error('Error on POST logout in main.', error)
 					})
 				break;
 			case 'Workouts':
@@ -47,7 +47,7 @@ export default function App() {
 						setView(response.data.view);
 					})
 					.catch((error) => {
-						console.error('Error on GET workouts view in main.')
+						console.error('Error on GET workouts view in main.', error)
 					})
 				break;
 			case 'Workouts-Search':
@@ -56,7 +56,7 @@ export default function App() {
 						setView(response.data.view);
 					})
 					.catch((error) => {
-						console.error('Error on GET workouts search view in main.')
+						console.error('Error on GET workouts search view in main.', error)
 					})
 					break;
 			case 'Nutrition':
@@ -65,9 +65,19 @@ export default function App() {
 						setView(response.data.view);
 					})
 					.catch((error) => {
-						console.error('Error on GET nutrition view in main.')
+						console.error('Error on GET nutrition view in main.', error)
 					})
 					break;
+			case 'Delete Account':
+				axios.delete('/user/delete')
+					.then((response) => {
+						if (response.status === 200){
+							window.location.href = "http://localhost:8080/";
+						}
+					})
+					.catch((error) => {
+						console.error('Error on DELETE user in main.', error)
+					})
 			default:
 				console.error('Client error for update view in main.')
 		}
