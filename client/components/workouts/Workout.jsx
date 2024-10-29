@@ -14,7 +14,6 @@ const Workout = ({workout, onClick}) => {
   if(onClick) {
     return (
       <Box
-        className={classes.text}
         onClick={onClick}
         sx={{
           padding: 1,
@@ -22,6 +21,7 @@ const Workout = ({workout, onClick}) => {
           borderRadius: 4,
           minWidth: '150px',
           boxShadow: 2,
+          height: 'flex'
         }}
       >
         <Typography className={classes.text} variant="h6">{name}</Typography>
@@ -58,7 +58,7 @@ const Workout = ({workout, onClick}) => {
         <Typography variant="body2">Muscle: {muscle}</Typography>
         <Typography variant="body2">Equipment: {equipment}</Typography>
         <Typography variant="body2">Difficulty: {difficulty}</Typography>
-  
+
         <Accordion sx={{ marginTop: 2 }}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Typography>Instructions</Typography>

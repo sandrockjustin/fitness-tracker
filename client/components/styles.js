@@ -12,11 +12,13 @@ const useStyles = makeStyles(() => ({
     margin: '10px'
   },
   workouts: {
-    flex: '200px',
-    display: '200px',
+    flex: '250px',
+    display: '250px',
+    minHeight: '250px',
     maxHeight: '100%',
     overflowY: 'auto',
     minWidth: '300px',
+    maxWidth: '300px',
     padding: '20px',
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     boxSizing: 'border-box',

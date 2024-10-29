@@ -27,7 +27,7 @@ const WorkoutList = ({workouts, fetchUser, user}) => {
     <Typography variant='h3' fontWeight='bold' fontFamily='Roboto' align='center' display='flex' justifyContent='center' >Saved Workout List</Typography>
     <Box
       className={classes.box}
-      display="flex" flexDirection="row" alignItems="center"
+      alignItems="center"
     >
       {workouts.map((workout, index) => {
         return (
