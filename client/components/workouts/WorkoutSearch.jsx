@@ -2,15 +2,30 @@ import React, { useState } from "react";
 import axios from "axios";
 import Workout from "./Workout.jsx";
 import { Button, FormControl, Box, MenuItem, Select } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import useStyles from '../styles';
+import AddIcon from "@mui/icons-material/Add";
+import useStyles from "../styles";
 
 const WorkoutSearch = ({ user, fetchUser }) => {
   const classes = useStyles();
   // choices of muscle groups
-  const keywords = ['abdominals', 'abductors', 'adductors', 'biceps', 'calves',
-    'chest', 'forearms', 'glutes', 'hamstrings', 'lats', 'lower_back', 'middle_back', 'neck',
-    'quadriceps', 'traps', 'triceps'];
+  const keywords = [
+    "abdominals",
+    "abductors",
+    "adductors",
+    "biceps",
+    "calves",
+    "chest",
+    "forearms",
+    "glutes",
+    "hamstrings",
+    "lats",
+    "lower_back",
+    "middle_back",
+    "neck",
+    "quadriceps",
+    "traps",
+    "triceps",
+  ];
 
   // states
   const [selectedKeyword, setSelectedKeyword] = useState("");
@@ -27,7 +42,8 @@ const WorkoutSearch = ({ user, fetchUser }) => {
   const handleSearch = () => {
     if (!selectedKeyword) return;
 
-         axios.get(`/user/workouts/search/${selectedKeyword}`)
+    axios
+      .get(`/user/workouts/search/${selectedKeyword}`)
       .then((result) => {
         setFilteredResults(result.data);
       })
@@ -38,7 +54,8 @@ const WorkoutSearch = ({ user, fetchUser }) => {
 
   // handle user clicks to add workout to saved list
   const handleSelectedWorkout = (workout, index) => {
-    axios.patch(`/user/workouts/create`, { workout })
+    axios
+      .patch(`/user/workouts/create`, { workout })
 
       .then(() => {
         setFilteredResults((prevResults) =>
@@ -53,8 +70,15 @@ const WorkoutSearch = ({ user, fetchUser }) => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <FormControl sx={{ width: 500, alignContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        margin: "10px",
+      }}
+    >
+      <FormControl sx={{ width: 500, alignContent: "center"}}>
         <label htmlFor="keyword" style={{ textAlign: "center" }}>
           Choose Muscle Group:
         </label>
@@ -92,46 +116,28 @@ const WorkoutSearch = ({ user, fetchUser }) => {
       </FormControl>
       <h3 style={{ marginTop: "20px" }}>Workout results</h3>
       <Box
-        name="results"
+        className={classes.box}
         sx={{
-          overflowX: "auto",
-          display: "flex",
-          flexDirection: "row",
-          gap: 2,
-          padding: "10px",
-          width: "100%",
-          flexWrap: "nowrap",
+          overflowX: 'auto',
+          display: 'flex',
+          justifyContent: 'flex-start',
+          width: '100%',
+          padding: '10px',
+          alignItems: 'center'
         }}
       >
         {filteredResults.length > 0 ? (
           filteredResults.map((workout, index) => (
-            <div
-              key={index}
-              style={{
-                flex: "0 0 auto",
-                maxHeight: "500px",
-                overflowY: "auto",
-                width: "300px",
-                padding: "10px",
-                background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-                boxSizing: "border-box",
-                position: "relative",
-                borderRadius: "8px",
-              }}
-            >
+            <div className={classes.workouts} key={index}>
               <Button
                 className={classes.addButton}
                 variant="contained"
                 color="primary"
                 onClick={() => handleSelectedWorkout(workout, index)}
-
               >
                 <AddIcon />
               </Button>
-              <Workout
-                workout={workout}
-                key={index}
-              />
+              <Workout workout={workout} key={index} />
             </div>
           ))
         ) : (
@@ -152,4 +158,3 @@ const WorkoutSearch = ({ user, fetchUser }) => {
 };
 
 export default WorkoutSearch;
-

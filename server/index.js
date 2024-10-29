@@ -14,10 +14,10 @@
 /* ===================================================================================
  *                              IMPORTS & INITIALIZATION
  * ----------------------------------------------------------------------------------*/
-import express from 'express';            
+import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-import { User, db } from './db/index.js'  // must be imported for database connection  
+import { User, db } from './db/index.js'  // must be imported for database connection
 import auth from './auth.js';             // must be imported for Passport to function
 import axios from 'axios';                // must be imported for external requests
 import dotenv from 'dotenv';
@@ -76,7 +76,7 @@ app.use(session(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.json())                       
+app.use(express.json());
 app.use('/user/homepage', isLoggedIn, express.static('client/dist'));
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
@@ -254,6 +254,7 @@ app.patch('/user/workouts/create', (req, res) => {
   })
 })
 
+
 app.patch('/user/workouts/delete', (req, res) => {
   const { workout } = req.body;
 
@@ -287,19 +288,21 @@ app.get('/user/nutrition/search/:query', (req, res) => {
       axios.get((secondaryExternalRequest))
         .then((caloricInfo) => {
           //calculates caloric density of the searched food
-          let calories = data.data.nutrition.nutrients
+          let calories = caloricInfo.data.nutrition.nutrients
             .filter(nutrient=>nutrient.name === "Calories")
             .map(key=>key.amount);
             
           let grams = caloricInfo.data.nutrition.weightPerServing.amount
           let nutDensity = calories/grams
+          console.log("CATEGORY???", caloricInfo.data.categoryPath)
 
           const nutrientsInfo = {
             'foodName': foodItem.data.results[0].name,
             'foodId':  foodItem.data.results[0].id,
             'calories': calories,
             'grams': grams,
-            'nutDensity': nutDensity
+            'nutDensity': nutDensity,
+            'category': caloricInfo.data.categoryPath[0]
           }
 
           res.status(200).send(nutrientsInfo)
@@ -330,8 +333,10 @@ app.put('/user/nutrition/create', (req, res)=>{
 })
 
 app.put('/user/nutrition/delete', (req, res)=>{
+  console.log("DELETE REQ USER ID", req.user._id, "REQ BODY", req.body)
 
   User.findByIdAndUpdate({_id: req.user._id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
+
   .then((data)=>{
     // INCOMPLETE
     console.log("THEN BLOCK DATA", data)

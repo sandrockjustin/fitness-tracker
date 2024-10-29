@@ -9,7 +9,8 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'row',
     gap: '10px',
     padding: '20px',
-    margin: '10px'
+    margin: '10px',
+    marginRight: '20px'
   },
   workouts: {
     flex: '250px',

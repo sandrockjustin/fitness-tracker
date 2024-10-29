@@ -63,11 +63,37 @@ let calorieCount = dummyExercises.reduce((acc, curr)=>{
 
 //////////////////////////////////////////////////
 export default function Meals(props){
+  //MAKES A RANDOM MEAL
+/////////////////////////////////////////////////////////////////////
+
+
   console.log("PROPS nutrition", props.user.nutrition)
+
   let exRoutine = props.user.workouts
 
+  let calsBurned = exRoutine.length * 150
 
+  let meal = [];
+  let foods = props.user.nutrition
+  let foodNum = props.user.nutrition.length;
+  let mealSize = 3;
 
+  //makes a random meal
+  for (let i = 0; i < mealSize; i++){
+    meal[i] = foods[Math.floor(Math.random() * foodNum)]
+    meal[i] = foods[Math.floor(Math.random() * foodNum)]
+    meal[i] = foods[Math.floor(Math.random() * foodNum)]
+  }
+
+  let mealReplenish = calsBurned / mealSize
+
+  let mealReplaceAmts = []
+  for (let i = 0; i < meal.length; i++){
+    mealReplaceAmts.push(Math.round((mealReplenish / meal[i].nutDensity)*100)/100)
+  }
+
+  console.log("MEAL", meal, mealReplaceAmts)
+/////////////////////////////////////////////////////////////////////
   return(
     <div style={{fontFamily: "Arial, sans-serif"}}>
       <h1 style={{textAlign: "center"}}>POST-WORKOUT MEALS</h1>
@@ -75,25 +101,33 @@ export default function Meals(props){
       <WorkoutBox sx={{padding: "5px"}}>
           <strong>EXERCISES</strong>
           {exRoutine.map(exercise=>{
-            return <div>{exercise.name}</div>
+            return (
+            <div key={`${exercise.name}`}>
+              {exercise.name}
+            </div>
+              )
           })}
-        {/* {dummyExercises.map(exercise=>{
-          return(
-              <div>{exercise.name}</div>
-          
-            )
-          })} */}
           <br></br>
-          <strong >CALORIES BURNED:</strong> {exRoutine.length * 150}
-        </WorkoutBox>
-
-
+          <strong >CALORIES BURNED:</strong> {calsBurned}
+      </WorkoutBox>
         <br></br>
-        <MealBox sx={{padding: "5px"}}>
+      <MealBox sx={{padding: "5px"}}>
           <div>
-            {props.nutrition.map(food=>{
+
+            <strong>RANDOM MEAL</strong>
+            <br></br>
+            {meal.map((food, i)=>{
               return(
                 <div>
+                  <strong>{mealReplaceAmts[i]} grams of {food.foodName}</strong>
+                  <br></br>
+                </div>
+              )
+            })}
+
+            {/* {props.nutrition.map((food, i)=>{
+              return(
+                <div key={`${food.foodName}-${i}`}>
                   <strong>PANTRY ITEM:</strong> {food.foodName}
                   <br></br>
                   <strong>CALORIC DENSITY/G:</strong> {food.nutDensity}
@@ -103,9 +137,9 @@ export default function Meals(props){
                   <br></br>
                 </div>
               )
-            })}
+            })} */}
           </div>
-          </MealBox>
+      </MealBox>
       </div>
 
 
