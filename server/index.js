@@ -1,4 +1,17 @@
 /* ===================================================================================
+ *                                    DOCUMENTATION
+ * ----------------------------------------------------------------------------------
+ * https://developer.mozilla.org/en-US/docs/Web/API/Location                  REVIEW
+ * https://developer.mozilla.org/en-US/docs/Web/API/History/pushState         REVIEW
+ * https://reactrouter.com/en/main                                            REVIEW
+ * https://mongoosejs.com/docs/connections.html#connection-events
+ * https://expressjs.com/
+ * https://www.passportjs.org/packages/passport-google-oauth20/
+ * ----------------------------------------------------------------------------------- */
+// =================================================================================== //
+
+
+/* ===================================================================================
  *                              IMPORTS & INITIALIZATION
  * ----------------------------------------------------------------------------------*/
 import express from 'express';            
@@ -31,7 +44,7 @@ const port = 8080;                  // random port, can change as necessary
  * ----------------------------------------------------------------------------------- */
 
 function isLoggedIn(req, res, next) {
-  req.user ? next() : res.status(401).redirect('/');
+  req.user ? next() : res.redirect('/');
 }
 
 app.use(session(
@@ -78,10 +91,16 @@ app.get('/login-success',
   })
 );
 
+
 // On request to logout, attempt to delete session and user data
-app.post('/user/logout', isLoggedIn, (req, res, next) => {
-  req.logout( (err) => {console.error('POST :: INTERNAL :: Error on logout.')});
-  res.status(200).redirect('/');
+app.post('/user/logout', (req, res, next) => {
+  req.logout( (err) => {
+    if (err){
+      console.error('POST :: INTERNAL :: Error on logout.')
+      return next(err);
+    }
+    res.sendStatus(200);  // indicate success in logout
+  });
 })
 
 app.get('/user/homepage', isLoggedIn, (req, res) => {
@@ -99,6 +118,36 @@ app.get('/user/workouts/search', isLoggedIn, (req, res) => {
 app.get('/user/nutrition', isLoggedIn, (req, res) => {
   res.status(200).send({view: 'Nutrition'})
 })
+
+
+// IN RESERVE // 
+// app.post('/user/logout', (req, res, next) => {
+//   passport.authenticate('google', (err, user, info, status) => {
+//     if (err) { return next(err) }
+//     if (!user) { return res.redirect('/') }
+//     res.redirect('/user/homepage');
+//   })(req, res, next);
+// });
+
+// app.get('/user/homepage', passport.authenticate('google', {
+//   successRedirect: '/user/homepage',
+//   failureRedirect: '/'
+// }))
+
+// app.get('/user/workouts', passport.authenticate('google', {
+//   successRedirect: '/user/workouts',
+//   failureRedirect: '/'
+// }))
+
+// app.get('/user/workouts/search', passport.authenticate('google', {
+//   successRedirect: '/user/workouts/search',
+//   failureRedirect: '/'
+// }))
+
+// app.get('/user/nutrition', passport.authenticate('google', {
+//   successRedirect: '/user/nutrition',
+//   failureRedirect: '/'
+// }))
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
