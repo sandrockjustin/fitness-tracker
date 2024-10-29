@@ -33,6 +33,8 @@ export default function Nutrition(props){
     <Meals fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
     <br></br>
   </NutBox>
+  <br></br>
+  <img src="https://media.tenor.com/ZFUJ2eZcm2IAAAAM/work-out-excercise.gif"/>
 </AllBox>
   )
 }

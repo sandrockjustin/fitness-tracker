@@ -63,8 +63,9 @@ let calorieCount = dummyExercises.reduce((acc, curr)=>{
 
 //////////////////////////////////////////////////
 export default function Meals(props){
-  props.nutrition.forEach(food=>{
-  })
+  console.log("PROPS nutrition", props.user.nutrition)
+  let exRoutine = props.user.workouts
+
 
 
   return(
@@ -73,15 +74,20 @@ export default function Meals(props){
       <div>
       <WorkoutBox sx={{padding: "5px"}}>
           <strong>EXERCISES</strong>
-        {dummyExercises.map(exercise=>{
+          {exRoutine.map(exercise=>{
+            return <div>{exercise.name}</div>
+          })}
+        {/* {dummyExercises.map(exercise=>{
           return(
               <div>{exercise.name}</div>
           
             )
-          })}
+          })} */}
           <br></br>
-          <strong >CALORIES BURNED:</strong> {calorieCount}
+          <strong >CALORIES BURNED:</strong> {exRoutine.length * 150}
         </WorkoutBox>
+
+
         <br></br>
         <MealBox sx={{padding: "5px"}}>
           <div>

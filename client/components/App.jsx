@@ -90,7 +90,8 @@ export default function App() {
           <IconButton onClick={handleThemeChange} color="inherit">
           <Brightness4Icon />
         </IconButton>
-				<div id="root-app">Fitness Tracker
+				<div id="root-app">
+				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
 				{user ?
 					<div>
@@ -111,7 +112,8 @@ export default function App() {
         <IconButton onClick={handleThemeChange} color="inherit">
           <Brightness4Icon />
         </IconButton>
-				<div id="root-app">Fitness Tracker
+				<div id="root-app">
+				<h1>Fitness Tracker</h1>
 				<Navigation updateView={updateView}/>
 					<div>
 					<WorkoutSearch user={user} fetchUser={fetchUser}/>
@@ -126,7 +128,8 @@ export default function App() {
         <IconButton onClick={handleThemeChange} color="inherit">
           <Brightness4Icon />
         </IconButton>
-				<div id="root-app">Fitness Tracker
+				<div id="root-app">
+					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
 					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
 				</div>
@@ -139,7 +142,8 @@ export default function App() {
         <IconButton onClick={handleThemeChange} color="inherit">
           <Brightness4Icon />
         </IconButton>
-				<div id="root-app">Fitness Tracker
+				<div id="root-app">
+					<h1>Fitness Tracker</h1>
 					<Navigation updateView={updateView}/>
 					<button type="button">Log in with Google</button>
 				</div>

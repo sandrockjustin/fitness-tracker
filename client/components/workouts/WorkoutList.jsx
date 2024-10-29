@@ -24,10 +24,10 @@ const WorkoutList = ({workouts, fetchUser, user}) => {
 
   return (
     <div>
-    <Typography variant='h3' fontWeight='bold' fontFamily='Roboto' align='center' display='flex' justifyContent='center' >Saved Workout List</Typography>
+    <Typography variant='h5' fontWeight='bold' fontFamily='Roboto' align='center' display='flex' justifyContent='center' >Saved Workout List</Typography>
     <Box
       className={classes.box}
-      display="flex" flexDirection="row" alignItems="center"
+      alignItems="center"
     >
       {workouts.map((workout, index) => {
         return (

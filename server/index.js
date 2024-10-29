@@ -182,6 +182,7 @@ app.get('/user/info/', (req, res) => {
     })
 })
 
+
 app.get('/user/workouts/search/:query', (req, res) => {
   const { query } = req.params;
   let data;
@@ -201,8 +202,7 @@ app.get('/user/workouts/search/:query', (req, res) => {
 
 app.patch('/user/workouts/create', (req, res) => {
   const { workout } = req.body;
-
-  User.findOneAndUpdate(
+        User.findOneAndUpdate(
     {_id: req.user._id},
     {$push: {workouts: workout}},
     { new: true, upsert: true }
@@ -219,6 +219,10 @@ app.patch('/user/workouts/create', (req, res) => {
     res.sendStatus(500);
   })
 })
+})
+
+
+
 
 app.patch('/user/workouts/delete', (req, res) => {
   const { workout } = req.body;
