@@ -60,6 +60,7 @@ let calorieCount = dummyExercises.reduce((acc, curr)=>{
   return acc
 }, 0)
 
+
 //////////////////////////////////////////////////
 export default function Meals(props){
   props.nutrition.forEach(food=>{
