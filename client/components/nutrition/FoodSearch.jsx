@@ -3,23 +3,29 @@ import {useState} from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 //search bar input
 
 //add food object to pantry button
 
+const SearchBox = styled(Box)`
+display: flex; 
+flex-direction: row; 
+align-items: center;
+`
+
 const CustomButt = styled(Button)`
 background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
 padding: 15px;
 margin: 15px;
-
-
 `;
 
 export default function FoodSearch(props){
-
+  
   const [searchField, setSearch] = useState('')
+  const [searchResults, setResults] = useState({})
   const handleChange = (e)=> {
     setSearch(e.target.value)
   }
@@ -29,22 +35,37 @@ export default function FoodSearch(props){
     //and the search to the /FoodSearch endpoint
     axios.get(`/FoodSearch/${searchField}`)
     .then((foodInfo)=>{
-      // console.log("FOODINFO", foodInfo.data)
+      console.log("FOODINFO", foodInfo.data)
       setResults(foodInfo.data)
-      handleAdd(foodInfo.data)
+      console.log("FOODINFO", foodInfo.data.foodId)
+      console.log("props.user.nutrition RESULTS!", props.user.nutrition)
+
+      let inPantry = false
+
+      for (let i = 0; i < props.user.nutrition.length; i++){
+        if (props.user.nutrition[i].foodId === foodInfo.data.foodId){
+          inPantry = true;
+        }
+      }
+
+      if(!inPantry){
+        handleAdd(foodInfo.data)
+      } else(
+        console.log("already added this food")
+      )
     })
     .catch((err)=>{
       console.error(err);
     })
-
-
   }
 
-  const handleAdd = (foodInfo)=>{
+// console.log("POOPS", props)
 
+  const handleAdd = (foodInfo)=>{
     axios.put(`/pantry/${props.user._id}`, { nutrition: foodInfo })
       .then((data) => {
         // console.log("HANDLE ADD DATA", data)
+        props.fetchUser()
       })
       .catch((err)=>{
         console.error(`Error during PUT request to database.`)
@@ -53,11 +74,13 @@ export default function FoodSearch(props){
 
 ///////////////////////////////////////////////////////
   return(
-    <div id="search-foods" style={{textAlign: 'justify'}}>
-      <TextField style={{display: 'inline-block'}} variant="outlined" label="Search Foods" type="text" id='food-search' onChange={handleChange}/>
+    <SearchBox >
+
+      <TextField sx={{margin: 'auto'}} variant="outlined" label="Search Foods" type="text" id='food-search' onChange={handleChange}/>
       {/* {console.log(searchField)} */}
+
       <CustomButt sx={{ "&:hover": { background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)'} }} variant="contained" type="submit" onClick={handleClick}>Add Food</CustomButt>
 
-    </div>
+    </SearchBox>
   )
 }

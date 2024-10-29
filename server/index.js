@@ -4,7 +4,7 @@ import Passport from 'passport-google-oauth20';
 import { User, db } from './db/index.js'  // Importing User model and the database (db) connection
 import axios from 'axios';
 import {API_NINJA_KEY, FOOD_API_KEY} from '../config.js';
-// import FOOD_API_KEY from '../config.js';
+
 
 const app = express();              // create Express instance named 'app'
 const port = 8080;                  // random port, can change as necessary
@@ -30,11 +30,11 @@ app.use('/', express.static('client/dist'));  // on startup, serve files from we
 // Responsible for answering basic get request, return the current User's information from database
 app.get('/user/info/:username', (req, res) => {
 
-  console.log('req.params', req.params);
+  // console.log('req.params', req.params);
   // Try to find a user matching the current user's ID
   User.findOne({username: req.params.username})
     .then((foundUser) => {
-      console.log('foundUser', foundUser);
+      // console.log('foundUser', foundUser);
       // if no user with that ID is found
       if (foundUser === null){
         res.sendStatus(404)
@@ -112,51 +112,30 @@ app.get('/WorkoutSearch/workouts/:query', (req, res) => {
   endpoint '/FoodSearch
 */
 app.get('/FoodSearch/:query', (req, res) => {
+
   const {query} = req.params;
-  console.log("SERVER REQ PARAMS", req.params)
-  
-  axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
-  .then(results=>{
-
-    let id = results.data.results[0].id
-
-    console.log("FOODID", id, results.data.results[0])
-
-    axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
-    .then((data)=>{
-
-      //calculates caloric density of the searched food
-      let calories = data.data.nutrition.nutrients[2].amount
-      let grams = data.data.nutrition.weightPerServing.amount
-      let nutDensity = calories/grams
-
-      console.log("caloric density", nutDensity)
-
-      const nutrientsInfo = {
-        foodName: results.data.results[0].name,
-        foodId:  results.data.results[0].id,
-        calories,
-        grams,
-        nutDensity
-      }
-
-      res.status(200).send(nutrientsInfo);
-
+  let data;
+  // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
+  axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
+    .then((response) => {
+      data = JSON.stringify(response.data);
+      res.status(200).send(data);
     })
-  })
-  .catch(err=>{
-    console.error("didn't get food", err)
-    res.sendStatus(500)
-  })
+    .catch((err) => {
+      console.error('Error during API fetch for workouts', err);
+
+      res.sendStatus(500);
+    })
 
 })
+//////////////////////////////////////////////////////////////////////////////////////
 
 
 //handle requests to add workout to users saved workout list
 app.patch('/WorkoutSearch/addWorkout', (req, res) => {
   const {workout, user} = req.body;
-  console.log('user', user);
-  console.log('workout to be added', workout);
+  // console.log('user', user);
+  // console.log('workout to be added', workout);
   User.findOneAndUpdate(
     {_id: user._id},
     {$push: {workouts: workout}},
@@ -199,6 +178,59 @@ app.patch('/WorkoutList/deleteWorkout/:id', (req, res) => {
 //////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////
+
+/* 
+  This is used to send a search request to Spoonacular
+  endpoint '/FoodSearch
+*/
+app.get('/FoodSearch/:query', (req, res) => {
+  const {query} = req.params;
+  // console.log("SERVER REQ PARAMS", req.params)
+  
+  axios.get(`https://api.spoonacular.com/food/ingredients/search?query=${ query }&number=1&sortDirection=desc&apiKey=${FOOD_API_KEY}`)
+  .then(results=>{
+
+    let id = results.data.results[0].id
+
+    console.log("FOODID", id, results.data.results[0])
+
+    
+
+    axios.get(`https://api.spoonacular.com/food/ingredients/${id}/information?apiKey=${FOOD_API_KEY}&amount=1`)
+    .then((data)=>{
+
+      //calculates caloric density of the searched food
+      let calories = data.data.nutrition.nutrients
+      .filter(nutrient=>nutrient.name === "Calories")
+      .map(key=>key.amount);
+
+
+      let grams = data.data.nutrition.weightPerServing.amount
+      console.log("###### GRAMS:", grams)
+      let nutDensity = calories/grams
+
+      console.log("|calories", calories, "|grams", grams, "|caloric density", nutDensity)
+
+      const nutrientsInfo = {
+        foodName: results.data.results[0].name,
+        foodId:  results.data.results[0].id,
+        calories,
+        grams,
+        nutDensity
+      }
+
+      res.status(200).send(nutrientsInfo);
+
+    })
+  })
+  .catch(err=>{
+    console.error("didn't get food", err)
+    res.sendStatus(500)
+  })
+
+})
+
+
 /* 
   This is used to save a search result from 
   endpoint '/pantry
@@ -208,10 +240,13 @@ app.put('/pantry/:id', (req, res)=>{
 	const id = req.params.id;
 	const update = req.body.nutrition; // not sure if req.data or req.body
 	
+
+  // console.log("!!! !!! !!! USER DATA NUTRITION???:", User.findById(id).then(data=>console.log(data)))
 	/////////////////////////////////////////////////
-	console.log(`User ID is: ${id}.`)
-	console.log(`Request body is: `, update)
+	// console.log(`User ID is: ${id}.`)
+	// console.log(`Request body is: `, update)
 	/////////////////////////////////////////////////
+
 
 	User.findByIdAndUpdate({_id: id}, {$push: {nutrition: update}})
 		.then((updateComplete) => {
@@ -229,12 +264,12 @@ app.put('/pantry/:id', (req, res)=>{
 */
 
 app.put('/pantry/food/:id', (req, res)=>{
-  console.log("DELETE REQ PARAMS", req.body)
-  console.log('user request:', req.params.id)
+  // console.log("DELETE REQ PARAMS", req.body)
+  // console.log('user request:', req.params.id)
 
   User.findByIdAndUpdate({_id: req.params.id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
   .then((data)=>{
-    console.log("THEN BLOCK DATA", data)
+    // console.log("THEN BLOCK DATA", data)
   })
   .catch((err)=>{
     console.error(err)
