@@ -1,18 +1,17 @@
 import React from 'react'
 import axios from 'axios';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
 
-let CustomButt = styled(CloseIcon)`
-  transform: scale(0.4);
-  color: white;
-  size: small;
-  background: red;
+let CustomButt = styled(DeleteIcon)`
+  display: flex;
+  justify-content: flex-end;
+  transform: scale(.825);
   padding: 5px;
-  margin: 15px
-
+  color: rgba(0, 0, 0, 0.7)
+  "&:hover": { color: 'rgba(0, 0, 0, 0.4)'};
+  
 `
 
 export default function PantryListItem(props){
@@ -27,11 +26,10 @@ export default function PantryListItem(props){
     })
   }
 
-
   return(
-    <ListItem>
+    <>
+    <CustomButt sx={{ "&:hover": { color: 'rgba(0, 0, 0, 0.4)'} }} type="button" onClick={handleRemove}></CustomButt>
       <h3>{props.food.foodName}</h3>
-    <CustomButt type="button" onClick={handleRemove}>X</CustomButt>
-    </ListItem>
+    </>
   )
 }

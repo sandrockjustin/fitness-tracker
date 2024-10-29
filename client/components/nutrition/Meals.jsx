@@ -3,32 +3,53 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
+const WorkoutBox = styled(Box)`
+background: #f1f1f1;
+height: 100px;
+width: 500px;
+margin:auto;
+overflow-y:auto;
+box-sizing: border-box;
+box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+`
+const MealBox = styled(Box)`
+background: #f1f1f1;
+height: 100px;
+width: 500px;
+margin:auto;
+overflow-y:auto;
+box-sizing: border-box;
+box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+
+`
+
+
 
 //////////////////////////////////////////////////
-const  dummyExercises = [
+const dummyExercises = [
   {
     "name": "Incline Hammer Curls",
-    "caloriesBurned": 15
+    "caloriesBurned": 75
   },
   {
     "name": "Biceps curl to shoulder press",
-    "caloriesBurned": 10
+    "caloriesBurned": 50
   },
   {
     "name": "Incline Hammer Curls",
-    "caloriesBurned": 20
+    "caloriesBurned": 100
   },
   {
     "name": "Barbell Curl",
-    "caloriesBurned": 25
+    "caloriesBurned": 125
   },
   {
     "name": "Concentration curl",
-    "caloriesBurned": 10
+    "caloriesBurned": 50
   },
   {
     "name": "Flexor Incline Dumbbell Curls",
-    "caloriesBurned": 5
+    "caloriesBurned": 75
   },
 ]
 
@@ -39,26 +60,47 @@ let calorieCount = dummyExercises.reduce((acc, curr)=>{
   return acc
 }, 0)
 
-// console.log("TOTAL CALORIES BURNED:", calorieCount)
-
 
 //////////////////////////////////////////////////
 export default function Meals(props){
-
-  console.log("MEALS PROPS", props.nutrition)
-
   props.nutrition.forEach(food=>{
-    console.log("FOOD: ", food.foodName)
-    console.log("CALORIC DENSITY: ", food.nutDensity)
-    console.log("GRAMS TO REFUEL", calorieCount / food.nutDensity)
-
   })
-
 
 
   return(
     <div style={{fontFamily: "Arial, sans-serif"}}>
-      <h1>REFUEL</h1>
+      <h1 style={{textAlign: "center"}}>POST-WORKOUT MEALS</h1>
+      <div>
+      <WorkoutBox sx={{padding: "5px"}}>
+          <strong>EXERCISES</strong>
+        {dummyExercises.map(exercise=>{
+          return(
+              <div>{exercise.name}</div>
+          
+            )
+          })}
+          <br></br>
+          <strong >CALORIES BURNED:</strong> {calorieCount}
+        </WorkoutBox>
+        <br></br>
+        <MealBox sx={{padding: "5px"}}>
+          <div>
+            {props.nutrition.map(food=>{
+              return(
+                <div>
+                  <strong>PANTRY ITEM:</strong> {food.foodName}
+                  <br></br>
+                  <strong>CALORIC DENSITY/G:</strong> {food.nutDensity}
+                  <br></br>
+                  <strong>GRAMS TO REFUEL:</strong>{Math.round((calorieCount / food.nutDensity)*100)/100}
+                  <br></br>
+                  <br></br>
+                </div>
+              )
+            })}
+          </div>
+          </MealBox>
+      </div>
 
 
 
@@ -67,6 +109,7 @@ export default function Meals(props){
 
   )
 }
+
 //access saved workout list titles
 
 //access pantry list

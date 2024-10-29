@@ -7,6 +7,7 @@
 import React from 'react'
 import PantryListItem from './PantryListItem.jsx'
 import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
@@ -14,34 +15,40 @@ import { styled } from '@mui/material/styles';
 const PantryBox = styled(Box)`
 background: #f0f0f0;
 height: 200px;
+width: 500px;
+box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
+margin:auto;
 overflow-y:auto;
-
+scroll-behavior: smooth;
 `
 
 export default function PantryList(props){
-  console.log("PANTRY LIST NUTRITION", props.nutrition)
+  // console.log("PANTRY LIST NUTRITION", props.nutrition)
 
 
 
   return(
     <div style={{fontFamily: "Arial, sans-serif"}}>
-      <h1>PANTRY</h1>
+      <br></br>
+      <h1 style={{textAlign: "center"}}>PANTRY</h1>
 
 
       <PantryBox>
+        <List>
      {props.nutrition.map((food)=>{
 
-       // console.log("FOOD", food)
+      //  console.log("*** props.food.foodId", food.foodId)
 
       return(
 
-        <List key={food.foodId} sx={{maxHeight:'10px'}}>
+        <ListItem key={food.foodId} sx={{maxHeight:'30px'}}>
 
-      <PantryListItem fetchUser={props.fetchUser} user={props.user} food={food} />
+      <PantryListItem  fetchUser={props.fetchUser} user={props.user} food={food} />
 
-      </List>
+      </ListItem>
     )
   })}
+  </List>
   
       </PantryBox>
 
