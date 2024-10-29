@@ -105,9 +105,6 @@ app.get('/WorkoutSearch/workouts/:query', (req, res) => {
     })
 
 })
-//////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////
-
 
 //handle requests to add workout to users saved workout list
 app.patch('/WorkoutSearch/addWorkout', (req, res) => {
@@ -219,11 +216,11 @@ app.put('/pantry/:id', (req, res)=>{
 	const update = req.body.nutrition; // not sure if req.data or req.body
 	
 
-  // console.log("!!! !!! !!! USER DATA NUTRITION???:", User.findById(id).then(data=>console.log(data)))
-	/////////////////////////////////////////////////
-	// console.log(`User ID is: ${id}.`)
-	// console.log(`Request body is: `, update)
-	/////////////////////////////////////////////////
+  console.log("!!! !!! !!! USER DATA NUTRITION???:", User.findById(id).then(data=>console.log(data)))
+	///////////////////////////////////////////////
+	console.log(`User ID is: ${id}.`)
+	console.log(`Request body is: `, req.body)
+	///////////////////////////////////////////////
 
 
 	User.findByIdAndUpdate({_id: id}, {$push: {nutrition: update}})
