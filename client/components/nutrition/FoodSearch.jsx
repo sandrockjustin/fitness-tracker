@@ -36,20 +36,34 @@ export default function FoodSearch(props){
   const handleClick = ()=>{
     //and the search to the /FoodSearch endpoint
     axios.get(`/user/nutrition/search/${searchField}`)
-      .then((foodInfo)=>{
-        // console.log("FOODINFO", foodInfo.data)
-        setResults(foodInfo.data)
+    .then((foodInfo)=>{
+      console.log("FOODINFO", foodInfo.data)
+      setResults(foodInfo.data)
+      console.log("FOODINFO", foodInfo.data.foodId)
+      console.log("props.user.nutrition RESULTS!", props.user.nutrition)
+
+      let inPantry = false
+
+      for (let i = 0; i < props.user.nutrition.length; i++){
+        if (props.user.nutrition[i].foodId === foodInfo.data.foodId){
+          inPantry = true;
+        }
+      }
+
+      if(!inPantry){
         handleAdd(foodInfo.data)
-      })
-      .catch((err)=>{
-        console.error(err);
-      })
+      } else(
+        console.log("already added this food")
+      )
+    })
+    .catch((err)=>{
+      console.error(err);
+    })
   }
 
 // console.log("POOPS", props)
 
   const handleAdd = (foodInfo)=>{
-
     axios.put(`/user/nutrition/create`, { nutrition: foodInfo })
       .then((data) => {
         console.log("HANDLE ADD DATA", data)
