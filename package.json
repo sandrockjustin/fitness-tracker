@@ -8,10 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
     "seed": "node mock-data/seedDatabase.js",
-    "build": "webpack",
-    "reap": "node mock-data/reapDatabase.js"
-    "build": "webpack",
-    "reap": "node mock-data/reapDatabase.js"
+    "reap": "node mock-data/reapDatabase.js",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
