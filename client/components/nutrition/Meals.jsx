@@ -79,7 +79,7 @@ export default function Meals(props){
   let mealSize = 3;
   let mealReplaceAmts = []
   
-if(foods.length > 2){
+if(foods.length >= mealSize){
 
   //makes a random meal
   for (let i = 0; i < mealSize; i++){
