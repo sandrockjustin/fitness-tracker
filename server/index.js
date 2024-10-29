@@ -105,7 +105,6 @@ app.get('/WorkoutSearch/workouts/:query', (req, res) => {
     })
 
 })
-//////////////////////////////////////////////////////////////////////////////////////
 
 //handle requests to add workout to users saved workout list
 app.patch('/WorkoutSearch/addWorkout', (req, res) => {

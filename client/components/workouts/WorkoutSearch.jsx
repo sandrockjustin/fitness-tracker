@@ -1,129 +1,156 @@
-import React, {useState, useEffect} from 'react';
-import axios from 'axios';
-import exampleWorkoutData from '../../../mock-data/exampleWorkouts';
-import Workout from './Workout.jsx';
-import {Button, FormControl, Box} from '@mui/material';
+import React, { useState } from "react";
+import axios from "axios";
+import Workout from "./Workout.jsx";
+import { Button, FormControl, Box, MenuItem, Select } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import useStyles from '../styles';
 
-const WorkoutSearch = ({user, fetchUser}) => {
-  //useStates
-  const [searchQuery, setSearchQuery] = useState('');
+const WorkoutSearch = ({ user, fetchUser }) => {
+  const classes = useStyles();
+  // choices of muscle groups
+  const keywords = ['abdominals', 'abductors', 'adductors', 'biceps', 'calves',
+    'chest', 'forearms', 'glutes', 'hamstrings', 'lats', 'lower_back', 'middle_back', 'neck',
+    'quadriceps', 'traps', 'triceps'];
 
-  //state for filtered mock data
+  // states
+  const [selectedKeyword, setSelectedKeyword] = useState("");
+
+  // state for filtered mock data
   const [filteredResults, setFilteredResults] = useState([]);
 
-  //handler to update state of searchQuery on inputChange
-  const handleInputChange = (e) => {
-
-    setSearchQuery(e.target.value);
+  // handler for keyword selection
+  const handleKeywordSelect = (e) => {
+    setSelectedKeyword(e.target.value);
   };
 
-  const handleClickEvent = () => {
-    //on click event, send get request for workouts to server
-    axios.get(`/WorkoutSearch/workouts/${searchQuery}`)
-    .then((result) => {
-      // console.log('result returned', result);
-      //setState for results from API
-      setFilteredResults(result.data);
-      //reset input field
-      setSearchQuery('');
-    })
-    .catch((error) => {
-      console.error(`There was an error.`);
-    })
+  // handle search on keyword selection
+  const handleSearch = () => {
+    if (!selectedKeyword) return;
+
+    axios
+      .get(`/WorkoutSearch/workouts/${selectedKeyword}`)
+      .then((result) => {
+        setFilteredResults(result.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching workouts.");
+      });
   };
 
-  //handle user clicks on result workout objects to add to user's saved workout list
+  // handle user clicks to add workout to saved list
   const handleSelectedWorkout = (workout, index) => {
-    axios.patch(`/WorkoutSearch/addWorkout`, {workout, user})
+    axios
+      .patch(`/WorkoutSearch/addWorkout`, { workout, user })
       .then(() => {
-
         setFilteredResults((prevResults) =>
           prevResults.filter((_, i) => i !== index)
-      );
-      fetchUser();
-      alert('Workout has been added to your saved workout list!')
+        );
+        fetchUser();
+        alert("Workout has been added to your saved workout list!");
       })
-      .catch((err) => {
-        console.error('Failed to save workout');
-      })
+      .catch(() => {
+        console.error("Failed to save workout");
+      });
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <FormControl
-        sx={{
-          width: 500,
-          alignContent: 'center',
-         }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleClickEvent();
-        }}
-      >
-        <label 
-          htmlFor="query"
-          style={{'textAlign': 'center'}}>
-            Search Workouts for Muscle Group:
-          </label>
-        <input
-          type="search"
-          id="query"
-          name="query"
-          placeholder="Type workout name..."
-          required
-          style={{'textAlign': 'center'}}
-          onChange={handleInputChange}
-          value={searchQuery}
-        />
-        <Button variant='outlined'
-         sx={{background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-          borderRadius: 3,
-          border: 0,
-          color: 'white',
-          height: 48,
-          padding: '0 30px',
-          boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-          '&:hover': { background: 'rgba(226, 222, 222)' }
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <FormControl sx={{ width: 500, alignContent: "center" }}>
+        <label htmlFor="keyword" style={{ textAlign: "center" }}>
+          Choose Muscle Group:
+        </label>
+        <Select
+          id="keyword"
+          value={selectedKeyword}
+          onChange={handleKeywordSelect}
+          displayEmpty
+          sx={{ marginBottom: 2 }}
+        >
+          <MenuItem value="" disabled>
+            Select a muscle group
+          </MenuItem>
+          {keywords.map((keyword) => (
+            <MenuItem key={keyword} value={keyword}>
+              {keyword}
+            </MenuItem>
+          ))}
+        </Select>
+        <Button
+          variant="outlined"
+          sx={{
+            background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+            borderRadius: 3,
+            color: "white",
+            height: 48,
+            padding: "0 30px",
+            boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+            "&:hover": { background: "rgba(226, 222, 222)" },
           }}
-         type="submit"
-         onClick={handleClickEvent}>Search
-         </Button>
+          onClick={handleSearch}
+        >
+          Search
+        </Button>
       </FormControl>
-      <h3 style={{ marginTop: '20px' }}>Workout results</h3>
+      <h3 style={{ marginTop: "20px" }}>Workout results</h3>
       <Box
-        name='results'
+        name="results"
         sx={{
-          overflowX: 'auto',
-          display: 'flex',
-          flexDirection: 'row',
+          overflowX: "auto",
+          display: "flex",
+          flexDirection: "row",
           gap: 2,
-          padding: '10px',
-          width: '100%',
-          flexWrap: 'nowrap'
+          padding: "10px",
+          width: "100%",
+          flexWrap: "nowrap",
         }}
       >
-        {filteredResults.map((workout, index) => {
-          return (
+        {filteredResults.length > 0 ? (
+          filteredResults.map((workout, index) => (
             <div
               key={index}
-            style={{
-              flex: '0 0 auto',
-              maxHeight: '500px',
-              overflowY: 'auto',
-              width: '300px',
-              padding: '10px',
-              background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)', 
-              boxSizing: 'border-box',
-              position: 'relative'}}>
-              <Workout workout={workout}
+              style={{
+                flex: "0 0 auto",
+                maxHeight: "500px",
+                overflowY: "auto",
+                width: "300px",
+                padding: "10px",
+                background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+                boxSizing: "border-box",
+                position: "relative",
+                borderRadius: "8px",
+              }}
+            >
+              <Button
+                className={classes.addButton}
+                variant="contained"
+                color="primary"
+                onClick={() => handleSelectedWorkout(workout, index)}
+
+              >
+                <AddIcon />
+              </Button>
+              <Workout
+                workout={workout}
                 key={index}
-                onClick={() => handleSelectedWorkout(workout, index)}/>
+              />
             </div>
-          )
-        })}
+          ))
+        ) : (
+          <span
+            style={{
+              padding: "10px",
+              color: "#666",
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            No results found
+          </span>
+        )}
       </Box>
     </div>
   );
 };
 
 export default WorkoutSearch;
+
