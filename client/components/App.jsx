@@ -31,6 +31,11 @@ export default function App() {
 		switch (e.target.name){
 			case 'Logout':
 				axios.post('/user/logout')
+					.then((response) => {
+						if (response.status === 200){
+							window.location.href = "http://localhost:8080/";
+						}
+					})
 					.catch((error) => {
 						console.error('Error on POST logout.')
 					})
