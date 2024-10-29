@@ -107,30 +107,6 @@ app.get('/WorkoutSearch/workouts/:query', (req, res) => {
 })
 //////////////////////////////////////////////////////////////////////////////////////
 
-/* 
-  This is used to send a search request to Spoonacular
-  endpoint '/FoodSearch
-*/
-app.get('/FoodSearch/:query', (req, res) => {
-
-  const {query} = req.params;
-  let data;
-  // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
-  axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
-    .then((response) => {
-      data = JSON.stringify(response.data);
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      console.error('Error during API fetch for workouts', err);
-
-      res.sendStatus(500);
-    })
-
-})
-//////////////////////////////////////////////////////////////////////////////////////
-
-
 //handle requests to add workout to users saved workout list
 app.patch('/WorkoutSearch/addWorkout', (req, res) => {
   const {workout, user} = req.body;
@@ -241,11 +217,11 @@ app.put('/pantry/:id', (req, res)=>{
 	const update = req.body.nutrition; // not sure if req.data or req.body
 	
 
-  // console.log("!!! !!! !!! USER DATA NUTRITION???:", User.findById(id).then(data=>console.log(data)))
-	/////////////////////////////////////////////////
-	// console.log(`User ID is: ${id}.`)
-	// console.log(`Request body is: `, update)
-	/////////////////////////////////////////////////
+  console.log("!!! !!! !!! USER DATA NUTRITION???:", User.findById(id).then(data=>console.log(data)))
+	///////////////////////////////////////////////
+	console.log(`User ID is: ${id}.`)
+	console.log(`Request body is: `, req.body)
+	///////////////////////////////////////////////
 
 
 	User.findByIdAndUpdate({_id: id}, {$push: {nutrition: update}})
