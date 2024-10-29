@@ -31,14 +31,30 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     right: '30px',
     top: '30px',
-    width: '40px',
+    width: '20px',
     borderRadius: '10px',
     backgroundColor: 'transparent',
-    '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' }
+    '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
+    "&:active": {
+      transform: "scale(0.98)",
+    }
   },
   text: {
     fontFamily: 'Roboto, sans serif',
     fontSize: '1.2rem',
+  },
+  addButton: {
+    transform: 'scale(.825)',
+    height: '30px',
+    position: 'absolute',
+    right: '15px',
+    top: '100px',
+    borderRadius: '10px',
+    backgroundColor: 'transparent',
+    '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
+    "&:active": {
+      transform: "scale(0.98)",
+    }
   }
 }));
 

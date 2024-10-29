@@ -106,28 +106,6 @@ app.get('/WorkoutSearch/workouts/:query', (req, res) => {
 
 })
 //////////////////////////////////////////////////////////////////////////////////////
-
-/* 
-  This is used to send a search request to Spoonacular
-  endpoint '/FoodSearch
-*/
-app.get('/FoodSearch/:query', (req, res) => {
-
-  const {query} = req.params;
-  let data;
-  // https://api.api-ninjas.com/v1/exercises?muscle={searchQuery}
-  axios.get(`https://api.api-ninjas.com/v1/exercises?muscle=${query}&X-Api-Key=${API_NINJA_KEY}`)
-    .then((response) => {
-      data = JSON.stringify(response.data);
-      res.status(200).send(data);
-    })
-    .catch((err) => {
-      console.error('Error during API fetch for workouts', err);
-
-      res.sendStatus(500);
-    })
-
-})
 //////////////////////////////////////////////////////////////////////////////////////
 
 
