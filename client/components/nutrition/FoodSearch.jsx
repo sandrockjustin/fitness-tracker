@@ -17,7 +17,7 @@ align-items: center;
 `
 
 const CustomButt = styled(Button)`
-background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+background: linear-gradient(45deg, #556270 30%, #FF6B6B 90%);
 padding: 15px;
 margin: 15px;
 `;
@@ -83,7 +83,7 @@ export default function FoodSearch(props){
       <TextField sx={{margin: 'auto'}} variant="outlined" label="Search Foods" type="text" id='food-search' onChange={handleChange}/>
       {console.log(searchField)}
 
-      <CustomButt sx={{ "&:hover": { background: 'linear-gradient(45deg, #FF8E53 30%, #FE6B8B 90%)'} }} variant="contained" type="submit" onClick={handleClick}>Add Food</CustomButt>
+      <CustomButt sx={{ "&:hover": { background: 'linear-gradient(45deg, #FF6B6B 30%, #556270 90%)'} }} variant="contained" type="submit" onClick={handleClick}>Add Food</CustomButt>
 
     </SearchBox>
   )

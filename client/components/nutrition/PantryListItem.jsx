@@ -3,6 +3,7 @@ import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { styled } from '@mui/material/styles';
+import { Typography, Box } from '@mui/material';
 
 let CustomButt = styled(DeleteIcon)`
   display: flex;
@@ -16,7 +17,6 @@ let CustomButt = styled(DeleteIcon)`
 
 export default function PantryListItem(props){
   // console.log("PANTRYLISTITEM PROPS", props)
-
   const handleRemove = () =>{
     console.log("CLICK X", props)
     axios.put(`/user/nutrition/delete`, { foodData: props.food.foodId})
@@ -29,7 +29,7 @@ export default function PantryListItem(props){
   return(
     <>
     <CustomButt sx={{ "&:hover": { color: 'rgba(0, 0, 0, 0.4)'} }} type="button" onClick={handleRemove}></CustomButt>
-      <h3>{props.food.foodName}</h3>
+      <Typography variant="p">{props.food.foodName}</Typography>
     </>
   )
 }
