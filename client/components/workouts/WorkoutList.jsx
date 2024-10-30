@@ -28,17 +28,17 @@ const WorkoutList = ({workouts, fetchUser, user}) => {
     <Box
       className={classes.box}
       alignItems="center"
+      justifyContent='center'
+      justifyItems='center'
+      alignContent='center'
     >
       {workouts.map((workout, index) => {
         return (
           <div
-            className={classes.workouts}
+            className={classes.workoutSaved}
             key={index}
           >
-            <IconButton
-              className={classes.iconButton}
-              onClick={() => deleteWorkout(workout)}
-            >
+            <IconButton onClick={() => deleteWorkout(workout)}>
             <DeleteForeverIcon fontSize='medium'/>
             </IconButton>
             <Workout className={classes.workouts} workout={workout} key={index} />

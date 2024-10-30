@@ -101,7 +101,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
         <Button
           variant="outlined"
           sx={{
-            background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+            background: "linear-gradient(45deg, #556270 30%, #FF6B6B 90%)",
             borderRadius: 3,
             color: "white",
             height: 48,
@@ -134,6 +134,9 @@ const WorkoutSearch = ({ user, fetchUser }) => {
                 variant="contained"
                 color="primary"
                 onClick={() => handleSelectedWorkout(workout, index)}
+                sx={{
+                  backgroundColor: 'transparent'
+                }}
               >
                 <AddIcon />
               </Button>

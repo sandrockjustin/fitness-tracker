@@ -10,12 +10,12 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 
 
 
+
 export default function App() {
   //theme toggle light/dark
   const [darkMode, setDarkMode] = useState(false);
-	const [view, setView] = useState('WorkoutList');
+	const [view, setView] = useState('Workouts');
 	const [user, setUser] = useState(null);
-
 	function fetchUser() {
 		axios.get(`/user/info/`)
 		  .then((userData) => {
@@ -28,7 +28,7 @@ export default function App() {
 
 	function updateView(e) {
 
-		console.log(e.target.name);
+		// console.log(e.target.name);
 		switch (e.target.name){
 			case 'Logout':
 				axios.post('/user/logout')
@@ -88,6 +88,7 @@ export default function App() {
   };
 
 	useEffect(() => {
+		document.title = 'Vitality';
 		setTimeout( () => {fetchUser()}, 0)
 	}, [])
 
@@ -103,6 +104,7 @@ export default function App() {
         </IconButton>
 				<div id="root-app">
 				<Navigation updateView={updateView}/>
+				<br></br>
 				{user ?
 					<div>
 					<WorkoutList user={user} fetchUser={fetchUser} workouts={user.workouts}/>
@@ -124,6 +126,7 @@ export default function App() {
         </IconButton>
 				<div id="root-app">
 				<Navigation updateView={updateView}/>
+				<br></br>
 					<div>
 					<WorkoutSearch user={user} fetchUser={fetchUser}/>
 					</div>
@@ -139,7 +142,10 @@ export default function App() {
         </IconButton>
 				<div id="root-app">
 					<Navigation updateView={updateView}/>
+
+					<br></br>
 					<div><Nutrition state={darkMode} fetchUser={fetchUser} user={user}/></div>
+
 				</div>
         </ThemeProvider>
 			)
@@ -152,6 +158,7 @@ export default function App() {
         </IconButton>
 				<div id="root-app">
 					<Navigation updateView={updateView}/>
+				<br></br>
 				</div>
         </ThemeProvider>
 			)

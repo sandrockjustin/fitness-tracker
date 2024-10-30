@@ -12,7 +12,7 @@ function Navigation(props) {
   const nav_classes = useStyles();
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" >
       <Container maxWidth="100%" className={nav_classes.navBar}>
         <Toolbar sx={{justifyContent: "space-between"}}>
           <Container>
@@ -28,7 +28,7 @@ function Navigation(props) {
               <MenuItem>
                 <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Logout" sx={{color: 'white'}}>Logout</Button>
               </MenuItem>
-            </MenuList>				
+            </MenuList>
           </Container>
         </Toolbar>
       </Container>
