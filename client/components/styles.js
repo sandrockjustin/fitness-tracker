@@ -75,7 +75,7 @@ const useStyles = makeStyles(() => ({
     }
   },
   navBar: {
-    background: 'linear-gradient(45deg, #556270 30%, #FF6B6B 90%)',  
+    background: 'linear-gradient(45deg, #556270 30%, #FF6B6B 90%)',
   },
   navButtons: {
     '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
@@ -102,6 +102,9 @@ const useStyles = makeStyles(() => ({
     "&:active": {
       transform: "scale(0.98)",
     }
+  },
+  appPage: {
+    padding: '20px'
   }
 }));
 
