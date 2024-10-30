@@ -45,7 +45,7 @@ const port = 8080;                  // random port, can change as necessary
  * app.use(passport.initialize())     => initializes Passport for incoming requests
  * app.use(passport.session())        => works on top of Express session middleware
  * app.use(express.json())            => helps with parsing requests
- * app.use(..., express.static())     => serves client/dist on server startup
+ * app.use(..., express.static())     => serves client/dist on server startup, post-auth
  * ----------------------------------------------------------------------------------- */
 
 function isLoggedIn(req, res, next) {
@@ -93,9 +93,9 @@ app.use('/user/homepage', isLoggedIn, express.static('client/dist'));
  * /google/callback           => used after authentication to determine where to go next
  * /logout                    => deletes session, cookies and changes view to login
  * 
- * /currentWorkouts           => used to change view to 'WorkoutList' component
- * /searchWorkouts            => used to change view to 'WorkoutSearch' component
- * /nutrition                 => used to change view to 'Nutrition' component
+ * /user/workouts             => used to change view to 'WorkoutList' component
+ * /user/workouts/search      => used to change view to 'WorkoutSearch' component
+ * /user/nutrition            => used to change view to 'Nutrition' component
  * ----------------------------------------------------------------------------------- */
 
 app.get('/', passport.authenticate('google', { 
@@ -122,6 +122,10 @@ app.post('/user/logout', (req, res, next) => {
 
 app.get('/user/homepage', isLoggedIn, (req, res) => {
   res.status(200).redirect('/user/homepage');
+})
+
+app.get('/user/dashboard', isLoggedIn, (req, res) => {
+  res.status(200).send({view: 'Dashboard'});
 })
 
 app.get('/user/workouts', isLoggedIn, (req, res) => {
@@ -243,7 +247,7 @@ app.patch('/user/workouts/create', (req, res) => {
   )
   .then((updatedUser) => {
     if (updatedUser) {
-      res.status(201).send(updatedUser);  // review main; do we even need to send these?
+      res.status(201).send(updatedUser);
     } else {
       res.sendStatus(404);
     }
@@ -258,7 +262,6 @@ app.patch('/user/workouts/create', (req, res) => {
 app.patch('/user/workouts/delete', (req, res) => {
   const { workout } = req.body;
 
-  // console.log('id/workout', workout, id);
   User.findOneAndUpdate(
     {_id: req.user._id},
     {$pull: {workouts: workout}}
@@ -333,17 +336,16 @@ app.put('/user/nutrition/create', (req, res)=>{
 })
 
 app.put('/user/nutrition/delete', (req, res)=>{
-  console.log("DELETE REQ USER ID", req.user._id, "REQ BODY", req.body)
 
   User.findByIdAndUpdate({_id: req.user._id}, {$pull: {nutrition: {foodId: req.body.foodData}}})
-
-  .then((data)=>{
-    // INCOMPLETE
-    console.log("THEN BLOCK DATA", data)
-  })
-  .catch((err)=>{
-    console.error(`PUT :: INTERNAL :: On delete food #${req.body.foodData} for user #${req.user._id}.`)
-  })
+    .then((data)=>{
+      if (!data){ res.sendStatus(404)}
+      res.sendStatus(200);
+    })
+    .catch((err)=>{
+      console.error(`PUT :: INTERNAL :: On delete food #${req.body.foodData} for user #${req.user._id}.`)
+      res.sendStatus(500);
+    })
 })
 
 // ----------------------------------------------------------------------------------- //
