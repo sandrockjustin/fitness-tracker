@@ -28,7 +28,7 @@ export default function App() {
 
 	function updateView(e) {
 
-		console.log(e.target.name);
+		// console.log(e.target.name);
 		switch (e.target.name){
 			case 'Logout':
 				axios.post('/user/logout')

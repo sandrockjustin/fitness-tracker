@@ -44,6 +44,7 @@ const Workout = ({workout, onClick}) => {
     )
   } else {
     return (
+      
       <Box
         sx={{
           padding: 1,

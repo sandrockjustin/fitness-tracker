@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import { ThemeProvider, createTheme } from "@mui/material";
+import { createTheme } from "@mui/material";
 //Hook to call styling for useStyles instance
 //Below we can define specific stylings to call later in other components
 const useStyles = makeStyles(() => ({
@@ -21,15 +21,31 @@ const useStyles = makeStyles(() => ({
     minWidth: '300px',
     maxWidth: '300px',
     padding: '20px',
-    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    background: 'linear-gradient(45deg, #556270 30%, #FF6B6B 90%)',
     boxSizing: 'border-box',
     position: 'relative',
     flexDirection: 'column',
     borderRadius: '10px'
   },
+  workoutSaved: {
+    flex: '250px',
+    display: '250px',
+    minHeight: '250px',
+    maxHeight: '100%',
+    overflowY: 'auto',
+    minWidth: '300px',
+    maxWidth: '300px',
+    padding: '20px',
+    background: 'linear-gradient(45deg, #556270 30%, #FF6B6B 90%)',
+    boxSizing: 'border-box',
+    position: 'relative',
+    flexDirection: 'column',
+    borderRadius: '10px',
+    justifyItems: 'right'
+  },
   iconButton: {
     height: '30px',
-    position: 'absolute',
+    position: 'relative',
     right: '30px',
     top: '30px',
     width: '20px',
@@ -46,15 +62,16 @@ const useStyles = makeStyles(() => ({
   },
   addButton: {
     transform: 'scale(.825)',
+    justifyContent: 'right',
     height: '30px',
-    position: 'absolute',
-    right: '15px',
-    top: '100px',
+    position: 'fixed',
+    right: '-200px',
+    top: '-10px',
     borderRadius: '10px',
-    backgroundColor: 'transparent',
+    backgroundColor: 'rgba(211, 211, 211, 0.3)',
     '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
     "&:active": {
-      transform: "scale(0.98)",
+      transform: "scale(0.98)"
     }
   },
   navBar: {
@@ -67,7 +84,11 @@ const useStyles = makeStyles(() => ({
     }
   },
   navAccountOptions: {
-    justifyItems: "right"
+    justifyItems: "right",
+    alignContent: "right",
+    justifyContent: "right",
+    alignItems: "right",
+    alignSelf: "right"
   },
   navDeleteAccButton: {
     background: 'linear-gradient(45deg, #e52d27 30%, #b31217 90%)',
