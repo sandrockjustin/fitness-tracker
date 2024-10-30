@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 
 const WorkoutBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 100px;
 width: 500px;
 margin:auto;
@@ -17,7 +17,7 @@ box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 padding: 10px
 `
 const MealBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 125px;
 width: 500px;
 margin:auto;
