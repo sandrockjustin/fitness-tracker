@@ -100,7 +100,7 @@ app.use('/user/homepage', isLoggedIn, express.static('client/dist'));
 
 app.get('/', passport.authenticate('google', { 
   scope: ['email', 'openid'], 
-  // prompt: 'select_account' 
+  prompt: 'select_account' 
 }));
 
 app.get('/login-success', 
