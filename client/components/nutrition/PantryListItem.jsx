@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 import { Typography, Box } from '@mui/material';
 
@@ -27,9 +28,10 @@ export default function PantryListItem(props){
   }
 
   return(
-    <>
+    <Box sx={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+      {/* <Checkbox sx={{justifyContent: "right"}}/> */}
     <CustomButt sx={{ "&:hover": { color: 'rgba(0, 0, 0, 0.4)'} }} type="button" onClick={handleRemove}></CustomButt>
       <Typography variant="p">{props.food.foodName}</Typography>
-    </>
+    </Box>
   )
 }

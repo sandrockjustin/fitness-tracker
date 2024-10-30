@@ -4,10 +4,11 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useEffect } from 'react';
+import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 
 const WorkoutBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 100px;
 width: 500px;
 margin:auto;
@@ -17,7 +18,7 @@ box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 padding: 10px
 `
 const MealBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 125px;
 width: 500px;
 margin:auto;
@@ -111,11 +112,12 @@ const handleRefresh = () =>{
       <MealBox >
         <div>
 
-          <div>
+          <Box sx={{display: 'flex', flexDirection: 'row'}}>
 
-            <Refresh sx={{transform: 'scale(.75)', color: 'rgba(0, 0, 0, 0.7)', "&:hover": { color: 'rgba(0, 0, 0, 0.4)'}}} onClick={handleRefresh}></Refresh><strong>GENERATE RANDOM MEAL</strong>
+            <strong>GENERATE RANDOM MEAL</strong>
+            <Refresh sx={{marginLeft: 'auto', marginRight: '0', transform: 'scale(.75)', color: 'rgba(0, 0, 0, 0.7)', "&:hover": { color: 'rgba(0, 0, 0, 0.4)'}}} onClick={handleRefresh}></Refresh>
 
-          </div>
+          </Box>
 
 
             {randMeal.map((food, i)=>{

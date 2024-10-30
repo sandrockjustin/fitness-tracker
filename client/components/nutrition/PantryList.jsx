@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 
 
 const PantryBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 200px;
 width: 500px;
 box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
