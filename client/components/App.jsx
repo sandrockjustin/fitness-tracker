@@ -13,7 +13,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 export default function App() {
   //theme toggle light/dark
   const [darkMode, setDarkMode] = useState(false);
-	const [view, setView] = useState('WorkoutList');
+	const [view, setView] = useState('Workouts');
 	const [user, setUser] = useState(null);
 
 	function fetchUser() {

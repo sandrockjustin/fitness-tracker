@@ -1,6 +1,7 @@
-
 import React from 'react'
+import { useState } from 'react';
 import Box from '@mui/material/Box';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { styled } from '@mui/material/styles';
 
 const WorkoutBox = styled(Box)`
@@ -14,15 +15,19 @@ box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 `
 const MealBox = styled(Box)`
 background: #f1f1f1;
-height: 100px;
+height: 125px;
 width: 500px;
 margin:auto;
-overflow-y:auto;
 box-sizing: border-box;
 box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 
 `
+const Refresh = styled(RefreshIcon)`
+transform: scale(.9);
+  color: rgba(0, 0, 0, 0.7)
+  "&:hover": { color: 'rgba(0, 0, 0, 0.4)'};
 
+`
 
 
 //////////////////////////////////////////////////
@@ -73,26 +78,52 @@ export default function Meals(props){
 
   let calsBurned = exRoutine.length * 150
 
-  let meal = [];
   let foods = props.user.nutrition
   let foodNum = props.user.nutrition.length;
   let mealSize = 3;
-
-  //makes a random meal
-  for (let i = 0; i < mealSize; i++){
-    meal[i] = foods[Math.floor(Math.random() * foodNum)]
-    meal[i] = foods[Math.floor(Math.random() * foodNum)]
-    meal[i] = foods[Math.floor(Math.random() * foodNum)]
-  }
-
-  let mealReplenish = calsBurned / mealSize
-
+  let meal = [];
   let mealReplaceAmts = []
-  for (let i = 0; i < meal.length; i++){
-    mealReplaceAmts.push(Math.round((mealReplenish / meal[i].nutDensity)*100)/100)
-  }
 
+  const [randMeal, setRandMeal] = useState(meal)
+  const [mealRepAm, setMealRepAm] = useState(mealReplaceAmts)
+
+/////////////////////////////////////////////////
+//makes a random meal
+const randomMeal = () =>{
+
+  //reset meal replace amounts to empty array
+  if (mealReplaceAmts.length === mealSize){
+   mealReplaceAmts = []
+  }
+  //as long as there are enough foods to make a meal
+  if(foods.length >= mealSize){
+
+    //sets a random food in each meal index
+    for (let i = 0; i < mealSize; i++){
+      meal[i] = (foods[Math.floor(Math.random() * foodNum)])
+      //add corresponding replacement amounts to mealReplaceAmts array
+      let mealReplenish = calsBurned / mealSize
+      mealReplaceAmts[i] = (Math.round((mealReplenish / meal[i].nutDensity)*100)/100)
+   }
+
+   //determines the calories each food must replenish
+
+
+   //loop through the random meals,
+  // for (let i = 0; i < meal.length; i++){
+  // }
+  //  setRandMeal(meal)
+  //  setMealRepAm(mealReplaceAmts)
   console.log("MEAL", meal, mealReplaceAmts)
+  }
+}
+
+randomMeal()
+////////////////////////////////////////////////////
+const handleRefresh = () =>{
+  console.log("REFRESH!")
+  randomMeal()
+}
 /////////////////////////////////////////////////////////////////////
   return(
     <div style={{fontFamily: "Arial, sans-serif"}}>
@@ -112,10 +143,15 @@ export default function Meals(props){
       </WorkoutBox>
         <br></br>
       <MealBox sx={{padding: "5px"}}>
+        <div>
+
           <div>
 
-            <strong>RANDOM MEAL</strong>
-            <br></br>
+            <Refresh sx={{transform: 'scale(.75)', color: 'rgba(0, 0, 0, 0.7)', "&:hover": { color: 'rgba(0, 0, 0, 0.4)'}}} onClick={handleRefresh}></Refresh><strong>RANDOM MEAL</strong>
+
+          </div>
+
+
             {meal.map((food, i)=>{
               return(
                 <div>
@@ -124,6 +160,7 @@ export default function Meals(props){
                 </div>
               )
             })}
+
 
             {/* {props.nutrition.map((food, i)=>{
               return(

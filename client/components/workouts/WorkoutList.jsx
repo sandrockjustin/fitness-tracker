@@ -28,6 +28,9 @@ const WorkoutList = ({workouts, fetchUser, user}) => {
     <Box
       className={classes.box}
       alignItems="center"
+      justifyContent='center'
+      justifyItems='center'
+      alignContent='center'
     >
       {workouts.map((workout, index) => {
         return (
