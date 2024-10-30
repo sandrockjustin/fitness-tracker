@@ -13,7 +13,7 @@ align-items: center;
 `
 
 let NutBox = styled(Box)`
-background: linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%);
+background: linear-gradient(45deg, #556270 30%, #FF6B6B 90%);
 width: 525px;
 border-radius: 5px;
 
