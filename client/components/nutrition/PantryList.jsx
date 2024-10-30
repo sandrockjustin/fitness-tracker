@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 
 
 const PantryBox = styled(Box)`
-background: #f0f0f0;
+background: #9fa6a5;
 height: 200px;
 width: 500px;
 box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
@@ -33,7 +33,10 @@ export default function PantryList(props){
       <h1 style={{textAlign: "center"}}>PANTRY</h1>
 
 
-      <PantryBox>
+      <PantryBox >
+        <div>
+
+
         <List>
      {props.nutrition.map((food)=>{
 
@@ -49,6 +52,7 @@ export default function PantryList(props){
     )
   })}
   </List>
+        </div>
   
       </PantryBox>
 

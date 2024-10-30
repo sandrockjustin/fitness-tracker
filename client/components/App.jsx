@@ -139,7 +139,7 @@ export default function App() {
         </IconButton>
 				<div id="root-app">
 					<Navigation updateView={updateView}/>
-					<div><Nutrition fetchUser={fetchUser} user={user}/></div>
+					<div><Nutrition state={darkMode} fetchUser={fetchUser} user={user}/></div>
 				</div>
         </ThemeProvider>
 			)
