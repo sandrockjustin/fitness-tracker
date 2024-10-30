@@ -31,7 +31,7 @@ export default function DashboardWorkouts(props) {
               </TableCell>
               <TableCell align="right">{workout.muscle}</TableCell>
               <TableCell align="right">{workout.type}</TableCell>
-              <TableCell align="right">{workout.equipment}</TableCell>
+              <TableCell align="right">{workout.equipment.replaceAll("_", " ")}</TableCell>
               <TableCell align="right">{workout.difficulty}</TableCell>
             </TableRow>
           ))}
