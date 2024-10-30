@@ -69,15 +69,21 @@ export default function App() {
 					})
 					break;
 			case 'Delete Account':
-				axios.delete('/user/delete')
-					.then((response) => {
-						if (response.status === 200){
-							window.location.href = "http://localhost:8080/";
-						}
-					})
-					.catch((error) => {
-						console.error('Error on DELETE user in main.', error)
-					})
+				const warningMessage = `Are you sure that you would like to delete your account?\nThis action is irreversible.`
+				if (window.confirm(warningMessage)){
+					axios.delete('/user/delete')
+						.then((response) => {
+							if (response.status === 200){
+								window.location.href = "http://localhost:8080/";
+							}
+						})
+						.catch((error) => {
+							console.error('Error on DELETE user in main.', error)
+						})
+				} else {
+					return;
+				}
+
 			case 'Dashboard':
 				axios.get('/user/dashboard')
 					.then((response) => {
