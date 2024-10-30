@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
 import Nutrition from './nutrition/Nutrition.jsx';
-import Navigation from './Navigation.jsx'
+import Navigation from './Navigation.jsx';
+import Dashboard from './dashboard/Dashboard.jsx';
 import axios from 'axios';
 import { ThemeProvider, CssBaseline, Switch, IconButton } from '@mui/material';
 import { lightTheme, darkTheme } from './styles';
@@ -14,7 +15,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 export default function App() {
   //theme toggle light/dark
   const [darkMode, setDarkMode] = useState(false);
-	const [view, setView] = useState('Workouts');
+	const [view, setView] = useState('Dashboard');
 	const [user, setUser] = useState(null);
 	function fetchUser() {
 		axios.get(`/user/info/`)
@@ -28,7 +29,6 @@ export default function App() {
 
 	function updateView(e) {
 
-		// console.log(e.target.name);
 		switch (e.target.name){
 			case 'Logout':
 				axios.post('/user/logout')
@@ -78,6 +78,15 @@ export default function App() {
 					.catch((error) => {
 						console.error('Error on DELETE user in main.', error)
 					})
+			case 'Dashboard':
+				axios.get('/user/dashboard')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET nutrition view in main.', error)
+					})
+					break;
 			default:
 				console.error('Client error for update view in main.')
 		}
@@ -91,8 +100,6 @@ export default function App() {
 		document.title = 'Vitality';
 		setTimeout( () => {fetchUser()}, 0)
 	}, [])
-
-
 
 	switch(view){
 		case 'Workouts':
@@ -111,7 +118,8 @@ export default function App() {
 					</div>
 					:
 					<div>
-					<h1>Please Login</h1>
+						<h1 style={{textAlign:"center"}}>401</h1>
+						<h2 style={{textAlign:"center"}}>Unauthorized; please re-attempt login.</h2>
 					</div>
 					}
 				</div>
@@ -158,7 +166,16 @@ export default function App() {
         </IconButton>
 				<div id="root-app">
 					<Navigation updateView={updateView}/>
-				<br></br>
+					{user ?
+					<div>
+						<Dashboard user={user}/>
+					</div>
+					:
+					<div>
+						<h1 style={{textAlign:"center"}}>401</h1>
+						<h2 style={{textAlign:"center"}}>Unauthorized; please re-attempt login.</h2>
+					</div>
+					}
 				</div>
         </ThemeProvider>
 			)
