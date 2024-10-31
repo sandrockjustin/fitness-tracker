@@ -68,7 +68,7 @@ export default function FoodSearch(props){
     setSearch('')
     axios.put(`/user/nutrition/create`, { nutrition: foodInfo })
       .then((data) => {
-        console.log("HANDLE ADD DATA", data)
+        // console.log("HANDLE ADD DATA", data)
         props.fetchUser()
       })
       .catch((err)=>{
@@ -81,7 +81,7 @@ export default function FoodSearch(props){
     <SearchBox >
       
       <TextField sx={{margin: 'auto'}} variant="outlined" label="Search Foods" type="text" id='food-search' onChange={handleChange}/>
-      {console.log(searchField)}
+      {/* {console.log(searchField)} */}
 
       <CustomButt sx={{ "&:hover": { background: 'linear-gradient(45deg, #FF6B6B 30%, #556270 90%)'} }} variant="contained" type="submit" onClick={handleClick}>Add Food</CustomButt>
 
