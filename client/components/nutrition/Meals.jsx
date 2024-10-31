@@ -4,10 +4,11 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { useEffect } from 'react';
+import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 
 const WorkoutBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 100px;
 width: 500px;
 margin:auto;
@@ -17,10 +18,11 @@ box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 padding: 10px
 `
 const MealBox = styled(Box)`
-background: #9fa6a5;
+background: rgba(0, 0, 0, 0.2);
 height: 125px;
 width: 500px;
 margin:auto;
+overflow-y:auto;
 box-sizing: border-box;
 box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.5);
 padding: 10px
@@ -50,11 +52,11 @@ useEffect(()=>{
 
   let foods = props.user.nutrition
   let foodNum = props.user.nutrition.length;
-  let mealSize = 3;
+  let mealSize = props.checkedFoods.length;
   let meal = [];
   let mealReplaceAmts = []
 
-  const [randMeal, setRandMeal] = useState(meal)
+  const [newMeal, setNewMeal] = useState(meal)
   const [mealRepAm, setMealRepAm] = useState(mealReplaceAmts)
 
 /////////////////////////////////////////////////
@@ -70,12 +72,12 @@ const randomMeal = () =>{
 
     //sets a random food in each meal index
     for (let i = 0; i < mealSize; i++){
-      meal[i] = (foods[Math.floor(Math.random() * foodNum)])
+      meal[i] = props.checkedFoods[i]
       //add corresponding replacement amounts to mealReplaceAmts array
       let mealReplenish = calsBurned / mealSize
       mealReplaceAmts[i] = (Math.round((mealReplenish / meal[i].nutDensity)*100)/100)
    }
-   setRandMeal(meal)
+   setNewMeal(meal)
    setMealRepAm(mealReplaceAmts)
 
   console.log("MEAL", meal, mealReplaceAmts)
@@ -111,14 +113,15 @@ const handleRefresh = () =>{
       <MealBox >
         <div>
 
-          <div>
+          <Box sx={{display: 'flex', flexDirection: 'row'}}>
 
-            <Refresh sx={{transform: 'scale(.75)', color: 'rgba(0, 0, 0, 0.7)', "&:hover": { color: 'rgba(0, 0, 0, 0.4)'}}} onClick={handleRefresh}></Refresh><strong>GENERATE RANDOM MEAL</strong>
+            <strong>GENERATE MEAL FROM WORKOUT</strong>
+            <Refresh sx={{marginLeft: 'auto', marginRight: '0', transform: 'scale(1.25)', color: 'rgba(0, 0, 0, 0.7)', "&:hover": { color: 'rgba(0, 0, 0, 0.4)'}}} onClick={handleRefresh}></Refresh>
 
-          </div>
+          </Box>
 
 
-            {randMeal.map((food, i)=>{
+            {newMeal.map((food, i)=>{
               return(
                 <div>
                   <strong>{mealRepAm[i]} grams of {food.foodName}</strong>

@@ -1,4 +1,5 @@
 import React from 'react'
+import {useState} from 'react';
 import PantryList from './PantryList.jsx'
 import FoodSearch from './FoodSearch.jsx'
 import Meals from './Meals.jsx'
@@ -22,9 +23,9 @@ box-sizing: border-box
 `
 
 export default function Nutrition(props){
-
+  const [checkedFoods, setCheckedFoods] = useState([])
   
-  // console.log("NUTRITION USER", props.user.nutrition)
+  console.log("CHECKED FOODS", checkedFoods)
   return(
 <AllBox>
   <br></br>
@@ -34,11 +35,22 @@ export default function Nutrition(props){
 
    <div>
 
-    <PantryList theme={props.theme} fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
+    <PantryList 
+    checkedFoods={checkedFoods} 
+    setCheckedFoods={setCheckedFoods} 
+    theme={props.theme} 
+    fetchUser={props.fetchUser} 
+    user={props.user} 
+    nutrition={props.user.nutrition}/>
 
     <br></br>
 
-    <Meals theme={props.theme} fetchUser={props.fetchUser} user={props.user} nutrition={props.user.nutrition}/>
+    <Meals 
+    checkedFoods={checkedFoods} 
+    theme={props.theme} 
+    fetchUser={props.fetchUser} 
+    user={props.user} 
+    nutrition={props.user.nutrition}/>
 
     <br></br>
 

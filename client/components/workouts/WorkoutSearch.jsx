@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Workout from "./Workout.jsx";
-import { Button, FormControl, Box, MenuItem, Select } from "@mui/material";
+import { Button, FormControl, Box, MenuItem, Select, Divider, Typography, Snackbar } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import useStyles from "../styles";
+import Alert from '@mui/material/Alert';
+
 
 const WorkoutSearch = ({ user, fetchUser }) => {
   const classes = useStyles();
@@ -30,8 +32,11 @@ const WorkoutSearch = ({ user, fetchUser }) => {
   // states
   const [selectedKeyword, setSelectedKeyword] = useState("");
 
-  // state for filtered mock data
+  // state for filtered result data
   const [filteredResults, setFilteredResults] = useState([]);
+
+  //state for success alert when adding workout on add button click
+  const [open, setOpen] = useState(false);
 
   // handler for keyword selection
   const handleKeywordSelect = (e) => {
@@ -62,12 +67,14 @@ const WorkoutSearch = ({ user, fetchUser }) => {
           prevResults.filter((_, i) => i !== index)
         );
         fetchUser();
-        alert("Workout has been added to your saved workout list!");
+        //sets alert state to appear
+        setOpen(true);
       })
       .catch(() => {
         console.error("Failed to save workout");
       });
   };
+
 
   return (
     <div
@@ -78,6 +85,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
         margin: "10px",
       }}
     >
+      <Typography variant='h4' sx={{padding: '20px'}}>Workout Search</Typography>
       <FormControl sx={{ width: 500, alignContent: "center"}}>
         <label htmlFor="keyword" style={{ textAlign: "center" }}>
           Choose Muscle Group:
@@ -115,6 +123,13 @@ const WorkoutSearch = ({ user, fetchUser }) => {
         </Button>
       </FormControl>
       <h3 style={{ marginTop: "20px" }}>Workout results</h3>
+      <Divider sx={{width: '100%'}}/>
+      {/* Alert to show and hide after workout is added to saved workout list */}
+      <Snackbar open={open} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: '100%', transform: 'scale(2.0)' }}>
+          Workout added successfully!
+        </Alert>
+      </Snackbar>
       <Box
         className={classes.box}
         sx={{
@@ -156,6 +171,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
           </span>
         )}
       </Box>
+      <Divider sx={{width: '100%'}}/>
     </div>
   );
 };
