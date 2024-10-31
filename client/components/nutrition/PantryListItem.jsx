@@ -39,7 +39,6 @@ export default function PantryListItem(props){
       props.setCheckedFoods(props.checkedFoods.filter(food=>{
         console.log(props.food)
         return food.foodName !== props.food.foodName
-      
       }))
     }
   };
@@ -53,6 +52,10 @@ export default function PantryListItem(props){
     .catch((err)=>{
       console.error(err)
     })
+    props.setCheckedFoods(props.checkedFoods.filter(food=>{
+      console.log(props.food)
+      return food.foodName !== props.food.foodName
+    }))
   }
 
   return(
