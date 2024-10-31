@@ -16,7 +16,7 @@ function Navigation(props) {
       <Container maxWidth="100%" className={nav_classes.navBar}>
         <Toolbar sx={{justifyContent: "space-between"}}>
           <Container>
-            <img src='./../Logo.png' style={{width: "20%", height: "20%"}}/>
+            <img src='Logo.png' style={{width: "20%", height: "20%"}}/>
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Dashboard" sx={{color: 'white'}}>Dashboard</Button>
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts" sx={{color: 'white'}}>Workouts</Button>
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts-Search" sx={{color: 'white'}}>Search Workouts</Button>

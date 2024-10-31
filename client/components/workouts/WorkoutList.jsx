@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Workout from "./Workout.jsx";
 import { Box, IconButton, Typography, Divider } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import useStyles from "../styles";
 
@@ -26,15 +27,20 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
     setSelectedWorkout(workout);
   };
 
+  const deselectWorkout = (selectedWorkout) => {
+    setSelectedWorkout(null);
+  };
+
   return (
     <div>
       <Typography
-        variant="h5"
+        variant="h4"
         fontWeight="bold"
-        fontFamily="Roboto"
         align="center"
         display="flex"
         justifyContent="center"
+        paddingTop="50px"
+        paddingBottom="30px"
       >
         Saved Workout List
       </Typography>
@@ -43,12 +49,12 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
       <Box
         className={classes.box}
         sx={{
-          overflowX: 'auto',
-          display: 'flex',
-          justifyContent: 'flex-start',
-          width: '100%',
-          padding: '10px',
-          alignItems: 'center'
+          overflowX: "auto",
+          // display: "flex",
+          justifyContent: "flex-start",
+          width: "100%",
+          padding: "10px",
+          alignItems: "center",
         }}
       >
         {workouts.map((workout, index) => {
@@ -67,7 +73,7 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
           );
         })}
       </Box>
-      <Divider/>
+      <Divider />
       <Box>
         {selectedWorkout ? (
           <div>
@@ -84,7 +90,22 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
             </div>
             <br></br>
             <div className={classes.workoutSelected}>
-              <Workout className={classes.workoutSaved} workout={selectedWorkout} />  
+              <IconButton
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  background: "#F1F1F1",
+                  boxShadow: 2,
+                }}
+                onClick={() => deselectWorkout(selectedWorkout)}
+              >
+                <CloseIcon fontSize="medium" fontColor='red'/>
+              </IconButton>
+              {/* <br></br> */}
+              <Workout
+                className={classes.workoutSaved}
+                workout={selectedWorkout}
+              />
             </div>
           </div>
         ) : null}
