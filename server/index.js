@@ -17,11 +17,11 @@
 import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
-import { User, db } from './db/index.js'  // must be imported for database connection
-import auth from './auth.js';             // must be imported for Passport to function
-import axios from 'axios';                // must be imported for external requests
+import { db } from './db/index.js'         // must be imported for database connection
+import auth from './security/auth.js';     // must be imported for Passport to function
 import dotenv from 'dotenv';
-import users from './routes.js';          
+import users from './routes/users.js';     
+import verify from './security/verify.js';     
 dotenv.config();
 
 const app = express();              // create Express instance named 'app'
@@ -37,35 +37,12 @@ const port = 8080;                  // random port, can change as necessary
  *                                    MIDDLEWARE
  * -----------------------------------------------------------------------------------
  * 
- * isLoggedIn                         => CRITICAL :: used as middleware to secure 
- *                                     > routes checks to see if provided user is
- *                                     > valid does not check whether session is valid
- *                                     > as this is handled by other middleware
- * 
  * app.use(session())                 => Express is used for creating sessions
  * app.use(passport.initialize())     => initializes Passport for incoming requests
  * app.use(passport.session())        => works on top of Express session middleware
  * app.use(express.json())            => helps with parsing requests
  * app.use(..., express.static())     => serves client/dist on server startup, post-auth
  * ----------------------------------------------------------------------------------- */
-
-function isLoggedIn(req, res, next) {
-  if (!req.user) {
-    res.redirect('/');
-  } else {
-    User.findById({_id: req.user._id})
-      .then((isFound) => {
-        if (!isFound) { 
-          console.error(`SERVER :: INTERNAL :: User #${req.user._id} does not exist.`);
-          res.redirect('/')
-        }
-        next();
-      })
-      .catch((error) => {
-        console.error('SERVER :: INTERNAL :: Failure to authenticate.');
-      })
-  }
-}
 
 app.use(session(
   { 
@@ -78,7 +55,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use('/user', users);
-app.use('/homepage', isLoggedIn, express.static('client/dist'));
+app.use('/homepage', verify, express.static('client/dist'));
+
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
@@ -90,13 +68,9 @@ app.use('/homepage', isLoggedIn, express.static('client/dist'));
  *                          AUTHENTICATION & PROTECTED ROUTES
  * -----------------------------------------------------------------------------------
  *
- * /auth/google               => used for login and authentication
- * /google/callback           => used after authentication to determine where to go next
- * /logout                    => deletes session, cookies and changes view to login
- * 
- * /user/workouts             => used to change view to 'WorkoutList' component
- * /user/workouts/search      => used to change view to 'WorkoutSearch' component
- * /user/nutrition            => used to change view to 'Nutrition' component
+ *  GET   /                         => the login page and entry point to app
+ *  GET   /login-success            => login callback function for passport
+ *  GET   /homepage                 => redirect on login success, serves client files
  * ----------------------------------------------------------------------------------- */
 
 app.get('/', passport.authenticate('google', { 
@@ -111,7 +85,7 @@ app.get('/login-success',
   })
 );
 
-app.get('/homepage', isLoggedIn, (req, res) => {
+app.get('/homepage', verify, (req, res) => {
   res.status(200).redirect('/homepage');
 })
 
