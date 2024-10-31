@@ -3,6 +3,7 @@ import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
 import Nutrition from './nutrition/Nutrition.jsx';
 import Navigation from './Navigation.jsx';
+import Routines from './workouts/Routines.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
 import axios from 'axios';
 import { ThemeProvider, CssBaseline, Switch, IconButton } from '@mui/material';
@@ -17,6 +18,8 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false);
 	const [view, setView] = useState('Dashboard');
 	const [user, setUser] = useState(null);
+	const [routines, setRoutines] = useState(null);
+
 	function fetchUser() {
 		axios.get(`/user/info/`)
 		  .then((userData) => {
@@ -24,6 +27,16 @@ export default function App() {
 		  })
 		  .catch((err) => {
 			console.error('Failed to get userData');
+		  })
+	}
+
+	function fetchRoutines() {
+		axios.get(`/routines`)
+		  .then((routineData) => {
+				setRoutines(routineData.data)
+		  })
+		  .catch((err) => {
+			console.error('Failed to get routineData');
 		  })
 	}
 
@@ -68,6 +81,15 @@ export default function App() {
 						console.error('Error on GET nutrition view in main.', error)
 					})
 					break;
+			case 'Routines':
+				axios.get('/routines')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET routines view in main.', error)
+					})
+				break;
 			case 'Delete Account':
 				const warningMessage = `Are you sure that you would like to delete your account?\nThis action is irreversible.`
 				if (window.confirm(warningMessage)){
@@ -105,6 +127,7 @@ export default function App() {
 	useEffect(() => {
 		document.title = 'Vitality';
 		setTimeout( () => {fetchUser()}, 0)
+		setTimeout( () => {fetchRoutines()}, 0)
 	}, [])
 
 	switch(view){
@@ -160,6 +183,29 @@ export default function App() {
 					<br></br>
 					<div><Nutrition state={darkMode} fetchUser={fetchUser} user={user}/></div>
 
+				</div>
+        </ThemeProvider>
+			)
+			case 'Routines':
+			return (
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+          <CssBaseline />
+          <IconButton onClick={handleThemeChange} color="inherit">
+          <Brightness4Icon />
+        </IconButton>
+				<div id="root-app">
+				<Navigation updateView={updateView}/>
+				<br></br>
+				{user ?
+					<div>
+					<Routines user={user} fetchUser={fetchUser} routines={routines} workouts={user.workouts}/>
+					</div>
+					:
+					<div>
+						<h1 style={{textAlign:"center"}}>401</h1>
+						<h2 style={{textAlign:"center"}}>Unauthorized; please re-attempt login.</h2>
+					</div>
+					}
 				</div>
         </ThemeProvider>
 			)

@@ -21,6 +21,8 @@ function Navigation(props) {
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts" sx={{color: 'white'}}>Workouts</Button>
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts-Search" sx={{color: 'white'}}>Search Workouts</Button>
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Nutrition" sx={{color: 'white'}}>Nutrition</Button>	
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Routines" sx={{color: 'white'}}>Routines</Button>	
+
           </Container>
           <Container>
             <MenuList className={nav_classes.navAccountOptions}>
