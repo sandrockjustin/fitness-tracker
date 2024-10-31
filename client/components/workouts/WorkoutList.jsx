@@ -9,11 +9,13 @@ import useStyles from "../styles";
 //populate each workout list tied to the user's saved lists
 
 const WorkoutList = ({ workouts, fetchUser, user }) => {
+  //creates instance of style object in styles.js
   const classes = useStyles();
+  //state for selected workout
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+
   // function to handle delete requests in user's workout list
   const deleteWorkout = (workout) => {
-    // console.log('workout to be deleted', workout);
     axios
       .patch(`/user/workouts/delete`, { workout })
       .then(() => {
@@ -23,11 +25,12 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
         console.err("Failed to delete workout");
       });
   };
+  //function to set the state of selected workout on click
   const handleSelectWorkout = (workout) => {
     setSelectedWorkout(workout);
   };
-
-  const deselectWorkout = (selectedWorkout) => {
+  //function to clear selected workout view
+  const deselectWorkout = () => {
     setSelectedWorkout(null);
   };
 
@@ -50,7 +53,6 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
         className={classes.box}
         sx={{
           overflowX: "auto",
-          // display: "flex",
           justifyContent: "flex-start",
           width: "100%",
           padding: "10px",
@@ -97,7 +99,7 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
                   background: "#F1F1F1",
                   boxShadow: 2,
                 }}
-                onClick={() => deselectWorkout(selectedWorkout)}
+                onClick={() => deselectWorkout()}
               >
                 <CloseIcon fontSize="medium" fontColor='red'/>
               </IconButton>
