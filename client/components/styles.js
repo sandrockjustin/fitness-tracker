@@ -91,6 +91,7 @@ const useStyles = makeStyles(() => ({
   },
   navBar: {
     background: 'linear-gradient(45deg, #556270 30%, #FF6B6B 90%)',
+    // flexDirection: 'row'
   },
   navButtons: {
     '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
