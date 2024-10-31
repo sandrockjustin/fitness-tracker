@@ -47,7 +47,7 @@ export default function App() {
 				axios.post('/user/logout')
 					.then((response) => {
 						if (response.status === 200){
-							window.location.href = "http://ec2-3-129-61-157.us-east-2.compute.amazonaws.com:8080/";
+							window.location.href = "http://localhost:8080/";
 						}
 					})
 					.catch((error) => {
@@ -96,7 +96,7 @@ export default function App() {
 					axios.delete('/user/delete')
 						.then((response) => {
 							if (response.status === 200){
-								window.location.href = "http://ec2-3-129-61-157.us-east-2.compute.amazonaws.com:8080/";
+								window.location.href = "http://localhost:8080/";
 							}
 						})
 						.catch((error) => {
