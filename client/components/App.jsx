@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import WorkoutSearch from './workouts/WorkoutSearch.jsx';
 import WorkoutList from './workouts/WorkoutList.jsx';
 import Nutrition from './nutrition/Nutrition.jsx';
-import Navigation from './Navigation.jsx';
+import Navigation from './navigation/Navigation.jsx';
 import Routines from './workouts/Routines.jsx';
 import Dashboard from './dashboard/Dashboard.jsx';
+import AccountPage from './navigation/AccountPage.jsx';
 import axios from 'axios';
 import { ThemeProvider, CssBaseline, Switch, IconButton } from '@mui/material';
 import { lightTheme, darkTheme } from './styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-
-
 
 
 export default function App() {
@@ -39,6 +38,8 @@ export default function App() {
 	}
 
 	function updateView(e) {
+
+		console.log(e);
 
 		switch (e.target.name){
 			case 'Logout':
@@ -113,6 +114,16 @@ export default function App() {
 						console.error('Error on GET nutrition view in main.', error)
 					})
 					break;
+			
+			case 'Account Page':
+				axios.get('/user/account/')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET account page view in main.', error)
+					})
+					break;
 			default:
 				console.error('Client error for update view in main.')
 		}
@@ -184,25 +195,39 @@ export default function App() {
         </ThemeProvider>
 			)
 			case 'Routines':
+				return (
+					<ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+						<CssBaseline />
+						<IconButton onClick={handleThemeChange} color="inherit">
+						<Brightness4Icon />
+					</IconButton>
+					<div id="root-app">
+					<Navigation updateView={updateView}/>
+					<br></br>
+					{user ?
+						<div>
+						<Routines user={user} fetchUser={fetchUser} routines={routines} workouts={user.workouts}/>
+						</div>
+						:
+						<div>
+							<h1 style={{textAlign:"center"}}>401</h1>
+							<h2 style={{textAlign:"center"}}>Unauthorized; please re-attempt login.</h2>
+						</div>
+						}
+					</div>
+					</ThemeProvider>
+				)
+		case 'Account Page':
 			return (
         <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-          <CssBaseline />
-          <IconButton onClick={handleThemeChange} color="inherit">
+        <CssBaseline />
+        <IconButton onClick={handleThemeChange} color="inherit">
           <Brightness4Icon />
         </IconButton>
 				<div id="root-app">
-				<Navigation updateView={updateView}/>
-				<br></br>
-				{user ?
-					<div>
-					<Routines user={user} fetchUser={fetchUser} routines={routines} workouts={user.workouts}/>
-					</div>
-					:
-					<div>
-						<h1 style={{textAlign:"center"}}>401</h1>
-						<h2 style={{textAlign:"center"}}>Unauthorized; please re-attempt login.</h2>
-					</div>
-					}
+					<Navigation updateView={updateView}/>
+					<br></br>
+					<div><AccountPage state={darkMode} user={user} updateView={updateView} fetchUser={fetchUser}/></div>
 				</div>
         </ThemeProvider>
 			)
