@@ -51,9 +51,7 @@ export default function FoodSearch(props){
 
       if(!inPantry){
         handleAdd(foodInfo.data)
-      } else(
-        console.log("already added this food")
-      )
+      }
     })
     .catch((err)=>{
       console.error(err);
