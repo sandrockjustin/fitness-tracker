@@ -75,7 +75,7 @@ app.use('/homepage', verify, express.static('client/dist'));
 
 app.get('/', passport.authenticate('google', { 
   scope: ['email', 'openid'], 
-  // prompt: 'select_account consent' 
+  prompt: 'select_account consent' 
 }));
 
 app.get('/login-success', 
