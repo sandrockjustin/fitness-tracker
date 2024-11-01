@@ -86,6 +86,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
       }}
     >
       <Typography variant='h4' sx={{padding: '20px'}}>Workout Search</Typography>
+      <Divider sx={{width: '100%'}}/>
       <FormControl sx={{ width: 500, alignContent: "center"}}>
         <label htmlFor="keyword" style={{ textAlign: "center" }}>
           Choose Muscle Group:

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import useStyles from '../styles';
-import {Box, FormControl, Button, IconButton, InputLabel, Select, MenuItem, Snackbar, TextField} from '@mui/material';
+import {Box, FormControl, IconButton, Select, MenuItem, Snackbar, TextField, Divider} from '@mui/material';
 import Workout from './Workout.jsx';
 import CloseIcon from "@mui/icons-material/Close";
 import Alert from '@mui/material/Alert';
@@ -85,10 +85,12 @@ const Routines = ({fetchUser, routines, user}) => {
         </Alert>
       </Snackbar>
       <h2>Saved Routines</h2>
+      <Divider sx={{width: '100%'}}/>
       <h5>Select a saved Routine to display</h5>
-      <Box sx={{ display: 'flex', justifyContent: 'center', color: 'black', padding: '5px' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', color: 'black', paddingLeft: '150px' }}>
         <FormControl sx={{ width: 600, alignContent: "center" }}>
           {isEditing ? (
+            <div style={{alignContent: 'center', paddingLeft: '50px'}}>
             <TextField
               value={routineName}
               onChange={(e) => setRoutineName(e.target.value)}
@@ -108,6 +110,7 @@ const Routines = ({fetchUser, routines, user}) => {
                 color: 'black',
               }}
             />
+            </div>
           ) : (
             <Select
               id="routine"
