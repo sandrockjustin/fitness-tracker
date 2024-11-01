@@ -128,15 +128,12 @@ const useStyles = makeStyles(() => ({
     alignItems: "right",
     alignSelf: "right"
   },
-  DeleteAccButton: {
+  deleteAccButton: {
     background: 'linear-gradient(45deg, #e52d27 30%, #b31217 90%)',
     '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
     "&:active": {
       transform: "scale(0.98)",
     }
-  },
-  appPage: {
-    padding: '20px'
   }
 }));
 
