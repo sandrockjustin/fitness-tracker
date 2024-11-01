@@ -4,7 +4,7 @@ import DashboardMeals from './DashboardMeals.jsx';
 import { Divider } from '@mui/material';
 
 export default function Dashboard(props) {
-  console.log(props);
+
   return (
     <div id="dash_main">
       <h1 style={{textAlign: "center"}}>Dashboard</h1>
