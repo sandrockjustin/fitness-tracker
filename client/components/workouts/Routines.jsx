@@ -128,10 +128,10 @@ const Routines = ({fetchUser, routines, user}) => {
                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                   borderColor: 'black',
                 },
-                color: 'black',
+                color: '#B0BEC5',
               }}
             >
-              <MenuItem value="" disabled>
+              <MenuItem value="" disabled >
                 Select a routine
               </MenuItem>
               {routines.map((routine) => (

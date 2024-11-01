@@ -1,5 +1,6 @@
 import { makeStyles } from "@mui/styles";
 import { createTheme } from "@mui/material";
+import Routines from './workouts/Routines.jsx';
 //Hook to call styling for useStyles instance
 //Below we can define specific stylings to call later in other components
 const useStyles = makeStyles(() => ({

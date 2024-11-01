@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export default function AccountMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -33,7 +34,7 @@ export default function AccountMenu(props) {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}><AccountCircleIcon sx={{fontSize: '36px'}}/></Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -75,7 +76,7 @@ export default function AccountMenu(props) {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={() => {props.updateView({target: {name: "Account Page"}})}}>
-          <Avatar /> Profile
+          <Avatar><AccountCircleIcon sx={{fontSize: '36px'}} /></Avatar> Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={() => {props.updateView({target: {name: "Logout"}})}}>
