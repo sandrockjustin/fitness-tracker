@@ -66,10 +66,10 @@ export default function FoodSearch(props){
 // console.log("POOPS", props)
 
   const handleAdd = (foodInfo)=>{
-    setSearch('')
     axios.put(`/user/nutrition/create`, { nutrition: foodInfo })
-      .then((data) => {
-        // console.log("HANDLE ADD DATA", data)
+    .then((data) => {
+      // console.log("HANDLE ADD DATA", data)
+        setSearch('')
         props.fetchUser()
       })
       .catch((err)=>{

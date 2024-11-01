@@ -44,7 +44,6 @@ useEffect(()=>{
 }, []
 )
 
-  console.log("PROPS nutrition", props.user.nutrition)
 
   let exRoutine = props.user.workouts
 
@@ -55,6 +54,8 @@ useEffect(()=>{
   let mealSize = props.checkedFoods.length;
   let meal = [];
   let mealReplaceAmts = []
+
+  
 
   const [newMeal, setNewMeal] = useState(meal)
   const [mealRepAm, setMealRepAm] = useState(mealReplaceAmts)
@@ -80,13 +81,11 @@ const randomMeal = () =>{
    setNewMeal(meal)
    setMealRepAm(mealReplaceAmts)
 
-  console.log("MEAL", meal, mealReplaceAmts)
   }
 }
 
 ////////////////////////////////////////////////////
 const handleRefresh = () =>{
-  console.log("REFRESH!")
   randomMeal()
 }
 /////////////////////////////////////////////////////////////////////
@@ -129,21 +128,6 @@ const handleRefresh = () =>{
                 </div>
               )
             })}
-
-
-            {/* {props.nutrition.map((food, i)=>{
-              return(
-                <div key={`${food.foodName}-${i}`}>
-                  <strong>PANTRY ITEM:</strong> {food.foodName}
-                  <br></br>
-                  <strong>CALORIC DENSITY/G:</strong> {food.nutDensity}
-                  <br></br>
-                  <strong>GRAMS TO REFUEL:</strong>{Math.round((calorieCount / food.nutDensity)*100)/100}
-                  <br></br>
-                  <br></br>
-                </div>
-              )
-            })} */}
           </div>
       </MealBox>
       </div>
