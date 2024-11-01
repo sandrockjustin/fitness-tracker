@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import workouts from './workouts.js';               // workouts router
 import nutrition from './nutrition.js';             // nutrition router
 import routines from './routines.js';
+import account from './account.js';
 import verify from '../security/verify.js';
 
 dotenv.config();
@@ -28,6 +29,7 @@ const users = express.Router();
 users.use('/workouts', workouts);
 users.use('/nutrition', nutrition);
 users.use('/routines', routines);
+users.use('/account', account);
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
