@@ -68,16 +68,14 @@ routines.get('/all', verify, (req, res) => {
 })
 
 routines.patch('/update/:id', verify, (req, res) => {
-  const { exercise } = req.body;
 
-  User.findOneAndUpdate(
+  Routines.findOneAndUpdate(
     {_id: req.params.id},
-    {$push: {exercises: exercise}},
-    { new: true, upsert: true }
+    {routine_name: req.body.name}
   )
-  .then((updatedUser) => {
-    if (updatedUser) {
-      res.status(201).send(updatedUser);
+  .then((updatedRoutine) => {
+    if (updatedRoutine) {
+      res.status(201).send(updatedRoutine);
     } else {
       res.sendStatus(404);
     }

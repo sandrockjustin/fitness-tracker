@@ -1,19 +1,23 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import useStyles from '../styles';
-import {Box, FormControl, Button, IconButton, InputLabel, Select, MenuItem, Snackbar} from '@mui/material';
+import {Box, FormControl, Button, IconButton, InputLabel, Select, MenuItem, Snackbar, TextField} from '@mui/material';
 import Workout from './Workout.jsx';
 import CloseIcon from "@mui/icons-material/Close";
 import Alert from '@mui/material/Alert';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 
 const Routines = ({fetchUser, routines, user}) => {
-  console.log('rooutines,', routines)
+  // console.log('rooutines,', routines)
   const classes = useStyles();
 
   //state for selected workout
   const [selectedRoutine, setSelectedRoutine] = useState(null);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [open, setOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [routineName, setRoutineName] = useState("");
   //function to set the state of selected workout on click
   const handleSelectWorkout = (workout) => {
     setSelectedWorkout(workout);
@@ -24,8 +28,10 @@ const Routines = ({fetchUser, routines, user}) => {
   };
   //handles selection of routine to display
   const handleRoutineSelect = (event) => {
+    console.log('event', event);
     const routine = event.target.value;
     setSelectedRoutine(routine);
+    setRoutineName(routine.routine_name);
   };
 
   const deleteRoutine = () => {
@@ -46,7 +52,31 @@ const Routines = ({fetchUser, routines, user}) => {
           });
     }
   };
+  ////////////////////////////////////////////////////
+  //routine name edit handlers
+  const handleEditClick = () => {
+      setIsEditing(true);
+  };
 
+  const handleSaveClick = () => {
+      // Call the update function and pass the new name
+      updateRoutineName();
+      setIsEditing(false);
+  };
+
+   // update routine name on server
+   const updateRoutineName = () => {
+   axios.patch(`/user/routines/update/${selectedRoutine._id}`, {name: routineName})
+    .then(() => {
+      setSelectedRoutine(null);
+      setSelectedWorkout(null);
+      fetchUser();
+    })
+    .catch((err) => {
+      console.error('Failed to update routine name')
+    })
+  }
+  ////////////////////////////////////////////////////
 
   return (
     <div style={{padding: '10px', justifyItems: 'center'}}>
@@ -57,64 +87,62 @@ const Routines = ({fetchUser, routines, user}) => {
       </Snackbar>
       <h2>Saved Routines</h2>
       <h5>Select a saved Routine to display</h5>
-       <Box sx={{display: 'flex', justifyContent: 'center', color: 'black', padding: '5px'}}>
-      <FormControl sx={{ width: 300, alignContent: "center" }}>
-        <InputLabel
-          id="routine"
-          sx={{
-            paddingLeft: '50px',
-            textAlign: 'center',
-            color: 'black',
-            '&.Mui-focused': { color: 'black' },
-            '&.MuiFormLabel-filled': { color: 'black' }}}>
-        </InputLabel>
-        <Select
-          id="routine"
-          value={selectedRoutine || ""}
-          onChange={handleRoutineSelect}
-          displayEmpty
-          sx={{
-            textAlign: 'center',
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'black',
-            },
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'lightblue',
-            },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: 'black',
-            },
-            color: 'black',
-          }}
-        >
-          <MenuItem value="" disabled>
-          </MenuItem>
-          {routines.map((routine) => (
-            <MenuItem key={routine._id} value={routine}>
-              {routine.routine_name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-    <Box sx={{ width: "100%", textAlign: "center", marginBottom: "10px" }}>
-      <h4>These are the workouts in "{selectedRoutine?.routine_name}"</h4>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-        <Button 
-          type='button'
-          sx={{
-            color: 'white',
-            background: 'linear-gradient(90deg, #556270 0%, #FF6B6B  51%, #556270  100%)',
-            '&:hover': { background: 'linear-gradient(90deg, #ff4b1f 0%, #ff9068  51%, #ff4b1f  100%)'},
-            "&:active": {
-              transform: "scale(0.98)",
-             }
-          }}
-          onClick={() => deleteRoutine()}
-          > Delete Saved Routine
-        </Button>
-      </div>
-      
+      <Box sx={{ display: 'flex', justifyContent: 'center', color: 'black', padding: '5px' }}>
+        <FormControl sx={{ width: 600, alignContent: "center" }}>
+          {isEditing ? (
+            <TextField
+              value={routineName}
+              onChange={(e) => setRoutineName(e.target.value)}
+              onBlur={handleSaveClick}
+              autoFocus
+              sx={{
+                textAlign: 'center',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'black',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'lightblue',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'black',
+                },
+                color: 'black',
+              }}
+            />
+          ) : (
+            <Select
+              id="routine"
+              value={selectedRoutine || ""}
+              onChange={(e) => handleRoutineSelect(e)}
+              displayEmpty
+              sx={{
+                textAlign: 'center',
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'black',
+                },
+                '&:hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'lightblue',
+                },
+                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'black',
+                },
+                color: 'black',
+              }}
+            >
+              <MenuItem value="" disabled>
+                Select a routine
+              </MenuItem>
+              {routines.map((routine) => (
+                <MenuItem key={routine._id} value={routine}>
+                  {routine.routine_name}
+                </MenuItem>
+              ))}
+            </Select>
+          )}
+        </FormControl>
+        <IconButton onClick={isEditing ? handleSaveClick : handleEditClick}>
+          {isEditing ? <SaveIcon /> : <EditIcon />}
+        </IconButton>
     </Box>
     <Box 
       className={classes.box4Routines}
