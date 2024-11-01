@@ -6,12 +6,12 @@ import { User } from '../db/index.js'     // must be imported for database conne
 import dotenv from 'dotenv';
 import workouts from './workouts.js';               // workouts router
 import nutrition from './nutrition.js';             // nutrition router
+import routines from './routines.js';
 import verify from '../security/verify.js';
-dotenv.config();
 
+dotenv.config();
 const users = express.Router();
-users.use('/workouts', workouts);     
-users.use('/nutrition', nutrition);   
+
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
@@ -20,13 +20,14 @@ users.use('/nutrition', nutrition);
 
 
 /* ===================================================================================
- *                                    MIDDLEWARE
- * -----------------------------------------------------------------------------------
- * app.use('/workouts', workouts)     => handles requests for '/user/workouts/::'
- * app.use('/nutrition', nutrition)   => handles requests for '/user/nutrition/::'
- * ----------------------------------------------------------------------------------- */
-users.use('/workouts', workouts);     
+*                                    MIDDLEWARE
+* -----------------------------------------------------------------------------------
+* app.use('/workouts', workouts)     => handles requests for '/user/workouts/::'
+* app.use('/nutrition', nutrition)   => handles requests for '/user/nutrition/::'
+* ----------------------------------------------------------------------------------- */
+users.use('/workouts', workouts);
 users.use('/nutrition', nutrition);
+users.use('/routines', routines);
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 

@@ -12,6 +12,15 @@ const useStyles = makeStyles(() => ({
     boxSizing: 'border-box',
     alignItems: 'center',
   },
+  box4Routines: {
+    display: 'flex',
+    overflowX: 'auto',
+    flexDirection: 'row',
+    gap: '10px',
+    padding: '50px',
+    boxSizing: 'border-box',
+    alignItems: 'center',
+  },
   workouts: {
     minHeight: '300px',
     maxHeight: '100%',
@@ -71,6 +80,15 @@ const useStyles = makeStyles(() => ({
       transform: "scale(0.98)",
     }
   },
+  routineAdd: {
+    color: 'black',
+    background: 'linear-gradient(135deg, #556270 30%, #FF6B6B 90%)',
+    backgroundColor: 'transparent',
+    '&:hover': { background: 'linear-gradient(0deg, #556270 30%, #FF6B6B 90%)' },
+    "&:active": {
+      transform: "scale(0.98)",
+    }
+  },
   text: {
     fontFamily: 'Roboto, sans serif',
     fontSize: '1.2rem',
@@ -91,9 +109,13 @@ const useStyles = makeStyles(() => ({
   },
   navBar: {
     background: 'linear-gradient(45deg, #556270 30%, #FF6B6B 90%)',
-    // flexDirection: 'row'
   },
   navButtons: {
+    whiteSpace: 'nowrap',
+    margin: '0 15px',
+    minWidth: '125px',
+    padding: '8px 15px',
+    textAlign: 'center',
     '&:hover': { backgroundColor: 'rgba(211, 211, 211, 0.3)' },
     "&:active": {
       transform: "scale(0.98)",

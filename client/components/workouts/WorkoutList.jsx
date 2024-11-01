@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import Workout from "./Workout.jsx";
-import { Box, IconButton, Typography, Divider } from "@mui/material";
+import { Box, IconButton, Typography, Divider, FormControl, OutlinedInput, InputLabel, Button, Snackbar} from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import useStyles from "../styles";
+import Alert from '@mui/material/Alert';
 
 //populate each workout list tied to the user's saved lists
 
 const WorkoutList = ({ workouts, fetchUser, user }) => {
   //creates instance of style object in styles.js
   const classes = useStyles();
-  //state for selected workout
-  const [selectedWorkout, setSelectedWorkout] = useState(null);
-
+ 
+  const [routineName, setRoutineName] = useState('');
+  //state for success alert when adding workout on add button click
+  const [open, setOpen] = useState(false);
   // function to handle delete requests in user's workout list
   const deleteWorkout = (workout) => {
     axios
@@ -25,17 +27,25 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
         console.err("Failed to delete workout");
       });
   };
-  //function to set the state of selected workout on click
-  const handleSelectWorkout = (workout) => {
-    setSelectedWorkout(workout);
-  };
-  //function to clear selected workout view
-  const deselectWorkout = () => {
-    setSelectedWorkout(null);
+  const saveRoutine = () => {
+    axios.post('/user/routines/create', {routine_name: routineName, exercises: workouts})
+    .then(() => {
+      fetchUser();
+      //sets alert state to appear
+      setOpen(true);
+    })
+    .catch((err) => {
+      console.error('Failed to save routine');
+    });
   };
 
   return (
     <div>
+      <Snackbar open={open} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setOpen(false)}>
+        <Alert onClose={() => setOpen(false)} severity="success" sx={{ width: '100%', transform: 'scale(2.0)' }}>
+          Routine added successfully!
+        </Alert>
+      </Snackbar>
       <Typography
         variant="h4"
         fontWeight="bold"
@@ -48,6 +58,28 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
         Saved Workout List
       </Typography>
       <br></br>
+      <Box className={classes.box} sx={{display: 'flex', justifyContent: 'center'}}>
+        <FormControl sx={{width: '300px'}} >
+          <InputLabel sx={{color: 'black', '&.Mui-focused': { color: 'black' }, '&.MuiFormLabel-filled': { color: 'black' }}}>Enter a Routine name</InputLabel>
+          <OutlinedInput
+            label="Enter a Routine name"
+            onChange={(e) => setRoutineName(e.target.value)}
+            sx={{
+              '& .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'black',
+              },
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'lightblue',
+              },
+              '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'black',
+              },
+              color: 'black',
+            }}
+          />
+        </FormControl>
+        <Button variant="text" onClick={() => saveRoutine()} sx={{color: 'black'}} className={classes.routineAdd}>Save Routine</Button>
+      </Box>
       <Divider />
       <Box
         className={classes.box}
@@ -76,42 +108,6 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
         })}
       </Box>
       <Divider />
-      <Box>
-        {selectedWorkout ? (
-          <div>
-            <div
-              style={{
-                fontWeight: "bold",
-                fontFamily: "Roboto",
-                align: "center",
-                display: "flex",
-                justifyContent: "center",
-              }}
-            >
-              Selected Workout
-            </div>
-            <br></br>
-            <div className={classes.workoutSelected}>
-              <IconButton
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  background: "#F1F1F1",
-                  boxShadow: 2,
-                }}
-                onClick={() => deselectWorkout()}
-              >
-                <CloseIcon fontSize="medium" fontColor='red'/>
-              </IconButton>
-              {/* <br></br> */}
-              <Workout
-                className={classes.workoutSaved}
-                workout={selectedWorkout}
-              />
-            </div>
-          </div>
-        ) : null}
-      </Box>
     </div>
   );
 };

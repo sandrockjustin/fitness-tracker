@@ -26,18 +26,16 @@ export default function App() {
 				setUser(userData.data)
 		  })
 		  .catch((err) => {
-			console.error('Failed to get userData');
+				console.error('Failed to get userData');
 		  })
-	}
 
-	function fetchRoutines() {
-		axios.get(`/routines`)
-		  .then((routineData) => {
-				setRoutines(routineData.data)
-		  })
-		  .catch((err) => {
-			console.error('Failed to get routineData');
-		  })
+		axios.get(`/user/routines/all`)
+			.then((userRoutines) => {
+				setRoutines(userRoutines.data)
+			})
+			.catch((err) => {
+				console.error('Failed to fetch userRoutines.')
+			})
 	}
 
 	function updateView(e) {
@@ -82,7 +80,7 @@ export default function App() {
 					})
 					break;
 			case 'Routines':
-				axios.get('/routines')
+				axios.get('/user/routines')
 					.then((response) => {
 						setView(response.data.view);
 					})
@@ -127,7 +125,6 @@ export default function App() {
 	useEffect(() => {
 		document.title = 'Vitality';
 		setTimeout( () => {fetchUser()}, 0)
-		setTimeout( () => {fetchRoutines()}, 0)
 	}, [])
 
 	switch(view){

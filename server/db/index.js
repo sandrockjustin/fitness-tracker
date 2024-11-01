@@ -19,16 +19,23 @@ const UserSchema = new Schema({
   nutrition: Array
 })
 
+const RoutineSchema = new Schema({
+	user_id: String,
+	routine_name: String,
+	exercises: Array
+})
+
 UserSchema.plugin(findOrCreate);  // adding the findOrCreate plugin to our schema here
 
 // make model from Schema
 const User = mongoose.model('User', UserSchema);
-
+const Routines = mongoose.model('Routines', RoutineSchema);
 
 const db = mongoose.connection;
 
 // we still need to export this and the connection to mongoose
 export {
   User,
+  Routines,
   db
 }
