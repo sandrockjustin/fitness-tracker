@@ -2,9 +2,6 @@ import React from 'react';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useStyles from '../styles';
-//render individual workout routine
-
-//receives workouts as a prop from WorkoutList.jsx
 
 const Workout = ({workout, onClick}) => {
   const classes = useStyles();
