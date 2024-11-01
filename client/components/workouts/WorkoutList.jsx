@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Workout from "./Workout.jsx";
 import { Box, IconButton, Typography, Divider, FormControl, OutlinedInput, InputLabel, Button, Snackbar} from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import useStyles from "../styles";
 import Alert from '@mui/material/Alert';
