@@ -30,30 +30,29 @@ export default function PantryListItem(props){
 
     //set the state to 
     setChecked(e.target.checked);
-    console.log("TARGET", e.target.checked)
+
     if (checked === false){
       props.setCheckedFoods(props.checkedFoods.concat([props.food]))
 
     } else {
 
       props.setCheckedFoods(props.checkedFoods.filter(food=>{
-        console.log(props.food)
+ 
         return food.foodName !== props.food.foodName
       }))
     }
   };
 
 
-  // console.log("PANTRYLISTITEM PROPS", props)
   const handleRemove = () =>{
-    console.log("CLICK X", props)
+
     axios.put(`/user/nutrition/delete`, { foodData: props.food.foodId})
     .then(props.fetchUser())
     .catch((err)=>{
       console.error(err)
     })
     props.setCheckedFoods(props.checkedFoods.filter(food=>{
-      console.log(props.food)
+
       return food.foodName !== props.food.foodName
     }))
   }

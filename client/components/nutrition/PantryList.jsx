@@ -24,7 +24,7 @@ scroll-behavior: smooth;
 `
 
 export default function PantryList(props){
-  // console.log("PANTRY LIST NUTRITION", props.nutrition)
+
 
 
 
@@ -41,7 +41,6 @@ export default function PantryList(props){
         <List>
      {props.nutrition.map((food)=>{
 
-      //  console.log("*** props.food.foodId", food.foodId)
 
       return(
 

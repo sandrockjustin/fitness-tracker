@@ -25,7 +25,6 @@ box-sizing: border-box
 export default function Nutrition(props){
   const [checkedFoods, setCheckedFoods] = useState([])
   
-  console.log("CHECKED FOODS", checkedFoods)
   return(
 <AllBox>
   <br></br>
