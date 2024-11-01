@@ -1,8 +1,9 @@
-# Project "fitness-tracker"
+# Project "Vitality" 
+##### (pending; formerly fitness-tracker)
 **Track workouts, plan meals, live healthy.**
 
 # Project Description
-**Fitness tracker is an application designed to help end-users track workouts and nutrition plans so that they can meet their health goals. It has two primary features, workouts and nutritional data, which allow for a user to search for and track this type of information within their account.** 
+**Vitality is an application designed to help end-users track workouts and nutrition plans so that they can meet their health goals. It has two primary features, workouts and nutritional data, which allow for a user to search for and track this type of information within their account.** 
 
 # Installation
 
@@ -51,7 +52,7 @@ There are two other additional scripts that are particularly useful if you have 
 | Axios            | Passport         |                  | Express / express-session        |
 | Webpack          | Google OAuth 2.0 |                  | dotenv                           |
 |                  | Webpack          |                  | eslint                           |
-|                  |                  |                  | MaterialUI / icons-material      |
+|                  | Nodemon          |                  | MaterialUI                       |
 
 ### Client
 
@@ -59,13 +60,13 @@ The client uses Webpack with Babel in order to transpile and bundle our componen
 
 ### Server
 
-Our server imports several items for use, including our authentication strategy and database connection, which is available in the `auth.js` file and the `server/db/index.js` file respectively. The server imports these files so that they can be used within an Express instance. Most routes are secured with Passport and the Google OAuth 2.0 strategy, with a few _intended_ exceptions.
+Our server imports several items for use, including our authentication strategy and database connection, which is available in the `auth.js` file and the `server/db/index.js` file respectively. The server imports these files so that they can be used within an Express instance. Most routes are secured with Passport and the Google OAuth 2.0 strategy, with a few _intended_ exceptions. The server `routes` folder contains all routes associated with specific endpoints.
 
 The `server/index.js` expects for all sensitive information to be stored in the process environment; **never** store our secrets or API keys within a public config file. This would open our website to malign actors and it risks exposing user information that is intended to remain private.
 
 ### Database
 
-A critical import is our connection to MongoDB / Mongoose from the `server/db/index.js` file. This file initializes a `UserSchema`, registers this schema to use the methods provided by the `find-or-create` plugin, and exports this alongside a connection to the server.
+A critical import is our connection to MongoDB / Mongoose from the `server/db/index.js` file. This file initializes a `UserSchema`, registers this schema to use the methods provided by the `find-or-create` plugin, and exports this alongside a connection to the server. Additionally a `RoutineSchema` is initialized that is used within workout components; this schema is associated with a `user_id` property which acts as a foreign key (indicates which user the saved routine belongs to).
 
 ## Entry to Application & Authentication
 1. The entry point to our application is a Google Sign-in; this is handled by Passport with the Google OAuth 2.0 strategy. Navigation to routes within our server are prohibited if you have not or cannot be authenticated with this strategy.
@@ -76,10 +77,11 @@ A critical import is our connection to MongoDB / Mongoose from the `server/db/in
 
 ## Features for Application End-Users
 
-1. **Account**
+1. **Account & Dashboard**
     - C - Create a new account.
-    - R - Read stored data for their account.
-    - U - Update stored workouts and nutritional information.
+    - R - Read stored data for their account across components, and in the dashboard view.
+    - U - Update stored workouts and nutritional information. 
+    - U - Updated stored profile information.
     - D - Delete their account and data.
 
 2. **Workouts Management**
@@ -89,5 +91,12 @@ A critical import is our connection to MongoDB / Mongoose from the `server/db/in
 
 3. **Nutrition Management**
     - R - Read saved foods and nutritional information for the current account, as well as reading data from external APIs.
+    - C / R - Read workouts and nutritional information to generate recommended meals for restoring calories.
     - C / U - Create and update existing foods and nutritional information for the user.
     - D / U - Delete (update) existing existing foods and nutritional information for the user.
+
+4. **Routines Management**
+    - C - Create a new routine with a specified name.
+    - R - Read any routine associated with the current user.
+    - U - Update any routine's name for the current user.
+    - D - Delete any routine of specified name for the user.
