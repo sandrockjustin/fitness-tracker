@@ -1,9 +1,10 @@
 import { User } from '../db/index.js'  // must be imported for database connection
+import passport from 'passport';
 
 export default function verify(req, res, next) {
   if (!req.user) {
     res.redirect('/');
-  } else {
+  } else if (req.isAuthenticated()){
     User.findById({_id: req.user._id})
       .then((isFound) => {
         if (!isFound) { 
