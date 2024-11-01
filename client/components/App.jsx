@@ -21,7 +21,6 @@ export default function App() {
 	const [routines, setRoutines] = useState(null);
 
 	function fetchUser() {
-		console.log(new Date());
 		axios.get(`/user/info/`)
 		  .then((userData) => {
 				setUser(userData.data)
