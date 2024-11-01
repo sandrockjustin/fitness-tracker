@@ -1,5 +1,4 @@
 import React from 'react';
-import WorkoutList from './WorkoutList.jsx';
 import { Box, Typography, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useStyles from '../styles';
@@ -9,7 +8,7 @@ import useStyles from '../styles';
 
 const Workout = ({workout, onClick}) => {
   const classes = useStyles();
-  const { name, type, muscle, equipment, difficulty, instructions } = workout; 
+  const { name, type, muscle, equipment, difficulty, instructions } = workout;
 
   if(onClick) {
     return (
@@ -44,7 +43,6 @@ const Workout = ({workout, onClick}) => {
     )
   } else {
     return (
-      
       <Box
         sx={{
           padding: 1,

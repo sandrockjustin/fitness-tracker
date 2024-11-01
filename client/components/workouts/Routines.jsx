@@ -7,9 +7,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import Alert from '@mui/material/Alert';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
 
 const Routines = ({fetchUser, routines, user}) => {
-  // console.log('rooutines,', routines)
   const classes = useStyles();
 
   //state for selected workout
@@ -28,7 +29,6 @@ const Routines = ({fetchUser, routines, user}) => {
   };
   //handles selection of routine to display
   const handleRoutineSelect = (event) => {
-    console.log('event', event);
     const routine = event.target.value;
     setSelectedRoutine(routine);
     setRoutineName(routine.routine_name);
@@ -38,7 +38,6 @@ const Routines = ({fetchUser, routines, user}) => {
     if(!selectedRoutine) {
       return;
     } else {
-      console.log('routine to delete', selectedRoutine);
         axios
           .delete(`/user/routines/delete/${selectedRoutine._id}`)
           .then(() => {
@@ -140,8 +139,11 @@ const Routines = ({fetchUser, routines, user}) => {
             </Select>
           )}
         </FormControl>
-        <IconButton onClick={isEditing ? handleSaveClick : handleEditClick}>
+        <IconButton onClick={isEditing ? handleSaveClick : handleEditClick} sx={{marginBottom: '10px', margin: '10px', paddingBottom: '10px', marginRight: '20px' }}>
           {isEditing ? <SaveIcon /> : <EditIcon />}
+        </IconButton>
+        <IconButton onClick={() => deleteRoutine()} sx={{margin: '10px', paddingBottom: '10px', marginBottom: '10px'}}>
+          <DeleteForeverIcon sx={{color:'red'}} />
         </IconButton>
     </Box>
     <Box 
