@@ -2,7 +2,7 @@
  *                              IMPORTS & INITIALIZATION
  * ----------------------------------------------------------------------------------*/
 import express from 'express';
-import { User, Routines } from '../db/index.js'     // must be imported for database connection
+import { User, Routines, Meals } from '../db/index.js'
 import dotenv from 'dotenv';
 import workouts from './workouts.js';               // workouts router
 import nutrition from './nutrition.js';             // nutrition router
@@ -84,13 +84,13 @@ users.delete('/delete', verify, (req, res) => {
 
   User.findByIdAndDelete(filter)
     .then(() => {
-      Routines.deleteMany({user_id: req.user._id})
-        .then(() => {
-          res.sendStatus(200);
-        })
-        .catch(() => {
-          res.sendStatus(500);
-        })
+      return Routines.deleteMany({user_id: req.user._id})
+    })
+    .then(() => {
+      return Meals.deleteMany({user_id: req.user._id})
+    })
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((error) => {
       console.error(`DELETE :: INTERNAL :: Delete user #${req.user._id}.`)

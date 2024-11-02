@@ -6,9 +6,23 @@ import { User } from '../db/index.js'  // must be imported for database connecti
 import axios from 'axios';             // must be imported for external requests
 import dotenv from 'dotenv';
 import verify from '../security/verify.js';
+import { Meals } from '../db/index.js';
+import meals from './meals.js';
 dotenv.config();
 
 const nutrition = express.Router();
+// ----------------------------------------------------------------------------------- //
+// =================================================================================== //
+
+
+
+
+/* ===================================================================================
+*                                    MIDDLEWARE
+* -----------------------------------------------------------------------------------
+* nutrition.use('/workouts', workouts)     => handles requests for '/user/workouts/::'
+* ----------------------------------------------------------------------------------- */
+nutrition.use('/meals', meals);
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
@@ -71,7 +85,7 @@ nutrition.get('/search/:query', verify, (req, res) => {
     })
 })
 
-nutrition.put('/create', verify, (req, res)=>{
+nutrition.put('/create', verify, (req, res)=> {
 
 	const update = req.body.nutrition; 
 
@@ -97,6 +111,8 @@ nutrition.put('/delete', verify, (req, res)=>{
       res.sendStatus(500);
     })
 })
+
+
 // ----------------------------------------------------------------------------------- //
 // =================================================================================== //
 
