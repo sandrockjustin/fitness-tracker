@@ -56,6 +56,7 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
       >
         Saved Workout List
       </Typography>
+      <Divider />
       <br></br>
       <Box className={classes.box} sx={{display: 'flex', justifyContent: 'center'}}>
         <FormControl sx={{width: '300px'}} >

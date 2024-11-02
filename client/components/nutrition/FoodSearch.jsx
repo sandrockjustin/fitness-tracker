@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { Snackbar } from '@mui/material'
 
+
 //search bar input
 
 //add food object to pantry button
@@ -38,8 +39,9 @@ export default function FoodSearch(props){
     //and the search to the /FoodSearch endpoint
     axios.get(`/user/nutrition/search/${searchField}`)
     .then((foodInfo)=>{
-      setResults(foodInfo.data)   
 
+      setResults(foodInfo.data)
+  
       let inPantry = false
 
       for (let i = 0; i < props.user.nutrition.length; i++){
@@ -57,9 +59,11 @@ export default function FoodSearch(props){
     })
   }
 
+
   const handleAdd = (foodInfo)=>{
     axios.put(`/user/nutrition/create`, { nutrition: foodInfo })
     .then((data) => {
+
         setSearch('')
         props.fetchUser()
       })
@@ -75,7 +79,7 @@ export default function FoodSearch(props){
       <TextField sx={{margin: 'auto'}} variant="outlined" label="Search Foods" type="text" id='food-search' onChange={handleChange}/>
 
       <CustomButt sx={{ "&:hover": { background: 'linear-gradient(45deg, #FF6B6B 30%, #556270 90%)'} }} variant="contained" type="submit" onClick={handleClick}>Add Food</CustomButt>
-
+      
     </SearchBox>
   )
 }
