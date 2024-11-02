@@ -28,11 +28,18 @@ const RoutineSchema = new Schema({
 	exercises: Array
 })
 
+const MealSchema = new Schema({
+  user_id: String,
+  routine_name: {type: String, required: false},
+  food_items: Array
+})
+
 UserSchema.plugin(findOrCreate);  // adding the findOrCreate plugin to our schema here
 
 // make model from Schema
 const User = mongoose.model('User', UserSchema);
 const Routines = mongoose.model('Routines', RoutineSchema);
+const Meals = mongoose.model('Meals', MealSchema)
 
 const db = mongoose.connection;
 
@@ -40,5 +47,6 @@ const db = mongoose.connection;
 export {
   User,
   Routines,
+  Meals,
   db
 }
