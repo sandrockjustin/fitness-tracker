@@ -6,6 +6,7 @@ import Meals from './Meals.jsx'
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
+
 let AllBox = styled(Box)`
 display: flex; 
 flex-direction: column; 
@@ -28,7 +29,9 @@ export default function Nutrition(props){
   return(
 <AllBox>
   <br></br>
+  <div>
   <FoodSearch user={props.user} fetchUser={props.fetchUser}/>
+  </div>
 
   <NutBox >
 
@@ -49,7 +52,9 @@ export default function Nutrition(props){
     theme={props.theme} 
     fetchUser={props.fetchUser} 
     user={props.user} 
+    routines={props.routines}
     nutrition={props.user.nutrition}/>
+   
 
     <br></br>
 
