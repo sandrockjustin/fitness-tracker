@@ -187,7 +187,7 @@ export default function App() {
 					<Navigation updateView={updateView}/>
 
 					<br></br>
-					<div><Nutrition state={darkMode} fetchUser={fetchUser} user={user}/></div>
+					<div><Nutrition state={darkMode} fetchUser={fetchUser} user={user} routines={routines}/></div>
 
 				</div>
         </ThemeProvider>

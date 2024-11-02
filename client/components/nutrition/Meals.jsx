@@ -6,10 +6,11 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { useEffect } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
+import BasicMenu from './SelectWorkout.jsx'; 
 
 const WorkoutBox = styled(Box)`
 background: rgba(0, 0, 0, 0.2);
-height: 100px;
+height: 125px;
 width: 500px;
 margin:auto;
 overflow-y:auto;
@@ -44,12 +45,10 @@ useEffect(()=>{
 }, []
 )
 
+  
 
-  let exRoutine = props.user.workouts
 
-  let calsBurned = exRoutine.length * 150
-
-  let foods = props.user.nutrition
+let foods = props.user.nutrition
   let foodNum = props.user.nutrition.length;
   let mealSize = props.checkedFoods.length;
   let meal = [];
@@ -59,7 +58,11 @@ useEffect(()=>{
 
   const [newMeal, setNewMeal] = useState(meal)
   const [mealRepAm, setMealRepAm] = useState(mealReplaceAmts)
-
+  const [currentRoutine, setCurrentRoutine] = useState([])
+  const [currentRoutineName, setCurrentRoutineName] = useState('')
+  
+  let exRoutine = currentRoutine
+  let calsBurned = exRoutine.length * 150
 /////////////////////////////////////////////////
 //makes a random meal
 const randomMeal = () =>{
@@ -93,11 +96,24 @@ const handleRefresh = () =>{
     <div style={{fontFamily: "Arial, sans-serif"}}>
       <h1 style={{textAlign: "center"}}>POST-WORKOUT MEALS</h1>
       <div>
-
       <WorkoutBox >
-          <strong>EXERCISES</strong>
-          {exRoutine.map(exercise=>{
+        <Box
+        sx={{display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'flex-start'}}
+          >
 
+          <BasicMenu 
+          sx={{}} 
+          routines={props.routines} 
+          setCurrentRoutine={setCurrentRoutine}
+          setCurrentRoutineName={setCurrentRoutineName}
+          currentRoutineName={currentRoutineName}
+          />
+        </Box>
+
+
+          {exRoutine.map(exercise=>{
             return (
             <div key={`${exercise.name}`}>
               {exercise.name}
@@ -121,12 +137,24 @@ const handleRefresh = () =>{
 
 
             {newMeal.map((food, i)=>{
-              return(
-                <div>
-                  <strong>{mealRepAm[i]} grams of {food.foodName}</strong>
-                  <br></br>
-                </div>
-              )
+              console.log("FOOD", food)
+              if (food.grams > 1){
+
+                return(
+                  <div>
+                    <strong>{mealRepAm[i]} grams of {food.foodName}   (~ {Math.floor((mealRepAm[i]/food.grams)*10)/10} servings)</strong>
+                    <br></br>
+                  </div>
+                )
+
+              } else {
+                return(
+                  <div>
+                    <strong>{mealRepAm[i]} grams of {food.foodName}</strong>
+                    <br></br>
+                  </div>
+                )
+              }
             })}
           </div>
       </MealBox>
