@@ -187,7 +187,7 @@ export default function AccountPage(props){
       </TableContainer>
       <Divider sx={{paddingTop: "10px"}}/>
       <br></br>
-      <Button className={classes.DeleteAccButton} type="button" onClick={(e) => props.updateView(e)} name="Delete Account" sx={{color: 'white'}}>Delete Account</Button>
+      <Button className={classes.deleteAccButton} type="button" onClick={(e) => props.updateView(e)} name="Delete Account" sx={{color: 'white'}}>Delete Account</Button>
     </div>
   )
 

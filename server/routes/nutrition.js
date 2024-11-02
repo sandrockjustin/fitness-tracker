@@ -48,7 +48,6 @@ nutrition.get('/search/:query', verify, (req, res) => {
             
           let grams = caloricInfo.data.nutrition.weightPerServing.amount
           let nutDensity = calories/grams
-          console.log("CATEGORY???", caloricInfo.data.categoryPath)
 
           const nutrientsInfo = {
             'foodName': foodItem.data.results[0].name,
