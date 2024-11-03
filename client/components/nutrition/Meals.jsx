@@ -7,6 +7,8 @@ import { useEffect } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import { styled } from '@mui/material/styles';
 import BasicMenu from './SelectWorkout.jsx'; 
+import axios from 'axios';
+import Button from '@mui/material/Button';
 
 const WorkoutBox = styled(Box)`
 background: rgba(0, 0, 0, 0.2);
@@ -40,12 +42,6 @@ transform: scale(.9);
 export default function Meals(props){
   //MAKES A RANDOM MEAL
 /////////////////////////////////////////////////////////////////////
-useEffect(()=>{
-  randomMeal()
-}, []
-)
-
-  
 
 
 let foods = props.user.nutrition
@@ -84,6 +80,11 @@ const randomMeal = () =>{
    setNewMeal(meal)
    setMealRepAm(mealReplaceAmts)
 
+   // submits selected food items to create a meal in database, exception handling exists on server
+   axios.post('/user/nutrition/meals/create', {food_items: meal, routine_name: currentRoutineName})
+    .catch((error) => {
+      console.error(`Error on post request to create new meal.`)
+    })
   }
 }
 
@@ -141,7 +142,7 @@ const handleRefresh = () =>{
               if (food.grams > 1){
 
                 return(
-                  <div>
+                  <div key={i}>
                     <strong>{mealRepAm[i]} grams of {food.foodName}   (~ {Math.floor((mealRepAm[i]/food.grams)*10)/10} servings)</strong>
                     <br></br>
                   </div>
@@ -149,7 +150,7 @@ const handleRefresh = () =>{
 
               } else {
                 return(
-                  <div>
+                  <div key={i}>
                     <strong>{mealRepAm[i]} grams of {food.foodName}</strong>
                     <br></br>
                   </div>
@@ -158,6 +159,7 @@ const handleRefresh = () =>{
             })}
           </div>
       </MealBox>
+      <Button/>
       </div>
 
 
