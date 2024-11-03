@@ -85,7 +85,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
         margin: "10px",
       }}
     >
-      <Typography variant='h4' sx={{padding: '20px'}}>Workout Search</Typography>
+      <Typography variant='h4' sx={{padding: '20px'}}>Search for Exercises</Typography>
       <Divider sx={{width: '100%'}}/>
       <FormControl sx={{ width: 500, alignContent: "center"}}>
         <label htmlFor="keyword" style={{ textAlign: "center" }}>
@@ -123,7 +123,7 @@ const WorkoutSearch = ({ user, fetchUser }) => {
           Search
         </Button>
       </FormControl>
-      <h3 style={{ marginTop: "20px" }}>Workout results</h3>
+      <h3 style={{ marginTop: "20px" }}>Search Results</h3>
       <Divider sx={{width: '100%'}}/>
       {/* Alert to show and hide after workout is added to saved workout list */}
       <Snackbar open={open} autoHideDuration={3000} anchorOrigin={{ vertical: 'top', horizontal: 'center' }} onClose={() => setOpen(false)}>

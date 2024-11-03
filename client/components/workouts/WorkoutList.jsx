@@ -54,7 +54,7 @@ const WorkoutList = ({ workouts, fetchUser, user }) => {
         paddingTop="50px"
         paddingBottom="30px"
       >
-        Saved Workout List
+        Saved Exercises
       </Typography>
       <Divider />
       <br></br>
