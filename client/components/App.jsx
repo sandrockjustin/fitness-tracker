@@ -10,6 +10,7 @@ import axios from 'axios';
 import { ThemeProvider, CssBaseline, Switch, IconButton } from '@mui/material';
 import { lightTheme, darkTheme } from './styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
+import CurrentMealPlans from './nutrition/CurrentMealPlans.jsx';
 
 
 export default function App() {
@@ -45,7 +46,6 @@ export default function App() {
 					.then((response) => {
 						if (response.status === 200){
 							window.location.href = "http://ec2-3-23-88-112.us-east-2.compute.amazonaws.com:8080/";
-
 						}
 					})
 					.catch((error) => {
@@ -95,8 +95,6 @@ export default function App() {
 						.then((response) => {
 							if (response.status === 200){
 								window.location.href = "http://ec2-3-23-88-112.us-east-2.compute.amazonaws.com:8080/";
-
-
 							}
 						})
 						.catch((error) => {
@@ -118,6 +116,15 @@ export default function App() {
 			
 			case 'Account Page':
 				axios.get('/user/account/')
+					.then((response) => {
+						setView(response.data.view);
+					})
+					.catch((error) => {
+						console.error('Error on GET account page view in main.', error)
+					})
+					break;
+			case 'Meal Plans':
+				axios.get('/user/nutrition/meals')
 					.then((response) => {
 						setView(response.data.view);
 					})
@@ -229,6 +236,20 @@ export default function App() {
 					<Navigation updateView={updateView}/>
 					<br></br>
 					<div><AccountPage state={darkMode} user={user} updateView={updateView} fetchUser={fetchUser}/></div>
+				</div>
+        </ThemeProvider>
+			)
+		case 'Meal Plans':
+			return (
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+        <CssBaseline />
+        <IconButton onClick={handleThemeChange} color="inherit">
+          <Brightness4Icon />
+        </IconButton>
+				<div id="root-app">
+					<Navigation updateView={updateView}/>
+					<br></br>
+					<div><CurrentMealPlans state={darkMode} user={user} updateView={updateView} fetchUser={fetchUser}/></div>
 				</div>
         </ThemeProvider>
 			)
