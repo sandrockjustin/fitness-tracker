@@ -19,10 +19,11 @@ function Navigation(props) {
           <Container sx={{display: 'flex', flexDirection: 'row'}}>
             <img src='https://i.imgur.com/ZX5wc9L.png' style={{width: "20%", height: "20%"}}/>
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Dashboard" sx={{color: 'white'}}>Dashboard</Button>
-            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts" sx={{color: 'white'}}>Workouts</Button>
-            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts-Search" sx={{color: 'white', whiteSpace: 'nowrap'}}>Search Workouts</Button>
-            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Nutrition" sx={{color: 'white'}}>Nutrition</Button>	
             <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Routines" sx={{color: 'white'}}>Routines</Button>
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts" sx={{color: 'white'}}>Your Exercises</Button>
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Workouts-Search" sx={{color: 'white', whiteSpace: 'nowrap'}}>Find Exercises</Button>
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Nutrition" sx={{color: 'white'}}>Nutrition</Button>	
+            <Button type="button" onClick={(e) => props.updateView(e)}  className={nav_classes.navButtons} name="Meal Plans" sx={{color: 'white'}}>Meal Plans</Button>	
           </Container>
           <Container sx={{justifyItems: "right"}}>
               <AccountMenu updateView={props.updateView}/>
