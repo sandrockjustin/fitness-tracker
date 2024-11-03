@@ -1,14 +1,9 @@
 import mongoose from 'mongoose';
-import {User, db} from '../server/db/index.js'
+import {User, Routines, Meals, db} from '../server/db/index.js'
 import exampleWorkouts from './exampleWorkouts.js'
 import exampleNutrition from './exampleNutrition.js';
 
 db.on('open', () => {
-
-  let deletedCount = 0;
-  let successCount = 0;
-  let failureCount = 0;
-
 
   //////////////////////////////////////////////////////////////////////////////////////////////
   /*                                 INITIALIZING USERS FOR SEED                              */
@@ -21,15 +16,12 @@ db.on('open', () => {
     ) {
       return console.error('Error during database seed; exampleWorkouts undefined.')
     }
-
     let max = exampleWorkouts.length;
     let rand = Math.floor(Math.random() * max);
-
     return exampleWorkouts.slice(0, rand);
   }
 
   function randomNutrition(){
-    
     if (
       exampleNutrition === undefined ||
       exampleNutrition.length === undefined || 
@@ -37,133 +29,126 @@ db.on('open', () => {
     ) {
       return console.error('Error during database seed; exampleNutrition undefined.')
     }
-    
     let max = exampleNutrition.length;
-    
     let rand = Math.floor(Math.random() * max);
-
     return exampleNutrition.slice(0, rand);
   }
 
+  function randomRoutineName() {
+    const routines = ['Chest Day', 'Leg Day', 'Arm Day', 'Upper Body', 'Abdominals']
+
+    let max = routines.length;
+    
+    let rand = Math.floor(Math.random() * max);
+
+    return routines[rand];
+  }
+
   const userOne = {
-    username: 'Jeremy Hernandez',
-    password: 'password',
+    _id: 348528459102,
     workouts: randomWorkouts(),
-    nutrition: randomNutrition()
+    nutrition: randomNutrition(),
+    username: 'fiddlesticks',
+    phone_num: '111-111-1111',
+    recov_email: 'fiddle_me_timbers@gmail.com'
   }
 
   const userTwo = {
-    username: 'Benjamin Long',
-    password: 'password',
+    _id: 728573855104,
     workouts: randomWorkouts(),
-    nutrition: randomNutrition()
+    nutrition: randomNutrition(),
+    username: 'snorlax86',
+    phone_num: '222-222-2222',
+    recov_email: 'snorlax86@gmail.com'
   }
 
   const userThree = {
-    username: 'Justin Sandrock',
-    password: 'password',
+    _id: 948401729542,
     workouts: randomWorkouts(),
-    nutrition: randomNutrition()
+    nutrition: randomNutrition(),
+    username: 'lord_voltac',
+    phone_num: '333-333-3333',
+    recov_email: 'v0ltac@gmail.com'
   }
 
   const userFour = {
-    username: 'Olivia Baylor',
-    password: 'password',
+    _id: 648589359102,
     workouts: randomWorkouts(),
-    nutrition: randomNutrition()
+    nutrition: randomNutrition(),
+    username: 'my_baby_just_peed_all_over_the_floor',
+    phone_num: '444-444-4444',
+    recov_email: 'ohnobabyLuke@gmail.com'
   }
 
   const userFive = {
-    username: 'Ethan Little',
-    password: 'password',
+    _id: 118274869102,
     workouts: randomWorkouts(),
-    nutrition: randomNutrition()
+    nutrition: randomNutrition(),
+    username: 'Tad_Williams',
+    phone_num: '555-555-5555',
+    recov_email: 'georgeRRMartin_Come_on@gmail.com'
   }
   //////////////////////////////////////////////////////////////////////////////////////////////
 
 
+  function initUser(user) {
 
-  //////////////////////////////////////////////////////////////////////////////////////////////
-  /*                    PURGE DATABASE AND REPOPULATE WITH EXAMPLE USERS                      */
-  /*  !!WARNING!!: Running npm seed command WILL delete users with matching usernames in db   */
-  const createUserOne = User.deleteMany({username: userOne.username})
-    .then( () => {
-      deletedCount += 1
+    User.create(user)
+      .then( (userCreated) => {
+        return Routines.create({
+          user_id: user._id,
+          routine_name: randomRoutineName(),
+          exercises: randomWorkouts()
+        })
+      })
+      .then( (routineCreated1) => {
+        return Routines.create({
+          user_id: user._id,
+          routine_name: randomRoutineName(),
+          exercises: randomWorkouts()
+        })
+      })
+      .then( (routineCreated2) => {
+        return Routines.create({
+          user_id: user._id,
+          routine_name: randomRoutineName(),
+          exercises: randomWorkouts()
+        })
+      })
+      .then( (routineCreated3) => {
+        return Meals.create({
+          user_id: user._id,
+          routine_name: randomRoutineName(),
+          food_items: randomNutrition()
+        })
+      })
+      .then( (mealCreated1) => {
+        return Meals.create({
+          user_id: user._id,
+          routine_name: randomRoutineName(),
+          food_items: randomNutrition()
+        })
+      })
+      .then( (mealCreated2) => {
+        return Meals.create({
+          user_id: user._id,
+          routine_name: randomRoutineName(),
+          food_items: randomNutrition()
+        })
+      })
+      .then( () => {
+        console.log(`Database seed process has been completed for user #${user._id}.`)
+      })
+      .catch( (error) => {
+        console.error(`Error on database seed for #${user._id}; have you purged the database before running this command?`)
+      })
 
-      return User.create(userOne)
-    })
-    .then(() => {
-      successCount += 1;
-    })
-    .catch( () => {
-      failureCount += 1
-    })
+  }
 
-  const createUserTwo = User.deleteMany({username: userTwo.username})
-    .then( () => {
-      deletedCount += 1
+  const allUsers = [userOne, userTwo, userThree, userFour, userFive];
 
-      return User.create(userTwo)
-    })
-    .then( () => {
-      successCount += 1
-    })
-    .catch( () => {
-      failureCount += 1
-    })
-
-
-  const createUserThree = User.deleteMany({username: userThree.username})
-    .then( () => {
-      deletedCount += 1
-
-      return User.create(userThree)
-    })
-    .then( () => {
-      successCount += 1
-    })
-    .catch( () => {
-      failureCount += 1
-    })
-
-  const createUserFour = User.deleteMany({username: userFour.username})
-    .then( () => {
-      deletedCount += 1
-
-      return User.create(userFour)
-    })
-    .then( () => {
-      successCount += 1
-    })
-    .catch( () => {
-      failureCount += 1
-    })
-    
-  const createUserFive = User.deleteMany({username: userFive.username})
-    .then( () => {
-      deletedCount += 1
-
-      return User.create(userFive)
-    })
-    .then( () => {
-      successCount += 1
-    })
-    .catch( (error) => {
-      console.error(error);
-      failureCount += 1
-    })  
-  //////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-  //////////////////////////////////////////////////////////////////////////////////////////////
-  /*               WAITS FOR ALL OPERATIONS TO CONCLUDE, THEN LOGS MESSAGE                    */
-  Promise.all([createUserOne, createUserTwo, createUserThree, createUserFour, createUserFive])
-    .then(() => {
-      console.log(
-        `${deletedCount} successful deletions.\n${successCount} insertions.\n${failureCount} failures.`
-      )
-    })
-  //////////////////////////////////////////////////////////////////////////////////////////////
+  allUsers.forEach((user) => {
+    initUser(user);
+  })
 
 })
